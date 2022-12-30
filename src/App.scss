@@ -1,103 +1,78 @@
 @import "./colors.scss";
 
 @font-face {
-  font-family: "Bender";
-  src: url("./fonts/Bender.woff") format("woff");
-  font-weight: 400;
-  font-style: normal;
+    font-family: "Bender";
+    src: url("../public/fonts/Bender.woff") format("woff");
+    font-weight: 400;
+    font-style: normal;
 }
 @font-face {
-  font-family: "Bender";
-  src: url("./fonts/Bender-Italic.woff") format("woff");
-  font-weight: 400;
-  font-style: italic;
+    font-family: "Bender";
+    src: url("../public/fonts/Bender-Italic.woff") format("woff");
+    font-weight: 400;
+    font-style: italic;
 }
 @font-face {
-  font-family: "Bender";
-  src: url("./fonts/Bender-Light.woff") format("woff");
-  font-weight: 300;
-  font-style: normal;
+    font-family: "Bender";
+    src: url("../public/fonts/Bender-Light.woff") format("woff");
+    font-weight: 300;
+    font-style: normal;
 }
 @font-face {
-  font-family: "Bender";
-  src: url("./fonts/Bender-LightItalic.woff") format("woff");
-  font-weight: 300;
-  font-style: italic;
+    font-family: "Bender";
+    src: url("../public/fonts/Bender-LightItalic.woff") format("woff");
+    font-weight: 300;
+    font-style: italic;
 }
 @font-face {
-  font-family: "Bender";
-  src: url("./fonts/Bender-Bold.woff") format("woff");
-  font-weight: 700;
-  font-style: normal;
+    font-family: "Bender";
+    src: url("../public/fonts/Bender-Bold.woff") format("woff");
+    font-weight: 700;
+    font-style: normal;
 }
 @font-face {
-  font-family: "Bender";
-  src: url("./fonts/Bender-BoldItalic.woff") format("woff");
-  font-weight: 700;
-  font-style: italic;
+    font-family: "Bender";
+    src: url("../public/fonts/Bender-BoldItalic.woff") format("woff");
+    font-weight: 700;
+    font-style: italic;
 }
 @font-face {
-  font-family: "Bender";
-  src: url("./fonts/Bender-Black.woff") format("woff");
-  font-weight: 900;
-  font-style: normal;
+    font-family: "Bender";
+    src: url("../public/fonts/Bender-Black.woff") format("woff");
+    font-weight: 900;
+    font-style: normal;
 }
 @font-face {
-  font-family: "Bender";
-  src: url("./fonts/Bender-BlackItalic.woff") format("woff");
-  font-weight: 900;
-  font-style: italic;
+    font-family: "Bender";
+    src: url("../public/fonts/Bender-BlackItalic.woff") format("woff");
+    font-weight: 900;
+    font-style: italic;
 }
 
 * {
-  font-family: "Bender";
-  font-weight: normal;
-}
-
-body {
-  background-color: $back-color;
-  height: 100vh;
-  overflow: hidden;
-}
-
-#root {
-  height: 100%;
-}
-
-.scrollable {
-  overflow: auto;
-  height: 100vh;
-}
-
-h2 {
-  color: $tarkov-brown;
-}
-
-.next-completed {
-  stroke: green !important;
-  stroke-width: 5;
-  z-index: 1000;
+    font-family: "Bender" !important;
+    font-weight: normal !important;
 }
 
 ::-webkit-scrollbar {
-  width: 6px;
+    width: 10px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  // background: #f1f1f1;
-  background: #cecece;
-  // background: transparent;
+    // background: #f1f1f1;
+    background: #cecece;
+    // background: transparent;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  // background: #888;
-  background: rgb(99, 99, 99);
+    // background: #888;
+    background: rgb(99, 99, 99);
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  // background: #555;
-  background: rgb(73, 73, 73);
+    // background: #555;
+    background: rgb(73, 73, 73);
 }

@@ -6,9 +6,8 @@ import {
   adminConfig,
   adminConfigDev,
   dev,
-} from "../config.js";
+} from "../src/config.js";
 import { updateTraderData } from "./traderScraper.js";
-import { updateAmmoChart } from "./ammoChartScaper.js";
 
 const devFirevaseServiceAccount = adminConfigDev as ServiceAccount;
 const fireBaseserviceAccount = adminConfig as ServiceAccount;

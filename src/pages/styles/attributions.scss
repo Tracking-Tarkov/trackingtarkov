@@ -1,0 +1,13 @@
+@import "../../colors.scss";
+
+.credits {
+    color: $text-color;
+    margin-right: 25%;
+    margin-left: 25%;
+    margin-top: 50px;
+    font-size: 17px;
+    text-align: justify;
+    h2 {
+        color: $tarkov-brown;
+    }
+}

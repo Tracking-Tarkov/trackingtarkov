@@ -120,7 +120,6 @@ const getUrls = async () => {
                 rewards.push($(rew).text().replace(/\n+/g, ""));
               });
               _.set(res, `${trader}.Quests.${title}.Rewards`, rewards);
-              // _.set(res, `${trader}.Quests.${title}.isCompleted`, false);
               break;
             default:
               break;
@@ -133,114 +132,6 @@ const getUrls = async () => {
   } catch (error) {
     throw error;
   }
-};
-
-const findRoots = (quests) => {
-  const roots = [];
-  for (const [name, quest] of Object.entries(quests)) {
-    if (quest.Prior === undefined || quest.Prior.length === 0) {
-      roots.push(name);
-    } else {
-      let hasPrior = false;
-
-      quest.Prior.forEach((prior) => {
-        if (typeof quests[prior] != "undefined") {
-          hasPrior = true;
-        }
-      });
-      if (!hasPrior) {
-        roots.push(name);
-      }
-    }
-  }
-  return roots;
-};
-
-// () -> () -> () -> () -> ***
-const generateTraderTree = (tree, roots, validate, quests) => {
-  _.forEach(roots, (questName) => {
-    if (!quests[questName]) {
-      return;
-    }
-    const entry = {
-      name: quests[questName].Name,
-      attributes: {
-        Objectives: quests[questName].Objectives,
-        Rewards: quests[questName].Rewards,
-        type: quests[questName].Type,
-        link: quests[questName].Link,
-        kappa: quests[questName].Kappa,
-        noPriorNext: false,
-        id: questName,
-      },
-      children: [],
-    };
-    generateTraderTree(
-      entry.children,
-      quests[questName].Next,
-      validate,
-      quests
-    );
-    validate.push(questName);
-    tree.push(entry);
-  });
-};
-
-const fixDiff = (validate, allquestsNames, quests, tree) => {
-  const difference = allquestsNames.filter((x) => !validate.includes(x));
-  difference.forEach((questName) => {
-    const entry = {
-      name: quests[questName].Name,
-      attributes: {
-        Objectives: quests[questName].Objectives,
-        Rewards: quests[questName].Rewards,
-        type: quests[questName].Type,
-        link: quests[questName].Link,
-        kappa: quests[questName].Kappa,
-        noPriorNext: true,
-        id: questName,
-      },
-      children: [],
-    };
-    tree.push(entry);
-  });
-};
-
-const generateAllTraderTrees = (traderQuests) => {
-  const allTraderTrees = [];
-  const traders = Object.keys(traderQuests);
-  traders.forEach((trader) => {
-    const roots = findRoots(traderQuests[trader].Quests);
-    const tree = [];
-    const validate = [];
-    generateTraderTree(tree, roots, validate, traderQuests[trader].Quests);
-    fixDiff(
-      validate,
-      Object.keys(traderQuests[trader].Quests),
-      traderQuests[trader].Quests,
-      tree
-    );
-    const quests = _.cloneDeep(traderQuests[trader].Quests);
-    for (const quest in quests) {
-      delete quests[quest].Objectives;
-      delete quests[quest].Rewards;
-      delete quests[quest].Type;
-      delete quests[quest].Link;
-      delete quests[quest].Name;
-      delete quests[quest].Kappa;
-    }
-
-    allTraderTrees.push({
-      name: trader,
-      attributes: {
-        Quests: quests,
-        image: traderQuests[trader].image,
-      },
-      children: tree,
-    });
-    // _.set(allTraderTrees, trader, tree);
-  });
-  return allTraderTrees;
 };
 
 export const updateTraderData = async (database) => {
@@ -269,10 +160,7 @@ export const updateTraderData = async (database) => {
     return;
   }
 
-  const traderTrees = generateAllTraderTrees(traderQuests);
-  const traderTreesString = JSON.stringify(traderTrees);
   _.set(traderQuests, "lastUpdated", Date.now());
 
   await database.ref("traderQuests").set(traderQuests);
-  await database.ref("traderTrees").set(traderTreesString);
 };
