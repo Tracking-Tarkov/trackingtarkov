@@ -6,23 +6,25 @@ import ReactFlow, {
     useEdgesState,
 } from "reactflow";
 import dagre from "dagre";
-import buildQuestNodes from "../utils/buildQuestNodes";
+import buildQuestNodes, { FirebaseData } from "../utils/buildQuestNodes";
 
 import "reactflow/dist/style.css";
 import "./styles/quests.scss";
 
-const Quests = () => {
-    const questData = JSON.parse(localStorage.getItem("traderQuests") ?? "{}");
+export interface IQuestProps {
+    questData: FirebaseData;
+}
 
+const Quests = ({ questData }: IQuestProps) => {
     const graphData = buildQuestNodes(questData);
-    const initialNodes = graphData?.[5]?.nodes;
-    const initialEdges = graphData?.[5]?.edges;
+    const initialNodes = graphData?.[3]?.nodes;
+    const initialEdges = graphData?.[3]?.edges;
 
     const dagreGraph = new dagre.graphlib.Graph();
     dagreGraph.setDefaultEdgeLabel(() => ({}));
 
     const nodeWidth = 200;
-    const nodeHeight = 100;
+    const nodeHeight = 80;
 
     const getLayoutedElements = (nodes: any, edges: any, direction = "TB") => {
         const isHorizontal = direction === "LR";

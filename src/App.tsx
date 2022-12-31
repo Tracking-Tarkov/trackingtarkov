@@ -10,6 +10,7 @@ import Header from "./components/Header/Header";
 import Maps from "./pages/Maps";
 import Attributions from "./pages/Attributions";
 import Quests from "./pages/Quests";
+import { FirebaseData } from "./utils/buildQuestNodes";
 
 import "./App.scss";
 
@@ -31,10 +32,12 @@ const getBaseData = async () => {
             .data;
         localStorage.setItem("traderQuests", JSON.stringify(traderQuests));
     }
+    return JSON.parse(localStorage.getItem("traderQuests") as string);
 };
 
 const App = () => {
     const [uid, setUid] = useState<string>("");
+    const [questData, setQuestData] = useState<FirebaseData | null>(null);
 
     onAuthStateChanged(auth, (user) => {
         if (user && user.uid !== uid) {
@@ -43,7 +46,7 @@ const App = () => {
     });
 
     useEffect(() => {
-        getBaseData();
+        getBaseData().then(setQuestData);
     }, []);
 
     return (
@@ -52,7 +55,16 @@ const App = () => {
                 <CssBaseline />
                 <Header />
                 <Routes>
-                    <Route path="/quests" element={<Quests />} />
+                    <Route
+                        path="/"
+                        element={
+                            questData ? (
+                                <Quests questData={questData} />
+                            ) : (
+                                <p>...Loading</p>
+                            )
+                        }
+                    />
                     <Route path="maps" element={<Maps />} />
                     <Route path="attributions" element={<Attributions />} />
                 </Routes>
