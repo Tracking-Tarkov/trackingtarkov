@@ -6,13 +6,13 @@ import ReactFlow, {
     useEdgesState,
 } from "reactflow";
 import dagre from "dagre";
-import buildQuestNodes, { FirebaseData } from "../utils/buildQuestNodes";
+import buildQuestNodes, { Traders } from "../utils/buildQuestNodes";
 
 import "reactflow/dist/style.css";
 import "./styles/quests.scss";
 
 export interface IQuestProps {
-    questData: FirebaseData;
+    questData: Traders;
 }
 
 const Quests = ({ questData }: IQuestProps) => {

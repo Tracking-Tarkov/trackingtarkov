@@ -10,7 +10,7 @@ import Header from "./components/Header/Header";
 import Maps from "./pages/Maps";
 import Attributions from "./pages/Attributions";
 import Quests from "./pages/Quests";
-import { FirebaseData } from "./utils/buildQuestNodes";
+import { Traders } from "./utils/buildQuestNodes";
 
 import "./App.scss";
 
@@ -37,7 +37,7 @@ const getBaseData = async () => {
 
 const App = () => {
     const [uid, setUid] = useState<string>("");
-    const [questData, setQuestData] = useState<FirebaseData | null>(null);
+    const [questData, setQuestData] = useState<Traders | null>(null);
 
     onAuthStateChanged(auth, (user) => {
         if (user && user.uid !== uid) {

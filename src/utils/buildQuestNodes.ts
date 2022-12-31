@@ -1,22 +1,17 @@
 import ReactFlow, { ConnectionLineType } from "reactflow";
 import _ from "lodash";
 
-export interface FirebaseData {
-    [trader: string]: FirebaseTrader;
-}
+export type Traders = Record<string, FirebaseTrader>;
+export type Quests = Record<string, QuestData>;
 
 export interface FirebaseTrader {
     image: string;
-    quests: FirebaseQuests;
-}
-
-export interface FirebaseQuests {
-    [quest: string]: QuestData;
+    quests: Quests;
 }
 
 export interface TraderData {
     name: string;
-    quests: FirebaseQuests;
+    quests: Quests;
     image: string;
 }
 
@@ -57,15 +52,17 @@ export interface TraderGraphData {
 }
 
 const transformFirebaseTraderData = (
-    firebasesTraderData: FirebaseData
+    firebasesTraderData: Traders
 ): TraderData[] => {
-    const data = Object.entries(firebasesTraderData).map(([trader, data]) => {
-        return {
-            name: trader,
-            quests: data.quests,
-            image: data.image,
-        };
-    });
+    const data = Object.entries(firebasesTraderData).map(
+        ([trader, data]): TraderData => {
+            return {
+                name: trader,
+                quests: data.quests,
+                image: data.image,
+            };
+        }
+    );
     return data;
 };
 
@@ -89,7 +86,7 @@ const generateTraderNodes = (trader: TraderData): QuestNode[] => {
     return [rootNode, ...questNodes];
 };
 
-const generateTraderEdges = (quests: FirebaseQuests): QuestEdge[] => {
+const generateTraderEdges = (quests: Quests): QuestEdge[] => {
     const edgeType = ConnectionLineType.Bezier;
     const [validQuests, invalidQuests] = _.partition(
         Object.entries(quests),
@@ -134,7 +131,7 @@ const generateTraderEdges = (quests: FirebaseQuests): QuestEdge[] => {
     return [...rootEdges, ...questEdges.flat()];
 };
 
-const generateTraderGraphData = (firebaseTraderData: FirebaseData | null) => {
+const generateTraderGraphData = (firebaseTraderData: Traders | null) => {
     if (!firebaseTraderData) return;
     const allTraderData = transformFirebaseTraderData(firebaseTraderData);
     const allTraderQuestNodes: TraderGraphData[] = allTraderData.map(
