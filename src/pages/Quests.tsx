@@ -11,56 +11,58 @@ import buildQuestNodes from "../utils/buildQuestNodes";
 import "reactflow/dist/style.css";
 import "./styles/quests.scss";
 
-const questData = JSON.parse(localStorage.getItem("traderQuests") ?? "");
-
-const graphData = buildQuestNodes(questData);
-const initialNodes = graphData?.[5].nodes;
-const initialEdges = graphData?.[5].edges;
-
-const dagreGraph = new dagre.graphlib.Graph();
-dagreGraph.setDefaultEdgeLabel(() => ({}));
-
-const nodeWidth = 200;
-const nodeHeight = 100;
-
-const getLayoutedElements = (nodes: any, edges: any, direction = "TB") => {
-    const isHorizontal = direction === "LR";
-    dagreGraph.setGraph({ rankdir: direction });
-
-    nodes.forEach((node: any) => {
-        dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
-    });
-
-    edges.forEach((edge: any) => {
-        dagreGraph.setEdge(edge.source, edge.target);
-    });
-
-    dagre.layout(dagreGraph);
-
-    nodes.forEach((node: any) => {
-        const nodeWithPosition = dagreGraph.node(node.id);
-        node.targetPosition = isHorizontal ? "left" : "top";
-        node.sourcePosition = isHorizontal ? "right" : "bottom";
-
-        // We are shifting the dagre node position (anchor=center center) to the top left
-        // so it matches the React Flow node anchor point (top left).
-        node.position = {
-            x: nodeWithPosition.x - nodeWidth / 2,
-            y: nodeWithPosition.y - nodeHeight / 2,
-        };
-
-        return node;
-    });
-
-    return { nodes, edges };
-};
-
-const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
-    initialNodes,
-    initialEdges
-);
-
 const Quests = () => {
+    const questData = JSON.parse(localStorage.getItem("traderQuests") ?? "{}");
+
+    const graphData = buildQuestNodes(questData);
+    const initialNodes = graphData?.[5]?.nodes;
+    const initialEdges = graphData?.[5]?.edges;
+
+    const dagreGraph = new dagre.graphlib.Graph();
+    dagreGraph.setDefaultEdgeLabel(() => ({}));
+
+    const nodeWidth = 200;
+    const nodeHeight = 100;
+
+    const getLayoutedElements = (nodes: any, edges: any, direction = "TB") => {
+        const isHorizontal = direction === "LR";
+        dagreGraph.setGraph({ rankdir: direction });
+
+        nodes.forEach((node: any) => {
+            dagreGraph.setNode(node.id, {
+                width: nodeWidth,
+                height: nodeHeight,
+            });
+        });
+
+        edges.forEach((edge: any) => {
+            dagreGraph.setEdge(edge.source, edge.target);
+        });
+
+        dagre.layout(dagreGraph);
+
+        nodes.forEach((node: any) => {
+            const nodeWithPosition = dagreGraph.node(node.id);
+            node.targetPosition = isHorizontal ? "left" : "top";
+            node.sourcePosition = isHorizontal ? "right" : "bottom";
+
+            // We are shifting the dagre node position (anchor=center center) to the top left
+            // so it matches the React Flow node anchor point (top left).
+            node.position = {
+                x: nodeWithPosition.x - nodeWidth / 2,
+                y: nodeWithPosition.y - nodeHeight / 2,
+            };
+
+            return node;
+        });
+
+        return { nodes, edges };
+    };
+
+    const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
+        initialNodes,
+        initialEdges
+    );
     const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
 

@@ -52,7 +52,7 @@ const App = () => {
                 <CssBaseline />
                 <Header />
                 <Routes>
-                    <Route path="/" element={<Quests />} />
+                    <Route path="/quests" element={<Quests />} />
                     <Route path="maps" element={<Maps />} />
                     <Route path="attributions" element={<Attributions />} />
                 </Routes>
