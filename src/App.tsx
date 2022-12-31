@@ -20,15 +20,15 @@ const theme = createTheme({
 });
 
 const getBaseData = async () => {
-    let lastUpdated = (await basicRealtimeApiCall("traderQuests/lastUpdated"))
-        .data;
+    let lastUpdated = (await basicRealtimeApiCall("traders/lastUpdated")).data;
     if (
         !localStorage.getItem("lastUpdated") ||
         !localStorage.getItem("traderQuests") ||
         localStorage.getItem("lastUpdated") !== lastUpdated?.toString()
     ) {
         localStorage.setItem("lastUpdated", lastUpdated);
-        const traderQuests = (await basicRealtimeApiCall("traderQuests")).data;
+        const traderQuests = (await basicRealtimeApiCall("traders/quests"))
+            .data;
         localStorage.setItem("traderQuests", JSON.stringify(traderQuests));
     }
 };
