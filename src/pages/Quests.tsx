@@ -1,98 +1,83 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ReactFlow, {
-    addEdge,
     ConnectionLineType,
     useNodesState,
     useEdgesState,
+    Edge,
+    Node,
+    Position,
 } from "reactflow";
 import dagre from "dagre";
-import buildQuestNodes, { Traders } from "../utils/buildQuestNodes";
+import { TraderGraphData } from "../utils/buildQuestNodes";
 
 import "reactflow/dist/style.css";
 import "./styles/quests.scss";
 
 export interface IQuestProps {
-    questData: Traders;
+    traderGraphData: TraderGraphData[];
 }
 
-const Quests = ({ questData }: IQuestProps) => {
-    const graphData = buildQuestNodes(questData);
-    const initialNodes = graphData?.[3]?.nodes;
-    const initialEdges = graphData?.[3]?.edges;
+const NODE_WIDTH = 200;
+const NODE_HEIGHT = 80;
 
+const getLayoutedElements = (
+    { nodes, edges }: { nodes: Node<any>[]; edges: Edge[] },
+    direction: string
+) => {
     const dagreGraph = new dagre.graphlib.Graph();
     dagreGraph.setDefaultEdgeLabel(() => ({}));
 
-    const nodeWidth = 200;
-    const nodeHeight = 80;
+    const isHorizontal = direction === "LR";
+    dagreGraph.setGraph({ rankdir: direction });
 
-    const getLayoutedElements = (nodes: any, edges: any, direction = "TB") => {
-        const isHorizontal = direction === "LR";
-        dagreGraph.setGraph({ rankdir: direction });
-
-        nodes.forEach((node: any) => {
-            dagreGraph.setNode(node.id, {
-                width: nodeWidth,
-                height: nodeHeight,
-            });
+    nodes.forEach((node: Node) => {
+        dagreGraph.setNode(node.id, {
+            width: NODE_WIDTH,
+            height: NODE_HEIGHT,
         });
+    });
 
-        edges.forEach((edge: any) => {
-            dagreGraph.setEdge(edge.source, edge.target);
-        });
+    edges.forEach((edge: Edge) => {
+        dagreGraph.setEdge(edge.source, edge.target);
+    });
 
-        dagre.layout(dagreGraph);
+    dagre.layout(dagreGraph);
 
-        nodes.forEach((node: any) => {
-            const nodeWithPosition = dagreGraph.node(node.id);
-            node.targetPosition = isHorizontal ? "left" : "top";
-            node.sourcePosition = isHorizontal ? "right" : "bottom";
+    nodes.forEach((node: Node) => {
+        const nodeWithPosition = dagreGraph.node(node.id);
+        node.targetPosition = isHorizontal ? Position.Left : Position.Top;
+        node.sourcePosition = isHorizontal ? Position.Right : Position.Bottom;
 
-            // We are shifting the dagre node position (anchor=center center) to the top left
-            // so it matches the React Flow node anchor point (top left).
-            node.position = {
-                x: nodeWithPosition.x - nodeWidth / 2,
-                y: nodeWithPosition.y - nodeHeight / 2,
-            };
+        node.position = {
+            x: nodeWithPosition.x - NODE_WIDTH / 2,
+            y: nodeWithPosition.y - NODE_HEIGHT / 2,
+        };
 
-            return node;
-        });
+        return node;
+    });
 
-        return { nodes, edges };
-    };
+    return { nodes, edges };
+};
+
+const Quests = ({ traderGraphData }: IQuestProps) => {
+    const [currentTrader, setCurrentTrader] = useState<number>(0);
+    const [graphDirection, setGraphDirection] = useState<string>("TB");
 
     const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
-        initialNodes,
-        initialEdges
+        traderGraphData[currentTrader],
+        graphDirection
     );
+
     const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
 
-    const onConnect = useCallback(
-        (params: any) =>
-            setEdges((eds) =>
-                addEdge(
-                    {
-                        ...params,
-                        type: ConnectionLineType.SmoothStep,
-                        animated: true,
-                    },
-                    eds
-                )
-            ),
-        []
-    );
+    useEffect(() => {
+        const { nodes: layoutedNodes, edges: layoutedEdges } =
+            getLayoutedElements(traderGraphData[currentTrader], graphDirection);
 
-    const onLayout = useCallback(
-        (direction: any) => {
-            const { nodes: layoutedNodes, edges: layoutedEdges } =
-                getLayoutedElements(nodes, edges, direction);
-
-            setNodes([...layoutedNodes]);
-            setEdges([...layoutedEdges]);
-        },
-        [nodes, edges]
-    );
+        setNodes([...layoutedNodes]);
+        setEdges([...layoutedEdges]);
+    }, [currentTrader, graphDirection]);
 
     return (
         <div className="layoutflow">
@@ -101,14 +86,39 @@ const Quests = ({ questData }: IQuestProps) => {
                 edges={edges}
                 onNodesChange={onNodesChange}
                 onEdgesChange={onEdgesChange}
-                onConnect={onConnect}
                 connectionLineType={ConnectionLineType.SmoothStep}
+                nodesDraggable={false}
+                nodesConnectable={false}
                 fitView
             />
             <div className="controls">
-                <button onClick={() => onLayout("TB")}>vertical layout</button>
-                <button onClick={() => onLayout("LR")}>
+                <button onClick={() => setGraphDirection("TB")}>
+                    vertical layout
+                </button>
+                <button onClick={() => setGraphDirection("LR")}>
                     horizontal layout
+                </button>
+                <button
+                    onClick={() =>
+                        setCurrentTrader(
+                            currentTrader < 7
+                                ? currentTrader + 1
+                                : currentTrader
+                        )
+                    }
+                >
+                    Increment Trdaer
+                </button>
+                <button
+                    onClick={() =>
+                        setCurrentTrader(
+                            currentTrader > 0
+                                ? currentTrader - 1
+                                : currentTrader
+                        )
+                    }
+                >
+                    Decrement Trdaer
                 </button>
             </div>
         </div>

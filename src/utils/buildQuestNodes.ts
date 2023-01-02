@@ -69,7 +69,7 @@ const transformFirebaseTraderData = (
 const generateTraderNodes = (trader: TraderData): QuestNode[] => {
     const rootNode: QuestNode = {
         id: "root",
-        type: "input",
+        type: "traderNode",
         // Needs QuestNode data
         data: { label: trader.name },
         position: { x: 0, y: 0 },
@@ -78,6 +78,7 @@ const generateTraderNodes = (trader: TraderData): QuestNode[] => {
         ([quest, data]): QuestNode => {
             return {
                 id: quest,
+                type: "questNode",
                 data: { label: data.name },
                 position: { x: 0, y: 0 },
             };
@@ -88,7 +89,7 @@ const generateTraderNodes = (trader: TraderData): QuestNode[] => {
 
 const generateTraderEdges = (quests: Quests): QuestEdge[] => {
     const edgeType = ConnectionLineType.Bezier;
-    const [validQuests, invalidQuests] = _.partition(
+    const [childrenQeusts, parentQuests] = _.partition(
         Object.entries(quests),
         ([quest, data]) => {
             if (!data.prior) return false;
@@ -99,11 +100,11 @@ const generateTraderEdges = (quests: Quests): QuestEdge[] => {
         }
     );
 
-    validQuests.sort(([questA, dataA], [questB, dataB]) => {
+    childrenQeusts.sort(([questA, dataA], [questB, dataB]) => {
         return dataA.prior.length - dataB.prior.length;
     });
 
-    const questEdges = validQuests.map(([quest, data]): QuestEdge[] => {
+    const questEdges = childrenQeusts.map(([quest, data]): QuestEdge[] => {
         const priorEdges: QuestEdge[] = data.prior.map((priorQuest) => {
             return {
                 id: `${priorQuest}-${quest}`,
@@ -116,7 +117,7 @@ const generateTraderEdges = (quests: Quests): QuestEdge[] => {
         return priorEdges;
     });
 
-    const rootEdges: QuestEdge[] = invalidQuests.map(
+    const rootEdges: QuestEdge[] = parentQuests.map(
         ([quest, data]): QuestEdge => {
             return {
                 id: `root-${quest}`,
@@ -132,7 +133,7 @@ const generateTraderEdges = (quests: Quests): QuestEdge[] => {
 };
 
 const generateTraderGraphData = (firebaseTraderData: Traders | null) => {
-    if (!firebaseTraderData) return;
+    if (!firebaseTraderData) return null;
     const allTraderData = transformFirebaseTraderData(firebaseTraderData);
     const allTraderQuestNodes: TraderGraphData[] = allTraderData.map(
         (trader): TraderGraphData => {

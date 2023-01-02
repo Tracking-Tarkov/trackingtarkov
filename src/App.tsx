@@ -2,15 +2,16 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { basicRealtimeApiCall, auth } from "./utils/firebase";
 import { onAuthStateChanged } from "firebase/auth";
-
-import ThemeProvider from "@mui/system/ThemeProvider";
 import { createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Header from "./components/Header/Header";
 import Maps from "./pages/Maps";
 import Attributions from "./pages/Attributions";
 import Quests from "./pages/Quests";
-import { Traders } from "./utils/buildQuestNodes";
+import generateTraderGraphData, {
+    TraderGraphData,
+} from "./utils/buildQuestNodes";
+import ThemeProvider from "@mui/system/ThemeProvider";
 
 import "./App.scss";
 
@@ -20,7 +21,7 @@ const theme = createTheme({
     },
 });
 
-const getBaseData = async () => {
+const getFirebaseData = async () => {
     let lastUpdated = (await basicRealtimeApiCall("traders/lastUpdated")).data;
     if (
         !localStorage.getItem("lastUpdated") ||
@@ -37,7 +38,9 @@ const getBaseData = async () => {
 
 const App = () => {
     const [uid, setUid] = useState<string>("");
-    const [questData, setQuestData] = useState<Traders | null>(null);
+    const [traderGraphData, setTraderGraphData] = useState<
+        TraderGraphData[] | null
+    >(null);
 
     onAuthStateChanged(auth, (user) => {
         if (user && user.uid !== uid) {
@@ -46,7 +49,9 @@ const App = () => {
     });
 
     useEffect(() => {
-        getBaseData().then(setQuestData);
+        getFirebaseData()
+            .then(generateTraderGraphData)
+            .then(setTraderGraphData);
     }, []);
 
     return (
@@ -58,8 +63,8 @@ const App = () => {
                     <Route
                         path="/"
                         element={
-                            questData ? (
-                                <Quests questData={questData} />
+                            traderGraphData ? (
+                                <Quests traderGraphData={traderGraphData} />
                             ) : (
                                 <p>...Loading</p>
                             )
