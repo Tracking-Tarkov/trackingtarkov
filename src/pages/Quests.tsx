@@ -9,6 +9,8 @@ import ReactFlow, {
 } from "reactflow";
 import dagre from "dagre";
 import { TraderGraphData } from "../utils/buildQuestNodes";
+import QuestNode from "../components/Nodes/QuestNode";
+import TraderNode from "../components/Nodes/TraderNode";
 
 import "reactflow/dist/style.css";
 import "./styles/quests.scss";
@@ -19,6 +21,8 @@ export interface IQuestProps {
 
 const NODE_WIDTH = 200;
 const NODE_HEIGHT = 80;
+
+const nodeTypes = { questNode: QuestNode, traderNode: TraderNode };
 
 const getLayoutedElements = (
     { nodes, edges }: { nodes: Node<any>[]; edges: Edge[] },
@@ -87,6 +91,7 @@ const Quests = ({ traderGraphData }: IQuestProps) => {
                 onNodesChange={onNodesChange}
                 onEdgesChange={onEdgesChange}
                 connectionLineType={ConnectionLineType.SmoothStep}
+                nodeTypes={nodeTypes}
                 nodesDraggable={false}
                 nodesConnectable={false}
                 fitView

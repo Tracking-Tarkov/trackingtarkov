@@ -1,4 +1,4 @@
-import ReactFlow, { ConnectionLineType } from "reactflow";
+import ReactFlow, { ConnectionLineType, Node } from "reactflow";
 import _ from "lodash";
 
 export type Traders = Record<string, FirebaseTrader>;
@@ -26,15 +26,12 @@ export interface QuestData {
     type: string;
 }
 
-export interface QuestNodeData {
-    data: string;
+export interface QuestNode extends Node {
+    data: QuestData;
 }
 
-export interface QuestNode {
-    id: string;
-    type?: string;
-    data: any;
-    position: { x: number; y: number };
+export interface TraderNode extends Node {
+    data: TraderData;
 }
 
 export interface QuestEdge {
@@ -66,12 +63,12 @@ const transformFirebaseTraderData = (
     return data;
 };
 
-const generateTraderNodes = (trader: TraderData): QuestNode[] => {
-    const rootNode: QuestNode = {
+const generateTraderNodes = (trader: TraderData): Node[] => {
+    const rootNode: TraderNode = {
         id: "root",
         type: "traderNode",
         // Needs QuestNode data
-        data: { label: trader.name },
+        data: trader,
         position: { x: 0, y: 0 },
     };
     const questNodes = Object.entries(trader.quests).map(
@@ -79,7 +76,7 @@ const generateTraderNodes = (trader: TraderData): QuestNode[] => {
             return {
                 id: quest,
                 type: "questNode",
-                data: { label: data.name },
+                data: data,
                 position: { x: 0, y: 0 },
             };
         }
