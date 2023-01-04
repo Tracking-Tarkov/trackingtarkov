@@ -1,3 +1,5 @@
+@import "../../../colors.scss";
+
 .quest-node {
     width: 150px;
     height: auto;
@@ -5,10 +7,92 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid #eee;
     border-radius: 2px;
-    background: white;
-    color: black;
+    color: white;
     text-align: center;
     font-size: 12px;
+    cursor: pointer;
   }
+
+.prapor-node {
+    background: $prapor;
+    border: 1px solid $prapor-highlight;
+}
+
+.selected > .prapor-node { 
+    box-shadow: 0 0 0 1px $prapor-highlight;
+    border-radius: 2px;
+}
+
+.therapist-node {
+    background: $therapist;
+    border: 1px solid $therapist-highlight;
+}
+
+.selected > .therapist-node { 
+    box-shadow: 0 0 0 1px $therapist-highlight;
+    border-radius: 2px;
+}
+
+.skier-node {
+    background: $skier;
+    border: 1px solid $skier-highlight;
+}
+
+.selected > .skier-node { 
+    box-shadow: 0 0 0 1px $skier-highlight;
+    border-radius: 2px;
+}
+
+.peacekeeper-node {
+    background: $peacekeeper;
+    border: 1px solid $peacekeeper-highlight;
+}
+
+.selected > .peacekeeper-node { 
+    box-shadow: 0 0 0 1px $peacekeeper-highlight;
+    border-radius: 2px;
+}
+
+.mechanic-node {
+    background: $mechanic;
+    border: 1px solid $mechanic-highlight;
+}
+
+.selected > .mechanic-node { 
+    box-shadow: 0 0 0 1px $mechanic-highlight;
+    border-radius: 2px;
+}
+
+.ragman-node {
+    background: $ragman;
+    border: 1px solid $ragman-highlight;
+}
+
+.selected > .ragman-node { 
+    box-shadow: 0 0 0 1px $ragman-highlight;
+    border-radius: 2px;
+}
+
+.jaeger-node {
+    background: $jaeger;
+    border: 1px solid $jaeger-highlight;
+}
+
+.selected > .jaeger-node { 
+    box-shadow: 0 0 0 1px $jaeger-highlight;
+    border-radius: 2px;
+}
+
+.fence-node {
+    background: $fence;
+    border: 1px solid $fence-highlight;
+}
+
+.selected > .fence-node { 
+    box-shadow: 0 0 0 1px $fence-highlight;
+    border-radius: 2px;
+}
+
+
+

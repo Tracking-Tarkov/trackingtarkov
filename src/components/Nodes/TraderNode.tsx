@@ -11,8 +11,8 @@ export interface ITraderNode extends NodeProps {
 const TraderNode = ({ data }: ITraderNode) => {
     return (
         <div className="trader-node">
-            <Handle type="target" position={Position.Top} />
-            <div>{data.name}</div>
+            <img src={data.image} alt="Prapor" />
+            {data.name}
             <Handle type="source" position={Position.Bottom} />
         </div>
     );

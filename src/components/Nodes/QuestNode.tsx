@@ -10,7 +10,7 @@ export interface IQuestNode extends NodeProps {
 
 const QuestNode = ({ data }: IQuestNode) => {
     return (
-        <div className="quest-node">
+        <div className={`quest-node ${data.trader.toLowerCase()}-node`}>
             <Handle type="target" position={Position.Top} />
             <div>{data.name}</div>
             <Handle type="source" position={Position.Bottom} />

@@ -1,14 +1,17 @@
 .trader-node {
     width: 150px;
-    height: auto;
-    padding: 9px;
+    height: 100px;
     display: flex;
     justify-content: center;
+    flex-direction: column;
     align-items: center;
-    border: 1px solid #eee;
-    border-radius: 2px;
-    background: white;
-    color: black;
     text-align: center;
     font-size: 12px;
+    color: white;
+    img {
+        height: 100%;
+        width: auto;
+        overflow: hidden;
+        border-radius: 2px;
+    }
   }

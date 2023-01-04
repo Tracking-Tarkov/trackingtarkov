@@ -20,7 +20,7 @@ export interface IQuestProps {
 }
 
 const NODE_WIDTH = 200;
-const NODE_HEIGHT = 80;
+const NODE_HEIGHT = 100;
 
 const nodeTypes = { questNode: QuestNode, traderNode: TraderNode };
 
@@ -63,6 +63,8 @@ const getLayoutedElements = (
     return { nodes, edges };
 };
 
+const onNodeClick = (event: any, node: Node) => console.log("click node", node);
+
 const Quests = ({ traderGraphData }: IQuestProps) => {
     const [currentTrader, setCurrentTrader] = useState<number>(0);
     const [graphDirection, setGraphDirection] = useState<string>("TB");
@@ -94,6 +96,8 @@ const Quests = ({ traderGraphData }: IQuestProps) => {
                 nodeTypes={nodeTypes}
                 nodesDraggable={false}
                 nodesConnectable={false}
+                elementsSelectable={true}
+                onNodeClick={onNodeClick}
                 fitView
             />
             <div className="controls">

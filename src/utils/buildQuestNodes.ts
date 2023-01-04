@@ -24,6 +24,7 @@ export interface QuestData {
     prior: string[];
     next: string[];
     type: string;
+    trader: string;
 }
 
 export interface QuestNode extends Node {
@@ -76,7 +77,7 @@ const generateTraderNodes = (trader: TraderData): Node[] => {
             return {
                 id: quest,
                 type: "questNode",
-                data: data,
+                data: { ...data, trader: trader.name },
                 position: { x: 0, y: 0 },
             };
         }
