@@ -5,12 +5,14 @@ import ReactFlow, {
     useEdgesState,
     Edge,
     Node,
-    Position,
+    FitView,
 } from "reactflow";
 import dagre from "dagre";
 import { TraderGraphData } from "../utils/buildQuestNodes";
 import QuestNode from "../components/Nodes/QuestNode";
 import TraderNode from "../components/Nodes/TraderNode";
+import TraderBar from "../components/TraderBar/TraderBar";
+import Box from "@mui/material/Box";
 
 import "reactflow/dist/style.css";
 import "./styles/quests.scss";
@@ -24,15 +26,16 @@ const NODE_HEIGHT = 100;
 
 const nodeTypes = { questNode: QuestNode, traderNode: TraderNode };
 
-const getLayoutedElements = (
-    { nodes, edges }: { nodes: Node<any>[]; edges: Edge[] },
-    direction: string
-) => {
+const getLayoutedElements = ({
+    nodes,
+    edges,
+}: {
+    nodes: Node<any>[];
+    edges: Edge[];
+}) => {
     const dagreGraph = new dagre.graphlib.Graph();
     dagreGraph.setDefaultEdgeLabel(() => ({}));
-
-    const isHorizontal = direction === "LR";
-    dagreGraph.setGraph({ rankdir: direction });
+    dagreGraph.setGraph({});
 
     nodes.forEach((node: Node) => {
         dagreGraph.setNode(node.id, {
@@ -49,12 +52,20 @@ const getLayoutedElements = (
 
     nodes.forEach((node: Node) => {
         const nodeWithPosition = dagreGraph.node(node.id);
-        node.targetPosition = isHorizontal ? Position.Left : Position.Top;
-        node.sourcePosition = isHorizontal ? Position.Right : Position.Bottom;
-
         node.position = {
             x: nodeWithPosition.x - NODE_WIDTH / 2,
             y: nodeWithPosition.y - NODE_HEIGHT / 2,
+        };
+
+        return node;
+    });
+
+    const rootFromCenter = nodes[0].position.x - window.innerWidth / 2;
+
+    nodes.forEach((node: Node) => {
+        node.position = {
+            x: node.position.x - rootFromCenter - NODE_WIDTH / 2,
+            y: node.position.y + 100,
         };
 
         return node;
@@ -67,68 +78,47 @@ const onNodeClick = (event: any, node: Node) => console.log("click node", node);
 
 const Quests = ({ traderGraphData }: IQuestProps) => {
     const [currentTrader, setCurrentTrader] = useState<number>(0);
-    const [graphDirection, setGraphDirection] = useState<string>("TB");
 
     const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
-        traderGraphData[currentTrader],
-        graphDirection
+        traderGraphData[currentTrader]
     );
-
     const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
 
     useEffect(() => {
         const { nodes: layoutedNodes, edges: layoutedEdges } =
-            getLayoutedElements(traderGraphData[currentTrader], graphDirection);
+            getLayoutedElements(traderGraphData[currentTrader]);
 
         setNodes([...layoutedNodes]);
         setEdges([...layoutedEdges]);
-    }, [currentTrader, graphDirection]);
+    }, [currentTrader]);
 
     return (
-        <div className="layoutflow">
-            <ReactFlow
-                nodes={nodes}
-                edges={edges}
-                onNodesChange={onNodesChange}
-                onEdgesChange={onEdgesChange}
-                connectionLineType={ConnectionLineType.SmoothStep}
-                nodeTypes={nodeTypes}
-                nodesDraggable={false}
-                nodesConnectable={false}
-                elementsSelectable={true}
-                onNodeClick={onNodeClick}
-                fitView
+        <div>
+            <TraderBar
+                traders={traderGraphData}
+                currentTrader={currentTrader}
+                setCurrentTrader={setCurrentTrader}
             />
-            <div className="controls">
-                <button onClick={() => setGraphDirection("TB")}>
-                    vertical layout
-                </button>
-                <button onClick={() => setGraphDirection("LR")}>
-                    horizontal layout
-                </button>
-                <button
-                    onClick={() =>
-                        setCurrentTrader(
-                            currentTrader < 7
-                                ? currentTrader + 1
-                                : currentTrader
-                        )
-                    }
-                >
-                    Increment Trdaer
-                </button>
-                <button
-                    onClick={() =>
-                        setCurrentTrader(
-                            currentTrader > 0
-                                ? currentTrader - 1
-                                : currentTrader
-                        )
-                    }
-                >
-                    Decrement Trdaer
-                </button>
+            <div
+                className="layoutflow"
+                style={{ width: window.innerWidth, height: window.innerHeight }}
+            >
+                <ReactFlow
+                    nodes={nodes}
+                    edges={edges}
+                    onNodesChange={onNodesChange}
+                    onEdgesChange={onEdgesChange}
+                    onNodeClick={onNodeClick}
+                    connectionLineType={ConnectionLineType.SmoothStep}
+                    nodeTypes={nodeTypes}
+                    nodesDraggable={false}
+                    nodesConnectable={false}
+                    elementsSelectable={true}
+                    minZoom={0}
+                    maxZoom={1}
+                    defaultViewport={{ x: 0, y: 0, zoom: 1 }}
+                />
             </div>
         </div>
     );

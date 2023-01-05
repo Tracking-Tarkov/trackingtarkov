@@ -4,7 +4,7 @@ import { basicRealtimeApiCall, auth } from "./utils/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import Header from "./components/Header/Header";
+import SideBar from "./components/SideBar/SideBar";
 import Maps from "./pages/Maps";
 import Attributions from "./pages/Attributions";
 import Quests from "./pages/Quests";
@@ -57,8 +57,9 @@ const App = () => {
     return (
         <ThemeProvider theme={theme}>
             <Router>
+                {/* <div className="split-bar"> */}
                 <CssBaseline />
-                <Header />
+                <SideBar />
                 <Routes>
                     <Route
                         path="/"
@@ -73,6 +74,7 @@ const App = () => {
                     <Route path="maps" element={<Maps />} />
                     <Route path="attributions" element={<Attributions />} />
                 </Routes>
+                {/* </div> */}
             </Router>
         </ThemeProvider>
     );
