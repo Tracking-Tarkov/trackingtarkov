@@ -45,7 +45,7 @@ const QuestNode = ({ data }: IQuestNode) => {
         };
 
         onValue(questStateRef, snapshotCallback);
-    }, []);
+    }, [user]);
 
     const closePopover = useCallback(
         (event: MouseEvent) => {
