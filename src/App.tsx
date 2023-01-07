@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { basicRealtimeApiCall, auth } from "./utils/firebase";
-import { onAuthStateChanged } from "firebase/auth";
+import { basicRealtimeApiCall } from "./utils/firebase";
 import { createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import SideBar from "./components/SideBar/SideBar";
@@ -18,6 +17,15 @@ import "./App.scss";
 const theme = createTheme({
     palette: {
         mode: "dark",
+    },
+    components: {
+        MuiTabs: {
+            styleOverrides: {
+                indicator: {
+                    backgroundColor: "#cecece",
+                },
+            },
+        },
     },
 });
 
@@ -37,16 +45,9 @@ const getFirebaseData = async () => {
 };
 
 const App = () => {
-    const [uid, setUid] = useState<string>("");
     const [traderGraphData, setTraderGraphData] = useState<
         TraderGraphData[] | null
     >(null);
-
-    onAuthStateChanged(auth, (user) => {
-        if (user && user.uid !== uid) {
-            setUid(user.uid);
-        }
-    });
 
     useEffect(() => {
         getFirebaseData()
@@ -56,25 +57,25 @@ const App = () => {
 
     return (
         <ThemeProvider theme={theme}>
+            <CssBaseline />
             <Router>
-                {/* <div className="split-bar"> */}
-                <CssBaseline />
                 <SideBar />
-                <Routes>
-                    <Route
-                        path="/"
-                        element={
-                            traderGraphData ? (
-                                <Quests traderGraphData={traderGraphData} />
-                            ) : (
-                                <p>...Loading</p>
-                            )
-                        }
-                    />
-                    <Route path="maps" element={<Maps />} />
-                    <Route path="attributions" element={<Attributions />} />
-                </Routes>
-                {/* </div> */}
+                <div className="page-container">
+                    <Routes>
+                        <Route
+                            path="/"
+                            element={
+                                traderGraphData ? (
+                                    <Quests traderGraphData={traderGraphData} />
+                                ) : (
+                                    <p>...Loading</p>
+                                )
+                            }
+                        />
+                        <Route path="maps" element={<Maps />} />
+                        <Route path="attributions" element={<Attributions />} />
+                    </Routes>
+                </div>
             </Router>
         </ThemeProvider>
     );

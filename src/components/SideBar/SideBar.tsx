@@ -1,11 +1,16 @@
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth, signIn } from "../../utils/firebase";
+
 import { styled, Theme, CSSObject } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
+
 import IconButton from "@mui/material/IconButton";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -16,13 +21,18 @@ import ListItemText from "@mui/material/ListItemText";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import MapIcon from "@mui/icons-material/Map";
 import InfoIcon from "@mui/icons-material/Info";
+import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
+import LoopIcon from "@mui/icons-material/Loop";
+import discordIcon from "../../icons/discord-mark-white.png";
 
 export interface NavItems {
     title: string;
     icon: JSX.Element;
     path: string;
 }
-const navItems: NavItems[] = [
+
+const topNavItems: NavItems[] = [
     { title: "Quests", icon: <AssignmentIcon />, path: "/" },
     { title: "Maps", icon: <MapIcon />, path: "maps" },
     { title: "Attributions", icon: <InfoIcon />, path: "attributions" },
@@ -39,17 +49,19 @@ const openedMixin = (theme: Theme): CSSObject => ({
     overflowX: "hidden",
 });
 
-const closedMixin = (theme: Theme): CSSObject => ({
-    transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-    }),
-    overflowX: "hidden",
-    width: `calc(${theme.spacing(7)} + 1px)`,
-    [theme.breakpoints.up("sm")]: {
-        width: `calc(${theme.spacing(8)} + 1px)`,
-    },
-});
+const closedMixin = (theme: Theme): CSSObject => {
+    return {
+        transition: theme.transitions.create("width", {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+        overflowX: "hidden",
+        width: `calc(${theme.spacing(7)} + 1px)`,
+        [theme.breakpoints.up("sm")]: {
+            width: `calc(${theme.spacing(8)} + 1px)`,
+        },
+    };
+};
 
 const DrawerHeader = styled("div")(({ theme }) => ({
     display: "flex",
@@ -78,8 +90,14 @@ const Drawer = styled(MuiDrawer, {
     }),
 }));
 
+const getIsMobile = () => {
+    return !window.matchMedia("(max-width: 992px)").matches;
+};
+
 const SideBar = () => {
-    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [drawerOpen, setDrawerOpen] = useState(getIsMobile());
+    const [user, loading, error] = useAuthState(auth);
+
     const navigate = useNavigate();
 
     const onNav = useCallback(
@@ -89,10 +107,13 @@ const SideBar = () => {
         [navigate]
     );
 
-    const handleDrawerToggle = () => {
+    const handleDrawerToggle = useCallback(() => {
         setDrawerOpen((prevState) => !prevState);
-        console.log("here");
-    };
+    }, [setDrawerOpen]);
+
+    const typographySX = { opacity: drawerOpen ? 1 : 0, cursor: "pointer" };
+
+    const listItemSX = { display: "block" };
 
     const listItemButtonSX = {
         minHeight: 48,
@@ -100,20 +121,38 @@ const SideBar = () => {
         px: 2.5,
     };
 
-    const listItemIconSx = {
+    const listItemIconSX = {
         minWidth: 0,
         mr: drawerOpen ? 3 : "auto",
         justifyContent: "center",
     };
 
+    const userOptions = user
+        ? {
+              title: "Logout",
+              icon: <LogoutIcon />,
+              onClick: () => {
+                  signOut(auth);
+              },
+          }
+        : loading
+        ? {
+              title: "Loading",
+              icon: <LoopIcon />,
+              onClick: () => {},
+          }
+        : {
+              title: "Login",
+              icon: <LoginIcon />,
+              onClick: () => {
+                  signIn();
+              },
+          };
+
     const drawer = (
         <>
             <DrawerHeader>
-                <Typography
-                    variant="h6"
-                    sx={{ opacity: drawerOpen ? 1 : 0, cursor: "pointer" }}
-                    onClick={onNav("/")}
-                >
+                <Typography variant="h6" sx={typographySX} onClick={onNav("/")}>
                     Tracking Tarkov
                 </Typography>
                 <IconButton onClick={handleDrawerToggle}>
@@ -124,17 +163,13 @@ const SideBar = () => {
             <Divider />
 
             <List>
-                {navItems.map((item, index) => (
-                    <ListItem
-                        key={item.title}
-                        disablePadding
-                        sx={{ display: "block" }}
-                    >
+                {topNavItems.map((item, index) => (
+                    <ListItem key={item.title} disablePadding sx={listItemSX}>
                         <ListItemButton
                             sx={listItemButtonSX}
                             onClick={onNav(item.path)}
                         >
-                            <ListItemIcon sx={listItemIconSx}>
+                            <ListItemIcon sx={listItemIconSX}>
                                 {item.icon}
                             </ListItemIcon>
                             <ListItemText
@@ -145,23 +180,68 @@ const SideBar = () => {
                     </ListItem>
                 ))}
             </List>
+
+            <Divider />
+
+            <Divider sx={{ marginTop: "auto" }} />
+
+            <List>
+                <ListItem
+                    key={"user-options-icon"}
+                    disablePadding
+                    sx={listItemSX}
+                >
+                    <ListItemButton
+                        sx={listItemButtonSX}
+                        onClick={userOptions.onClick}
+                    >
+                        <ListItemIcon sx={listItemIconSX}>
+                            {userOptions.icon}
+                        </ListItemIcon>
+                        <ListItemText
+                            primary={userOptions.title}
+                            sx={{ opacity: drawerOpen ? 1 : 0 }}
+                        />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={"discord-icon"} disablePadding sx={listItemSX}>
+                    <ListItemButton
+                        sx={listItemButtonSX}
+                        onClick={() =>
+                            window.open("https://discord.gg/VkuW4wfC")
+                        }
+                    >
+                        <ListItemIcon sx={listItemIconSX}>
+                            <img
+                                className="icon-preview"
+                                src={discordIcon}
+                                alt=""
+                                width="24px"
+                                height="auto"
+                            />
+                        </ListItemIcon>
+                        <ListItemText
+                            primary="Join Discord"
+                            sx={{ opacity: drawerOpen ? 1 : 0 }}
+                        />
+                    </ListItemButton>
+                </ListItem>
+            </List>
         </>
     );
 
     return (
-        <>
-            <Box component="nav">
-                <Drawer
-                    variant="permanent"
-                    open={drawerOpen}
-                    ModalProps={{
-                        keepMounted: true, // Better open performance on mobile.
-                    }}
-                >
-                    {drawer}
-                </Drawer>
-            </Box>
-        </>
+        <Box component="nav">
+            <Drawer
+                variant="permanent"
+                open={drawerOpen}
+                ModalProps={{
+                    keepMounted: true, // Better open performance on mobile.
+                }}
+            >
+                {drawer}
+            </Drawer>
+        </Box>
     );
 };
 

@@ -19,6 +19,11 @@
     border: 1px solid $prapor-highlight;
 }
 
+.prapor-completed {
+    background: $prapor-highlight;
+    border: 1px solid $prapor-highlight;
+}
+
 .selected > .prapor-node { 
     box-shadow: 0 0 0 1px $prapor-highlight;
     border-radius: 2px;
@@ -26,6 +31,11 @@
 
 .therapist-node {
     background: $therapist;
+    border: 1px solid $therapist-highlight;
+}
+
+.therapist-completed {
+    background: $therapist-highlight;
     border: 1px solid $therapist-highlight;
 }
 
@@ -39,6 +49,11 @@
     border: 1px solid $skier-highlight;
 }
 
+.skier-completed {
+    background: $skier-highlight;
+    border: 1px solid $skier-highlight;
+}
+
 .selected > .skier-node { 
     box-shadow: 0 0 0 1px $skier-highlight;
     border-radius: 2px;
@@ -46,6 +61,11 @@
 
 .peacekeeper-node {
     background: $peacekeeper;
+    border: 1px solid $peacekeeper-highlight;
+}
+
+.peacekeeper-completed {
+    background: $peacekeeper-highlight;
     border: 1px solid $peacekeeper-highlight;
 }
 
@@ -59,6 +79,11 @@
     border: 1px solid $mechanic-highlight;
 }
 
+.mechanic-completed {
+    background: $mechanic-highlight;
+    border: 1px solid $mechanic-highlight;
+}
+
 .selected > .mechanic-node { 
     box-shadow: 0 0 0 1px $mechanic-highlight;
     border-radius: 2px;
@@ -66,6 +91,11 @@
 
 .ragman-node {
     background: $ragman;
+    border: 1px solid $ragman-highlight;
+}
+
+.ragman-completed {
+    background: $ragman-highlight;
     border: 1px solid $ragman-highlight;
 }
 
@@ -79,6 +109,11 @@
     border: 1px solid $jaeger-highlight;
 }
 
+.jaeger-completed {
+    background: $jaeger-highlight;
+    border: 1px solid $jaeger-highlight;
+}
+
 .selected > .jaeger-node { 
     box-shadow: 0 0 0 1px $jaeger-highlight;
     border-radius: 2px;
@@ -86,6 +121,11 @@
 
 .fence-node {
     background: $fence;
+    border: 1px solid $fence-highlight;
+}
+
+.fence-completed {
+    background: $fence-highlight;
     border: 1px solid $fence-highlight;
 }
 

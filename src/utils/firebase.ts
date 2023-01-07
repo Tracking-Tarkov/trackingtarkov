@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set, get } from "firebase/database";
+import { getDatabase, ref, set, get, update } from "firebase/database";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { firebaseConfig, firebaseConfigDev, dev } from "../config";
 
@@ -13,17 +13,17 @@ export const provider = new GoogleAuthProvider();
 const dbRef = ref(database);
 /* Authenticaiton  */
 
-export const SignIn = () => {
+export const signIn = () => {
     signInWithPopup(auth, provider)
         .then((result) => {
             /** @type {firebase.auth.OAuthCredential} */
-            let user = result.user;
+            const user = result.user;
 
-            set(ref(database, "users/" + user?.uid), {
-                uid: user?.uid,
-                name: user?.displayName,
-                email: user?.email,
-                creationTime: user?.metadata.creationTime,
+            update(ref(database, "users/" + user.uid), {
+                uid: user.uid,
+                name: user.displayName,
+                email: user.email,
+                creationTime: user.metadata.creationTime,
             });
         })
         .catch(() => {});

@@ -1,4 +1,5 @@
-import ReactFlow, { ConnectionLineType, Node } from "reactflow";
+import { ConnectionLineType, Edge, Node } from "reactflow";
+import dagre from "dagre";
 import _ from "lodash";
 
 export type Traders = Record<string, FirebaseTrader>;
@@ -19,12 +20,13 @@ export interface QuestData {
     kappa: boolean;
     link: string;
     name: string;
-    objective: string[];
+    objectives: string[];
     rewards: string[];
     prior: string[];
     next: string[];
     type: string;
     trader: string;
+    dbId: string;
 }
 
 export interface QuestNode extends Node {
@@ -77,7 +79,7 @@ const generateTraderNodes = (trader: TraderData): Node[] => {
             return {
                 id: quest,
                 type: "questNode",
-                data: { ...data, trader: trader.name },
+                data: { ...data, trader: trader.name, dbId: quest },
                 position: { x: 0, y: 0 },
             };
         }
@@ -146,6 +148,58 @@ const generateTraderGraphData = (firebaseTraderData: Traders | null) => {
         }
     );
     return allTraderQuestNodes;
+};
+
+const NODE_WIDTH = 200;
+const NODE_HEIGHT = 100;
+
+export const getLayoutedElements = ({
+    nodes,
+    edges,
+}: {
+    nodes: Node<any>[];
+    edges: Edge[];
+}) => {
+    const dagreGraph = new dagre.graphlib.Graph();
+    dagreGraph.setDefaultEdgeLabel(() => ({}));
+    dagreGraph.setGraph({});
+
+    nodes.forEach((node: Node) => {
+        dagreGraph.setNode(node.id, {
+            width: NODE_WIDTH,
+            height: NODE_HEIGHT,
+        });
+    });
+
+    edges.forEach((edge: Edge) => {
+        dagreGraph.setEdge(edge.source, edge.target);
+    });
+
+    dagre.layout(dagreGraph);
+
+    nodes.forEach((node: Node) => {
+        const nodeWithPosition = dagreGraph.node(node.id);
+        node.position = {
+            x: nodeWithPosition.x - NODE_WIDTH / 2,
+            y: nodeWithPosition.y - NODE_HEIGHT / 2,
+        };
+
+        return node;
+    });
+
+    const centerOfScreen = window.innerWidth / 2;
+    const rootFromCenter = nodes[0].position.x - centerOfScreen;
+
+    nodes.forEach((node: Node) => {
+        node.position = {
+            x: node.position.x - rootFromCenter - NODE_WIDTH / 2,
+            y: node.position.y + 100,
+        };
+
+        return node;
+    });
+
+    return { nodes, edges };
 };
 
 export default generateTraderGraphData;

@@ -19,6 +19,26 @@ const Attributions = () => {
                 Escape from Tarkov Wiki and is licensed under the Creative
                 Commons Attribution-Share Alike License.
             </p>
+            <h2>Graph Visualization</h2>
+            <p>
+                We are using{" "}
+                <a
+                    href="https://reactflow.dev/"
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    react flow
+                </a>{" "}
+                along with{" "}
+                <a
+                    href="https://github.com/dagrejs/dagre"
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    dagrejs
+                </a>{" "}
+                to generate the graph for the quests.
+            </p>
         </div>
     );
 };
