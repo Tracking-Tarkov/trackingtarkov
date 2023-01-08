@@ -1,9 +1,8 @@
-import { useEffect, useState, MouseEvent } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import ReactFlow, {
     ConnectionLineType,
     useNodesState,
     useEdgesState,
-    Node,
 } from "reactflow";
 import { TraderGraphData, getLayoutedElements } from "../utils/buildQuestNodes";
 import QuestNode from "../components/Nodes/QuestNode";
@@ -12,6 +11,8 @@ import TraderBar from "../components/TraderBar/TraderBar";
 
 import "reactflow/dist/style.css";
 import "./styles/quests.scss";
+import { database } from "../utils/firebase";
+import { goOffline, goOnline } from "firebase/database";
 
 export interface IQuestProps {
     traderGraphData: TraderGraphData[];
@@ -19,17 +20,20 @@ export interface IQuestProps {
 
 const nodeTypes = { questNode: QuestNode, traderNode: TraderNode };
 
-// const onNodeClick = (event: MouseEvent, node: Node) =>
-//     console.log("click node", node, event);
-
 const Quests = ({ traderGraphData }: IQuestProps) => {
     const [currentTrader, setCurrentTrader] = useState<number>(0);
+    const autoTimeout = useRef<NodeJS.Timeout>();
+    const isTimedOut = useRef(false);
 
     const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
         traderGraphData[currentTrader]
     );
     const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
+
+    useEffect(() => {
+        timeoutFunction();
+    }, []);
 
     useEffect(() => {
         const { nodes: layoutedNodes, edges: layoutedEdges } =
@@ -39,6 +43,26 @@ const Quests = ({ traderGraphData }: IQuestProps) => {
         setEdges([...layoutedEdges]);
         // eslint-disable-next-line
     }, [currentTrader]);
+
+    const onNodeClick = useCallback(() => {
+        if (isTimedOut.current) {
+            goOnline(database);
+            isTimedOut.current = false;
+        }
+        timeoutFunction();
+    }, [database]);
+
+    const hourInMilli = 3600000;
+    const timeoutFunction = () => {
+        if (autoTimeout.current) {
+            clearTimeout(autoTimeout.current);
+        }
+        autoTimeout.current = setTimeout(() => {
+            console.log("Timed out for inactivity");
+            goOffline(database);
+            isTimedOut.current = true;
+        }, hourInMilli);
+    };
 
     return (
         <>
@@ -51,9 +75,9 @@ const Quests = ({ traderGraphData }: IQuestProps) => {
                 <ReactFlow
                     nodes={nodes}
                     edges={edges}
+                    onNodeClick={onNodeClick}
                     onNodesChange={onNodesChange}
                     onEdgesChange={onEdgesChange}
-                    // onNodeClick={onNodeClick}
                     connectionLineType={ConnectionLineType.SmoothStep}
                     nodeTypes={nodeTypes}
                     nodesDraggable={false}

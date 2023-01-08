@@ -36,7 +36,7 @@ const QuestNode = ({ data }: IQuestNode) => {
 
         const questStateRef = ref(
             database,
-            `users/${user.uid}/completedQuests/${data.trader}/${data.dbId}/completed`
+            `users/${user.uid}/completedQuests/${data.trader}/${data.dbId}`
         );
 
         const snapshotCallback = (snapshot: DataSnapshot) => {
@@ -45,7 +45,7 @@ const QuestNode = ({ data }: IQuestNode) => {
         };
 
         onValue(questStateRef, snapshotCallback);
-    }, [user]);
+    }, [user, data]);
 
     const closePopover = useCallback(
         (event: MouseEvent) => {
@@ -60,18 +60,18 @@ const QuestNode = ({ data }: IQuestNode) => {
 
         const questRef = ref(
             database,
-            `users/${user.uid}/completedQuests/${data.trader}/${data.dbId}`
+            `users/${user.uid}/completedQuests/${data.trader}`
         );
 
-        update(questRef, { completed: !isQuestComplete });
-    }, [isQuestComplete]);
+        update(questRef, { [data.dbId]: !isQuestComplete });
+    }, [isQuestComplete, user, data]);
 
     return (
         <div
             ref={popoverAnchor}
-            className={`quest-node ${data.trader.toLowerCase()}-${
-                isQuestComplete ? "completed" : "node"
-            }`}
+            className={`quest-node ${data.trader.toLowerCase()}-node ${
+                isQuestComplete && data.trader.toLowerCase()
+            }-completed`}
             onClick={() => setOpenPopover(true)}
         >
             <Handle type="target" position={Position.Top} />
