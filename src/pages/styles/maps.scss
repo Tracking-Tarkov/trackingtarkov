@@ -1,0 +1,23 @@
+.element {
+    position: relative;
+    overflow: hidden;
+    width: calc(100vw - 65px);
+    height: calc(100vh - 48px);
+    // margin: 30px auto;
+}
+
+.wrapper {
+    height: 100%;
+}
+
+.map-image-wrapper {
+    // height: 200px;
+    // width: 400px;
+    // display: flex;
+    // align-items: center;
+    // justify-content: center;
+    position: relative;
+    overflow: hidden;
+    width: calc(100vw - 65px);
+    height: calc(100vh - 48px);
+}

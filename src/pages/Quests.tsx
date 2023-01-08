@@ -7,7 +7,7 @@ import ReactFlow, {
 import { TraderGraphData, getLayoutedElements } from "../utils/buildQuestNodes";
 import QuestNode from "../components/Nodes/QuestNode";
 import TraderNode from "../components/Nodes/TraderNode";
-import TraderBar from "../components/TraderBar/TraderBar";
+import GenericNavbar from "../components/GenericNavbar/GenericNavbar";
 
 import "reactflow/dist/style.css";
 import "./styles/quests.scss";
@@ -58,7 +58,6 @@ const Quests = ({ traderGraphData }: IQuestProps) => {
             clearTimeout(autoTimeout.current);
         }
         autoTimeout.current = setTimeout(() => {
-            console.log("Timed out for inactivity");
             goOffline(database);
             isTimedOut.current = true;
         }, hourInMilli);
@@ -66,10 +65,10 @@ const Quests = ({ traderGraphData }: IQuestProps) => {
 
     return (
         <>
-            <TraderBar
-                traders={traderGraphData}
-                currentTrader={currentTrader}
-                setCurrentTrader={setCurrentTrader}
+            <GenericNavbar
+                navData={traderGraphData.map((trader) => trader.name)}
+                currentNav={currentTrader}
+                setCurrentNav={setCurrentTrader}
             />
             <div className="layoutflow">
                 <ReactFlow
