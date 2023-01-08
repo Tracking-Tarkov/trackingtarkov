@@ -27,6 +27,7 @@ export interface QuestData {
     type: string;
     trader: string;
     dbId: string;
+    traderQuests: Quests;
 }
 
 export interface QuestNode extends Node {
@@ -59,7 +60,7 @@ const transformFirebaseTraderData = (
             return {
                 name: trader,
                 quests: data.quests,
-                image: data.image,
+                image: data.image
             };
         }
     );
@@ -72,15 +73,22 @@ const generateTraderNodes = (trader: TraderData): Node[] => {
         type: "traderNode",
         // Needs QuestNode data
         data: trader,
-        position: { x: 0, y: 0 },
+        position: { x: 0, y: 0 }
     };
     const questNodes = Object.entries(trader.quests).map(
         ([quest, data]): QuestNode => {
             return {
                 id: quest,
                 type: "questNode",
-                data: { ...data, trader: trader.name, dbId: quest },
-                position: { x: 0, y: 0 },
+                data: {
+                    ...data,
+                    next: data.next ?? [],
+                    prior: data.prior ?? [],
+                    trader: trader.name,
+                    dbId: quest,
+                    traderQuests: trader.quests
+                },
+                position: { x: 0, y: 0 }
             };
         }
     );
@@ -93,7 +101,7 @@ const generateTraderEdges = (quests: Quests): QuestEdge[] => {
         Object.entries(quests),
         ([quest, data]) => {
             if (!data.prior) return false;
-            const priorQuests = data.prior.filter((priorQuest) => {
+            const priorQuests = data.prior.filter(priorQuest => {
                 return !!quests[priorQuest];
             });
             return priorQuests.length;
@@ -104,18 +112,22 @@ const generateTraderEdges = (quests: Quests): QuestEdge[] => {
         return dataA.prior.length - dataB.prior.length;
     });
 
-    const questEdges = childrenQeusts.map(([quest, data]): QuestEdge[] => {
-        const priorEdges: QuestEdge[] = data.prior.map((priorQuest) => {
-            return {
-                id: `${priorQuest}-${quest}`,
-                source: priorQuest,
-                target: quest,
-                animated: false,
-                type: edgeType,
-            };
-        });
-        return priorEdges;
-    });
+    const questEdges = childrenQeusts.map(
+        ([quest, data]): QuestEdge[] => {
+            const priorEdges: QuestEdge[] = data.prior.map(
+                priorQuest => {
+                    return {
+                        id: `${priorQuest}-${quest}`,
+                        source: priorQuest,
+                        target: quest,
+                        animated: false,
+                        type: edgeType
+                    };
+                }
+            );
+            return priorEdges;
+        }
+    );
 
     const rootEdges: QuestEdge[] = parentQuests.map(
         ([quest, data]): QuestEdge => {
@@ -124,7 +136,7 @@ const generateTraderEdges = (quests: Quests): QuestEdge[] => {
                 source: "root",
                 target: quest,
                 animated: false,
-                type: edgeType,
+                type: edgeType
             };
         }
     );
@@ -132,9 +144,13 @@ const generateTraderEdges = (quests: Quests): QuestEdge[] => {
     return [...rootEdges, ...questEdges.flat()];
 };
 
-const generateTraderGraphData = (firebaseTraderData: Traders | null) => {
+const generateTraderGraphData = (
+    firebaseTraderData: Traders | null
+) => {
     if (!firebaseTraderData) return null;
-    const allTraderData = transformFirebaseTraderData(firebaseTraderData);
+    const allTraderData = transformFirebaseTraderData(
+        firebaseTraderData
+    );
     const allTraderQuestNodes: TraderGraphData[] = allTraderData.map(
         (trader): TraderGraphData => {
             const questNodes = generateTraderNodes(trader);
@@ -143,7 +159,7 @@ const generateTraderGraphData = (firebaseTraderData: Traders | null) => {
             return {
                 name: trader.name,
                 nodes: questNodes,
-                edges: questEdges,
+                edges: questEdges
             };
         }
     );
@@ -155,7 +171,7 @@ const NODE_HEIGHT = 100;
 
 export const getLayoutedElements = ({
     nodes,
-    edges,
+    edges
 }: {
     nodes: Node<any>[];
     edges: Edge[];
@@ -167,7 +183,7 @@ export const getLayoutedElements = ({
     nodes.forEach((node: Node) => {
         dagreGraph.setNode(node.id, {
             width: NODE_WIDTH,
-            height: NODE_HEIGHT,
+            height: NODE_HEIGHT
         });
     });
 
@@ -181,7 +197,7 @@ export const getLayoutedElements = ({
         const nodeWithPosition = dagreGraph.node(node.id);
         node.position = {
             x: nodeWithPosition.x - NODE_WIDTH / 2,
-            y: nodeWithPosition.y - NODE_HEIGHT / 2,
+            y: nodeWithPosition.y - NODE_HEIGHT / 2
         };
 
         return node;
@@ -193,7 +209,7 @@ export const getLayoutedElements = ({
     nodes.forEach((node: Node) => {
         node.position = {
             x: node.position.x - rootFromCenter - NODE_WIDTH / 2,
-            y: node.position.y + 100,
+            y: node.position.y + 100
         };
 
         return node;

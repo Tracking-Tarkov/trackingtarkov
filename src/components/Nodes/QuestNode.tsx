@@ -1,14 +1,10 @@
 import { useState, useCallback, useEffect, useRef, MouseEvent } from "react";
 import { Handle, NodeProps, Position } from "reactflow";
 import QuestPopover from "../QuestPopover/QuestPopover";
-import { QuestData } from "../../utils/buildQuestNodes";
+import { QuestData, TraderGraphData } from "../../utils/buildQuestNodes";
 import {
-    getDatabase,
     ref,
-    set,
-    get,
     update,
-    onChildChanged,
     onValue,
     DataSnapshot,
 } from "firebase/database";
@@ -17,7 +13,7 @@ import { auth, database } from "../../utils/firebase";
 import _ from "lodash";
 
 import "./styles/questnode.scss";
-import { getAllTruthyValues } from "../../utils/common";
+import { getAllQuestPriors } from "../../utils/common";
 
 export interface IQuestNode extends NodeProps {
     data: QuestData;
@@ -63,15 +59,21 @@ const QuestNode = ({ data }: IQuestNode) => {
             `users/${user.uid}/completedQuests/${data.trader}`
         );
 
-        update(questRef, { [data.dbId]: !isQuestComplete });
+        const updatedCompletions = { [data.dbId]: !isQuestComplete };
+        if (!isQuestComplete) {
+            const priors = getAllQuestPriors(data.dbId, data.traderQuests);
+            priors.forEach(prior => {
+                updatedCompletions[prior] = true;
+            });
+        }
+        update(questRef, updatedCompletions);
     }, [isQuestComplete, user, data]);
 
     return (
         <div
             ref={popoverAnchor}
-            className={`quest-node ${data.trader.toLowerCase()}-node ${
-                isQuestComplete && data.trader.toLowerCase()
-            }-completed`}
+            className={`quest-node ${data.trader.toLowerCase()}-node ${isQuestComplete && data.trader.toLowerCase()
+                }-completed`}
             onClick={() => setOpenPopover(true)}
         >
             <Handle type="target" position={Position.Top} />
@@ -81,6 +83,7 @@ const QuestNode = ({ data }: IQuestNode) => {
                 open={openPopover}
                 onClose={closePopover}
                 questInfo={data}
+                completed={isQuestComplete}
                 anchor={popoverAnchor}
                 updateQuestState={updateQuestState}
             />

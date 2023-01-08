@@ -40,6 +40,7 @@ const getFirebaseData = async () => {
         const traderQuests = (await basicRealtimeApiCall("traders/quests"))
             .data;
         localStorage.setItem("traderQuests", JSON.stringify(traderQuests));
+        return traderQuests;
     }
     return JSON.parse(localStorage.getItem("traderQuests") as string);
 };

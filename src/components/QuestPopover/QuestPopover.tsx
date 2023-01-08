@@ -2,8 +2,9 @@ import { MutableRefObject } from "react";
 import Popover from "@mui/material/Popover";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import CircleIcon from '@mui/icons-material/Circle';
 import { QuestData } from "../../utils/buildQuestNodes";
-import { Divider, List, ListItem, ListItemText } from "@mui/material";
+import { Button, Divider, List, ListItem, ListItemText, Tooltip } from "@mui/material";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../utils/firebase";
 
@@ -11,6 +12,7 @@ export type QuestPopoverProps = {
     open: boolean;
     onClose: (event: React.MouseEvent) => void;
     questInfo: QuestData;
+    completed: boolean;
     anchor: MutableRefObject<HTMLDivElement | null>;
     updateQuestState: () => void;
 };
@@ -18,12 +20,12 @@ export type QuestPopoverProps = {
 const QuestPopover = ({
     open,
     onClose,
+    completed,
     anchor,
     questInfo,
     updateQuestState,
 }: QuestPopoverProps) => {
-    const [user, loading, error] = useAuthState(auth);
-
+    const [user, ..._rest] = useAuthState(auth);
     return (
         <Popover
             open={open}
@@ -50,6 +52,7 @@ const QuestPopover = ({
                 >
                     {questInfo.objectives.map((obj) => (
                         <ListItem key={questInfo.name + obj}>
+                            <CircleIcon sx={{ fontSize: "0.75rem", marginRight: "5px" }} />
                             <ListItemText>{obj}</ListItemText>
                         </ListItem>
                     ))}
@@ -60,6 +63,7 @@ const QuestPopover = ({
                 >
                     {questInfo.rewards.map((reward) => (
                         <ListItem key={questInfo.name + reward}>
+                            <CircleIcon sx={{ fontSize: "0.75rem", marginRight: "5px" }} />
                             <ListItemText>{reward}</ListItemText>
                         </ListItem>
                     ))}
@@ -67,13 +71,11 @@ const QuestPopover = ({
                 {!questInfo.kappa && (
                     <Typography>Not required for Kappa</Typography>
                 )}
-                <button
-                    onClick={() => {
-                        updateQuestState();
-                    }}
-                >
-                    Toggle Complete
-                </button>
+                <Tooltip title={!user && "You must sign in to use this feature"} arrow>
+                    <Box display="flex" justifyContent="center">
+                        <Button disabled={!user} onClick={updateQuestState}>Mark as {completed ? "Incomplete" : "Complete"}</Button>
+                    </Box>
+                </Tooltip>
             </Box>
         </Popover>
     );
