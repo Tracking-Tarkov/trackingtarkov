@@ -2,18 +2,13 @@ import { useState, useCallback, useEffect, useRef, MouseEvent } from "react";
 import { Handle, NodeProps, Position } from "reactflow";
 import QuestPopover from "../QuestPopover/QuestPopover";
 import { QuestData, TraderGraphData } from "../../utils/buildQuestNodes";
-import {
-    ref,
-    update,
-    onValue,
-    DataSnapshot,
-} from "firebase/database";
+import { ref, update, onValue, DataSnapshot } from "firebase/database";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, database } from "../../utils/firebase";
+import { getAllQuestPriors, getAllQuestNexts } from "../../utils/common";
 import _ from "lodash";
 
 import "./styles/questnode.scss";
-import { getAllQuestPriors } from "../../utils/common";
 
 export interface IQuestNode extends NodeProps {
     data: QuestData;
@@ -62,8 +57,14 @@ const QuestNode = ({ data }: IQuestNode) => {
         const updatedCompletions = { [data.dbId]: !isQuestComplete };
         if (!isQuestComplete) {
             const priors = getAllQuestPriors(data.dbId, data.traderQuests);
-            priors.forEach(prior => {
+            priors.forEach((prior) => {
                 updatedCompletions[prior] = true;
+            });
+        }
+        if (isQuestComplete) {
+            const nexts = getAllQuestNexts(data.dbId, data.traderQuests);
+            nexts.forEach((next) => {
+                updatedCompletions[next] = false;
             });
         }
         update(questRef, updatedCompletions);
@@ -72,8 +73,9 @@ const QuestNode = ({ data }: IQuestNode) => {
     return (
         <div
             ref={popoverAnchor}
-            className={`quest-node ${data.trader.toLowerCase()}-node ${isQuestComplete && data.trader.toLowerCase()
-                }-completed`}
+            className={`quest-node ${data.trader.toLowerCase()}-node ${
+                isQuestComplete && data.trader.toLowerCase()
+            }-completed`}
             onClick={() => setOpenPopover(true)}
         >
             <Handle type="target" position={Position.Top} />
