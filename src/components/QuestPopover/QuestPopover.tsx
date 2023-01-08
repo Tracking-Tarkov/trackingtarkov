@@ -3,6 +3,7 @@ import Popover from "@mui/material/Popover";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import CircleIcon from '@mui/icons-material/Circle';
+import LinkIcon from '@mui/icons-material/Link';
 import { QuestData } from "../../utils/buildQuestNodes";
 import { Button, Divider, List, ListItem, ListItemText, Tooltip } from "@mui/material";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -41,7 +42,10 @@ const QuestPopover = ({
                 maxWidth="500px"
                 gap="6px"
             >
-                <Typography typography="h5">{questInfo.name}</Typography>
+                <Box display="flex" justifyContent="space-between">
+                    <Typography typography="h5" sx={{ marginRight: "5px" }}>{questInfo.name}</Typography>
+                    <Button href={questInfo.link} target="_blank" referrerPolicy="no-referrer" color="primary"><LinkIcon /></Button>
+                </Box>
                 <Divider />
                 <Typography typography="h7">Type: {questInfo.type}</Typography>
                 <List
