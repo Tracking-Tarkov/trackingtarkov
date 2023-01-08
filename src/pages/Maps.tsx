@@ -73,6 +73,9 @@ const Maps = () => {
         setTimeout(() => {
             ref?.current?.centerView(0.5, 500, "easeOut");
         }, 300);
+    }, [currentMap, currentSubMap]);
+
+    useEffect(() => {
         setCurrentSubMap(0);
     }, [currentMap]);
 
