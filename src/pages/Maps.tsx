@@ -7,7 +7,6 @@ import shoreline from "../mapimages/Shoreline/shoreline.jpg";
 import shorelineSpawn from "../mapimages/Shoreline/shorelineSpawn.jpg";
 
 import factory from "../mapimages/Factory/factory.jpg";
-import factorySVG from "../mapimages/Factory/Factory.svg";
 
 import woods from "../mapimages/Woods/woods.jpg";
 
