@@ -1,12 +1,11 @@
 import { useState, useCallback, useEffect, useRef, MouseEvent } from "react";
 import { Handle, NodeProps, Position } from "reactflow";
 import QuestPopover from "../QuestPopover/QuestPopover";
-import { QuestData, TraderGraphData } from "../../utils/buildQuestNodes";
+import { QuestData } from "../../utils/buildQuestNodes";
 import { ref, update, onValue, DataSnapshot } from "firebase/database";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, database } from "../../utils/firebase";
 import { getAllQuestPriors, getAllQuestNexts } from "../../utils/common";
-import _ from "lodash";
 
 import "./styles/questnode.scss";
 

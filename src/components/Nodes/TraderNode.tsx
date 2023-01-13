@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { Handle, NodeProps, Position } from "reactflow";
 import { TraderData } from "../../utils/buildQuestNodes";
 

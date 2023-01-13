@@ -125,3 +125,17 @@
     box-shadow: 0 0 0 2px $fence-highlight-completed;
     border-radius: 2px;
 }
+
+.lightkeeper-node {
+    background: $lightkeeper;
+    border: 1px solid $lightkeeper-highlight;
+}
+
+.lightkeeper-completed {
+    background: $lightkeeper-highlight;
+}
+
+.selected > .lightkeeper-node { 
+    box-shadow: 0 0 0 2px $lightkeeper-highlight-completed;
+    border-radius: 2px;
+}
