@@ -34,7 +34,7 @@ export interface NavItems {
 
 const topNavItems: NavItems[] = [
     { title: "Quests", icon: <AssignmentIcon />, path: "/" },
-    { title: "Maps", icon: <MapIcon />, path: "maps" },
+    { title: "Maps", icon: <MapIcon />, path: "maps/customs/customs-3d" },
     { title: "Attributions", icon: <InfoIcon />, path: "attributions" },
 ];
 
