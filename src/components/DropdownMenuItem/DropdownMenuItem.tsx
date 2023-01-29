@@ -11,15 +11,31 @@ export interface INavbarProps {
 
 const DropdownMenuItem = ({ name, menuItems }: INavbarProps) => {
     const navigate = useNavigate();
-
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+    let currentlyHovering = false;
     const open = Boolean(anchorEl);
+
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
+        currentlyHovering = true;
+    };
+
+    const handleHover = () => {
+        currentlyHovering = true;
     };
 
     const handleClose = () => {
         setAnchorEl(null);
+    };
+
+    const handleCloseHover = () => {
+        currentlyHovering = false;
+        setTimeout(() => {
+            if (!currentlyHovering) {
+                handleClose();
+            }
+        }, 50);
     };
 
     const onClickMenuItem = (menuItem: string) => {
@@ -34,7 +50,9 @@ const DropdownMenuItem = ({ name, menuItems }: INavbarProps) => {
                 aria-controls={open ? "basic-menu" : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? "true" : undefined}
+                onClick={handleClick}
                 onMouseOver={handleClick}
+                onMouseLeave={handleCloseHover}
                 style={{
                     color: "white",
                 }}
@@ -48,8 +66,11 @@ const DropdownMenuItem = ({ name, menuItems }: INavbarProps) => {
                 onClose={handleClose}
                 MenuListProps={{
                     "aria-labelledby": "basic-button",
-                    onMouseLeave: handleClose,
+                    onMouseEnter: handleHover,
+                    onMouseLeave: handleCloseHover,
+                    style: { pointerEvents: "auto" },
                 }}
+                sx={{ pointerEvents: "none" }}
             >
                 {menuItems.map((menuItem) => (
                     <MenuItem onClick={() => onClickMenuItem(menuItem)}>
