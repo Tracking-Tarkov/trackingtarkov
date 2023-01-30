@@ -1,84 +1,69 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "@mui/material/Button";
-import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import { Popover, Tab } from "@mui/material";
 
 export interface INavbarProps {
     name: string;
     menuItems: string[];
+    selected: boolean;
 }
 
-const DropdownMenuItem = ({ name, menuItems }: INavbarProps) => {
+const DropdownMenuItem = ({ name, menuItems, selected }: INavbarProps) => {
     const navigate = useNavigate();
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [openedPopover, setOpenedPopover] = useState(false);
+    const popoverAnchor = useRef<any>(null);
 
-    let currentlyHovering = false;
-    const open = Boolean(anchorEl);
-
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget);
-        currentlyHovering = true;
+    const popoverEnter = () => {
+        setOpenedPopover(true);
     };
 
-    const handleHover = () => {
-        currentlyHovering = true;
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const handleCloseHover = () => {
-        currentlyHovering = false;
-        setTimeout(() => {
-            if (!currentlyHovering) {
-                handleClose();
-            }
-        }, 50);
+    const popoverLeave = () => {
+        setOpenedPopover(false);
     };
 
     const onClickMenuItem = (menuItem: string) => {
-        handleClose();
         navigate(`/maps/${name}/${menuItem}`);
     };
 
     return (
-        <div>
-            <Button
-                id="basic-button"
-                aria-controls={open ? "basic-menu" : undefined}
+        <>
+            <Tab
+                ref={popoverAnchor}
+                id="basic-map-tab"
+                aria-owns={"mouse-over-popover"}
                 aria-haspopup="true"
-                aria-expanded={open ? "true" : undefined}
-                onClick={handleClick}
-                onMouseOver={handleClick}
-                onMouseLeave={handleCloseHover}
-                style={{
-                    color: "white",
+                aria-selected={selected}
+                onMouseEnter={popoverEnter}
+                onMouseLeave={popoverLeave}
+                label={name}
+                style={{ opacity: selected ? 1 : 0.6 }}
+            />
+            <Popover
+                id="mouse-over-popover"
+                open={openedPopover}
+                anchorEl={popoverAnchor.current}
+                anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
                 }}
-            >
-                {name}
-            </Button>
-            <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                    "aria-labelledby": "basic-button",
-                    onMouseEnter: handleHover,
-                    onMouseLeave: handleCloseHover,
+                PaperProps={{
+                    onMouseEnter: popoverEnter,
+                    onMouseLeave: popoverLeave,
                     style: { pointerEvents: "auto" },
                 }}
                 sx={{ pointerEvents: "none" }}
             >
                 {menuItems.map((menuItem) => (
-                    <MenuItem onClick={() => onClickMenuItem(menuItem)}>
+                    <MenuItem
+                        onClick={() => onClickMenuItem(menuItem)}
+                        key={menuItem}
+                    >
                         {menuItem.toUpperCase()}
                     </MenuItem>
                 ))}
-            </Menu>
-        </div>
+            </Popover>
+        </>
     );
 };
 
