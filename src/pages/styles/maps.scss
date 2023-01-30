@@ -1,10 +1,19 @@
-.image-wrapper {
+.display-wrapper {
+    height: var(--display-height);
+    min-height: 80vh;
     position: relative;
-    overflow: hidden;
-    width: calc(100vw - 65px);
-    height: calc(100vh - 96px);
 }
 
-.transform-component {
-    height: 100% !important;
+.map-image-wrapper {
+    height: var(--display-height);
+    width: calc(100vw - 65px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.map-image {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
 }
