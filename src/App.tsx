@@ -73,7 +73,7 @@ const App = () => {
                                 )
                             }
                         />
-                        <Route path="maps" element={<Maps />} />
+                        <Route path="maps/:map/:subMap" element={<Maps />} />
                         <Route path="attributions" element={<Attributions />} />
                     </Routes>
                 </div>
