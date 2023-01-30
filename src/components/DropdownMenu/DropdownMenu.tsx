@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import DropdownMenuItem from "../DropdownMenuItem/DropdownMenuItem";
 import Tabs from "@mui/material/Tabs";
 import Box from "@mui/material/Box";
@@ -15,16 +16,16 @@ export interface IDropdownMenu {
 const DropdownMenu = ({ navData }: IDropdownMenu) => {
     const { map = "" } = useParams();
 
-    const getCurrentElement = (element: DropdownElement) => {
-        return element.label === map;
-    };
-
-    const currentElement = navData.findIndex(getCurrentElement);
+    const currentValue = useMemo<number>(() => {
+        return navData.findIndex((element: DropdownElement) => {
+            return element.label === map;
+        });
+    }, [map, navData]);
 
     return (
         <Box display="flex" justifyContent="center" width="100%">
             <Tabs
-                value={currentElement}
+                value={currentValue}
                 textColor="inherit"
                 variant="scrollable"
                 scrollButtons="auto"
@@ -34,7 +35,7 @@ const DropdownMenu = ({ navData }: IDropdownMenu) => {
                         key={navElement.label}
                         name={navElement.label}
                         menuItems={navElement.menuItems}
-                        selected={index === currentElement}
+                        selected={index === currentValue}
                     />
                 ))}
             </Tabs>
