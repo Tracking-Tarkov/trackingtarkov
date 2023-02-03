@@ -155,7 +155,9 @@ const generateTraderGraphData = (firebaseTraderData: Traders | null) => {
             };
         }
     );
-    return allTraderQuestNodes;
+
+    // The database is sorted in alphabetical order, this just reverses that order as it makes more sense for the trader bar
+    return allTraderQuestNodes.reverse();
 };
 
 const NODE_WIDTH = 200;
