@@ -1,5 +1,3 @@
-import { useMemo } from "react";
-
 import customs from "../mapimages/Customs/customs.jpg";
 import customsGray from "../mapimages/Customs/customsGray.jpg";
 

@@ -50,7 +50,7 @@ const Quests = ({ traderGraphData }: IQuestProps) => {
             isTimedOut.current = false;
         }
         timeoutFunction();
-    }, [database]);
+    }, []);
 
     const hourInMilli = 3600000;
     const timeoutFunction = () => {

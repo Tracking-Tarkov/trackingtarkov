@@ -96,7 +96,7 @@ const getIsMobile = () => {
 
 const SideBar = () => {
     const [drawerOpen, setDrawerOpen] = useState(getIsMobile());
-    const [user, loading, error] = useAuthState(auth);
+    const [user, loading] = useAuthState(auth);
 
     const navigate = useNavigate();
 
