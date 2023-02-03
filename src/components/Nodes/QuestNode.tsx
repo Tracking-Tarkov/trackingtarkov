@@ -15,7 +15,7 @@ export interface IQuestNode extends NodeProps {
 
 const QuestNode = ({ data }: IQuestNode) => {
     const [openPopover, setOpenPopover] = useState(false);
-    const [user, loading, error] = useAuthState(auth);
+    const [user] = useAuthState(auth);
     const [isQuestComplete, setIsQuestComplete] = useState<boolean>(false);
     const popoverAnchor = useRef<HTMLDivElement>(null);
 

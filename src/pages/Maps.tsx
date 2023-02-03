@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { tarkovMaps } from "../utils/getMaps";
 import DropdownMenu, {
