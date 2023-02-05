@@ -30,15 +30,14 @@ const theme = createTheme({
 });
 
 const getFirebaseData = async () => {
-    let lastUpdated = (await basicRealtimeApiCall("traders/lastUpdated")).data;
+    let lastUpdated = (await basicRealtimeApiCall("data/lastUpdated")).data;
     if (
         !localStorage.getItem("lastUpdated") ||
         !localStorage.getItem("traderQuests") ||
         localStorage.getItem("lastUpdated") !== lastUpdated?.toString()
     ) {
         localStorage.setItem("lastUpdated", lastUpdated);
-        const traderQuests = (await basicRealtimeApiCall("traders/quests"))
-            .data;
+        const traderQuests = (await basicRealtimeApiCall("data/quests")).data;
         localStorage.setItem("traderQuests", JSON.stringify(traderQuests));
         return traderQuests;
     }
