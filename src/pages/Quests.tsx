@@ -1,8 +1,10 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import ReactFlow, {
+    ReactFlowProvider,
     ConnectionLineType,
     useNodesState,
     useEdgesState,
+    useReactFlow,
 } from "reactflow";
 import { TraderGraphData, getLayoutedElements } from "../utils/buildQuestNodes";
 import QuestNode from "../components/Nodes/QuestNode";
@@ -24,6 +26,7 @@ const Quests = ({ traderGraphData }: IQuestProps) => {
     const [currentTrader, setCurrentTrader] = useState<number>(0);
     const autoTimeout = useRef<NodeJS.Timeout>();
     const isTimedOut = useRef(false);
+    const { setViewport } = useReactFlow();
 
     const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
         traderGraphData[currentTrader]
@@ -41,6 +44,9 @@ const Quests = ({ traderGraphData }: IQuestProps) => {
 
         setNodes([...layoutedNodes]);
         setEdges([...layoutedEdges]);
+
+        setViewport({ x: 0, y: 0, zoom: 1 });
+
         // eslint-disable-next-line
     }, [currentTrader]);
 
@@ -93,4 +99,10 @@ const Quests = ({ traderGraphData }: IQuestProps) => {
     );
 };
 
-export default Quests;
+const QuestWithProvider = ({ traderGraphData }: IQuestProps) => (
+    <ReactFlowProvider>
+        <Quests traderGraphData={traderGraphData} />
+    </ReactFlowProvider>
+);
+
+export default QuestWithProvider;
