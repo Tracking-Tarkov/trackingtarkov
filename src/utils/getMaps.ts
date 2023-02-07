@@ -18,6 +18,9 @@ import lighthouse from "../mapimages/Lighthouse/lighthouse.jpg";
 import lighthouseRotated from "../mapimages/Lighthouse/lighthouseRotated.jpg";
 import lighthouseFlat from "../mapimages/Lighthouse/lighthouseFlat.jpg";
 
+import streets3d from "../mapimages/Streets/streets3d.jpg";
+import streets2d from "../mapimages/Streets/streets2d.jpg";
+
 import labs from "../mapimages/Labs/labs.jpg";
 import labsExtract from "../mapimages/Labs/labsExtract.jpg";
 import labsHorizontal from "../mapimages/Labs/labsHorizontal.jpg";
@@ -83,6 +86,16 @@ export const tarkovMaps: Maps = {
         playerCount: 16,
         duration: 35,
     },
+    labs: {
+        subMaps: {
+            "labs-2d": labs,
+            "labs-3d-extracts": labsExtract,
+            "labs-3d-horizontal": labsHorizontal,
+            "labs-3d-vertical": labsVertical,
+        },
+        playerCount: 16,
+        duration: 35,
+    },
     lighthouse: {
         subMaps: {
             "lighthouse-3d": lighthouse,
@@ -92,12 +105,10 @@ export const tarkovMaps: Maps = {
         playerCount: 16,
         duration: 35,
     },
-    labs: {
+    streets: {
         subMaps: {
-            "labs-2d": labs,
-            "labs-3d-extracts": labsExtract,
-            "labs-3d-horizontal": labsHorizontal,
-            "labs-3d-vertical": labsVertical,
+            "streets-2d": streets2d,
+            "streets-3d": streets3d,
         },
         playerCount: 16,
         duration: 35,
