@@ -34,6 +34,14 @@ const Quests = ({ traderGraphData }: IQuestProps) => {
     const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
 
+    const resetDatabaseConnection = useCallback(() => {
+        if (isTimedOut.current) {
+            goOnline(database);
+            isTimedOut.current = false;
+        }
+        timeoutFunction();
+    }, []);
+
     useEffect(() => {
         timeoutFunction();
     }, []);
@@ -47,16 +55,15 @@ const Quests = ({ traderGraphData }: IQuestProps) => {
 
         setViewport({ x: 0, y: 0, zoom: 1 });
 
-        // eslint-disable-next-line
-    }, [currentTrader]);
-
-    const onNodeClick = useCallback(() => {
-        if (isTimedOut.current) {
-            goOnline(database);
-            isTimedOut.current = false;
-        }
-        timeoutFunction();
-    }, []);
+        resetDatabaseConnection();
+    }, [
+        currentTrader,
+        traderGraphData,
+        resetDatabaseConnection,
+        setEdges,
+        setNodes,
+        setViewport,
+    ]);
 
     const hourInMilli = 3600000;
     const timeoutFunction = () => {
@@ -80,7 +87,7 @@ const Quests = ({ traderGraphData }: IQuestProps) => {
                 <ReactFlow
                     nodes={nodes}
                     edges={edges}
-                    onNodeClick={onNodeClick}
+                    onNodeClick={resetDatabaseConnection}
                     onNodesChange={onNodesChange}
                     onEdgesChange={onEdgesChange}
                     connectionLineType={ConnectionLineType.SmoothStep}
