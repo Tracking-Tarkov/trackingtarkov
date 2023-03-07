@@ -140,8 +140,7 @@ const generateTraderEdges = (quests: Quests): QuestEdge[] => {
     return [...rootEdges, ...questEdges.flat()];
 };
 
-const generateTraderGraphData = (firebaseTraderData: Traders | null) => {
-    if (!firebaseTraderData) return null;
+const generateTraderGraphData = (firebaseTraderData: Traders) => {
     const allTraderData = transformFirebaseTraderData(firebaseTraderData);
     const allTraderQuestNodes: TraderGraphData[] = allTraderData.map(
         (trader): TraderGraphData => {

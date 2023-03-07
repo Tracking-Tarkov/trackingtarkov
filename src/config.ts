@@ -1,7 +1,7 @@
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
-export const dev = false;
+export const dev = true;
 
 export const firebaseConfig = {
     apiKey: "AIzaSyA_G-8ob1XuK2Qh5kHYEJy-KLHxX5nmZSE",

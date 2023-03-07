@@ -24,6 +24,8 @@ import InfoIcon from "@mui/icons-material/Info";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LoopIcon from "@mui/icons-material/Loop";
+import GridViewIcon from "@mui/icons-material/GridView";
+
 import discordIcon from "../../icons/discord-mark-white.png";
 
 export interface NavItems {
@@ -35,6 +37,7 @@ export interface NavItems {
 const topNavItems: NavItems[] = [
     { title: "Quests", icon: <AssignmentIcon />, path: "/" },
     { title: "Maps", icon: <MapIcon />, path: "maps/customs/customs-3d" },
+    { title: "Items", icon: <GridViewIcon />, path: "items" },
     { title: "Attributions", icon: <InfoIcon />, path: "attributions" },
 ];
 

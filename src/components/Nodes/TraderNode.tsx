@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import { Handle, NodeProps, Position } from "reactflow";
 import { TraderData } from "../../utils/buildQuestNodes";
 
@@ -11,7 +12,7 @@ const TraderNode = ({ data }: ITraderNode) => {
     return (
         <div className="trader-node">
             <img src={data.image} alt="Prapor" />
-            {data.name}
+            <Typography sx={{ fontSize: "12px" }}>{data.name}</Typography>
             <Handle type="source" position={Position.Bottom} />
         </div>
     );

@@ -1,0 +1,12 @@
+.item-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    img {
+        width: auto;
+        height: 100%;
+        overflow: hidden;
+        padding: 10px;
+    }
+}

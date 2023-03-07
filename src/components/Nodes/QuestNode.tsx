@@ -8,6 +8,7 @@ import { auth, database } from "../../utils/firebase";
 import { getAllQuestPriors, getAllQuestNexts } from "../../utils/common";
 
 import "./styles/questnode.scss";
+import { Typography } from "@mui/material";
 
 export interface IQuestNode extends NodeProps {
     data: QuestData;
@@ -78,7 +79,7 @@ const QuestNode = ({ data }: IQuestNode) => {
             onClick={() => setOpenPopover(true)}
         >
             <Handle type="target" position={Position.Top} />
-            {data.name}
+            <Typography sx={{ fontSize: "12px" }}>{data.name}</Typography>
             <Handle type="source" position={Position.Bottom} />
             <QuestPopover
                 open={openPopover}

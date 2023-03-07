@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import MenuItem from "@mui/material/MenuItem";
-import { Popover, Tab } from "@mui/material";
+import { Popover, Tab, Typography } from "@mui/material";
 
 export interface INavbarProps {
     name: string;
@@ -59,7 +59,7 @@ const DropdownMenuItem = ({ name, menuItems, selected }: INavbarProps) => {
                         onClick={() => onClickMenuItem(menuItem)}
                         key={menuItem}
                     >
-                        {menuItem.toUpperCase()}
+                        menuItem.toUpperCase()
                     </MenuItem>
                 ))}
             </Popover>
