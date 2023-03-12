@@ -15,6 +15,8 @@ import "reactflow/dist/style.css";
 import "./styles/quests.scss";
 import { database } from "../utils/firebase";
 import { goOffline, goOnline } from "firebase/database";
+import { Params, useNavigate, useParams } from "react-router-dom";
+import _ from "lodash";
 
 export interface IQuestProps {
     traderGraphData: TraderGraphData[];
@@ -22,12 +24,19 @@ export interface IQuestProps {
 
 const nodeTypes = { questNode: QuestNode, traderNode: TraderNode };
 
+const getCurrentTrader = (urlParams: Readonly<Params<string>>, traderGraphData: IQuestProps["traderGraphData"]) => {
+    const index = _.findIndex(traderGraphData, ({ name }) => _.camelCase(name) === _.camelCase(urlParams["trader"]));
+    if (index === -1) return 0;
+    return index;
+}
+
 const Quests = ({ traderGraphData }: IQuestProps) => {
-    const [currentTrader, setCurrentTrader] = useState<number>(0);
+    const urlParams = useParams();
+    const navigate = useNavigate();
     const autoTimeout = useRef<NodeJS.Timeout>();
     const isTimedOut = useRef(false);
     const { setViewport } = useReactFlow();
-
+    const currentTrader = getCurrentTrader(urlParams, traderGraphData);
     const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
         traderGraphData[currentTrader]
     );
@@ -76,12 +85,16 @@ const Quests = ({ traderGraphData }: IQuestProps) => {
         }, hourInMilli);
     };
 
+    const setCurrentNav = useCallback((val: number) => {
+        navigate(`/quests/${traderGraphData[val].name}`)
+    }, [traderGraphData])
+
     return (
         <>
             <GenericNavbar
                 navData={traderGraphData.map((trader) => trader.name)}
                 currentNav={currentTrader}
-                setCurrentNav={setCurrentTrader}
+                setCurrentNav={setCurrentNav}
             />
             <div className="layoutflow">
                 <ReactFlow

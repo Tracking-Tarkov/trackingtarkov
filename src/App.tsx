@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { basicRealtimeApiCall } from "./utils/firebase";
 import { createTheme } from "@mui/material/styles";
@@ -63,7 +63,7 @@ const App = () => {
                 <div className="page-container">
                     <Routes>
                         <Route
-                            path="/"
+                            path="quests/:trader"
                             element={
                                 traderGraphData ? (
                                     <Quests traderGraphData={traderGraphData} />
@@ -74,6 +74,11 @@ const App = () => {
                         />
                         <Route path="maps/:map/:subMap" element={<Maps />} />
                         <Route path="attributions" element={<Attributions />} />
+                        <Route index element={traderGraphData ? (
+                            <Navigate to={`quests/${traderGraphData[0].name}`} />
+                        ) : (
+                            <p>...Loading</p>
+                        )} />
                     </Routes>
                 </div>
             </Router>
