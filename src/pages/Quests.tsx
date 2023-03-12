@@ -87,7 +87,7 @@ const Quests = ({ traderGraphData }: IQuestProps) => {
 
     const setCurrentNav = useCallback((val: number) => {
         navigate(`/quests/${traderGraphData[val].name}`)
-    }, [traderGraphData])
+    }, [traderGraphData, navigate])
 
     return (
         <>
