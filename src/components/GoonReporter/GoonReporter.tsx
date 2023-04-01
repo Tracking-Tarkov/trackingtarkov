@@ -1,18 +1,73 @@
-import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
+import { Alert, FormControlLabel, Radio, RadioGroup, Typography } from "@mui/material";
+import { auth, database } from "../../utils/firebase";
+import { onValue, ref, set } from "firebase/database";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 
+const HOUR_IN_MS = 60 * 60 * 1000;
+
+const mapOptions = [
+    "Customs",
+    "Shoreline",
+    "Woods",
+    "Lighthouse",
+]
 
 const GoonReporter = () => {
-    // On change, update reports database with the reported location and time.
+    const [user] = useAuthState(auth);
+    const [lastReported, setLastReported] = useState<{ location: string; time: number; }>({ location: "", time: Date.now() });
+
+    useEffect(() => {
+        if (!user) return;
+        return onValue(ref(database, `goons/votes/${user.uid}`), (snapshot) => {
+            const lastUserVote = snapshot.val();
+            if (lastUserVote) {
+                setLastReported(lastUserVote);
+            } else {
+                setLastReported({ location: "", time: 0 })
+            }
+        })
+    }, [user])
+
+    const report = useCallback((event: ChangeEvent<HTMLInputElement>, value: string) => {
+        if (!user) return;
+        if (Date.now() - lastReported.time < HOUR_IN_MS) return;
+        const reporterRef = ref(database, `goons/votes/${user.uid}`)
+        set(reporterRef, {
+            location: value,
+            time: Date.now()
+        })
+    }, [user, lastReported])
+
     return (
-        <RadioGroup
-            name="goons-radio-group"
-            row
-        >
-            <FormControlLabel value="customs" control={<Radio />} label="Customs" labelPlacement="top" />
-            <FormControlLabel value="shoreline" control={<Radio />} label="Shoreline" labelPlacement="top" />
-            <FormControlLabel value="woods" control={<Radio />} label="Woods" labelPlacement="top" />
-            <FormControlLabel value="lighthouse" control={<Radio />} label="Lighthouse" labelPlacement="top" />
-        </RadioGroup>
+        <>
+            <RadioGroup
+                name="goons-radio-group"
+                row
+                value={lastReported.location}
+                onChange={report}
+            >
+                {mapOptions.map(map =>
+                    <FormControlLabel
+                        key={map}
+                        disabled={!!lastReported.location}
+                        value={map}
+                        control={<Radio />}
+                        label={map}
+                        labelPlacement="top"
+                    />
+                )}
+            </RadioGroup>
+            {!!lastReported.location &&
+                <Alert severity="info">
+                    <Typography variant="subtitle2">
+                        You last reported the goons at: {new Date(lastReported.time).toLocaleTimeString()}.
+                        <br />
+                        You can report them again at: {new Date(lastReported.time + HOUR_IN_MS).toLocaleTimeString()}.
+                    </Typography>
+                </Alert>
+            }
+        </>
     )
 }
 
