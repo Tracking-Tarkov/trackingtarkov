@@ -7,6 +7,7 @@ import SideBar from "./components/SideBar/SideBar";
 import Maps from "./pages/Maps";
 import Attributions from "./pages/Attributions";
 import Quests from "./pages/Quests";
+import Goons from "./pages/Goons";
 import generateTraderGraphData, {
     TraderGraphData,
 } from "./utils/buildQuestNodes";
@@ -73,6 +74,7 @@ const App = () => {
                             }
                         />
                         <Route path="maps/:map/:subMap" element={<Maps />} />
+                        <Route path="goons" element={<Goons />} />
                         <Route path="attributions" element={<Attributions />} />
                         <Route index element={traderGraphData ? (
                             <Navigate to={`quests/${traderGraphData[0].name}`} />

@@ -1,0 +1,10 @@
+.goon-info-container {
+    display: flex;
+    @media screen and (min-width: 525px) {
+        flex-direction: row;
+    }
+    @media screen and (max-width: 525px) {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
