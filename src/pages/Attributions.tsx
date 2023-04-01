@@ -1,10 +1,13 @@
+import { Typography } from "@mui/material";
 import "./styles/attributions.scss";
 
 const Attributions = () => {
     return (
         <div className="credits">
-            <h2>Quest Information</h2>
-            <p>
+            <Typography variant="h5" className="attribution-header">
+                Quest Information
+            </Typography>
+            <Typography>
                 A huge thank you to the Official Escape from Tarkov Wiki,
                 without their hard work this website would not be possible. If
                 you want to check them out they can be found{" "}
@@ -18,9 +21,11 @@ const Attributions = () => {
                 . All quest information is sourced directly from the Official
                 Escape from Tarkov Wiki and is licensed under the Creative
                 Commons Attribution-Share Alike License.
-            </p>
-            <h2>Graph Visualization</h2>
-            <p>
+            </Typography>
+            <Typography variant="h5" className="attribution-header">
+                Graph Visualization
+            </Typography>
+            <Typography>
                 We are using{" "}
                 <a
                     href="https://reactflow.dev/"
@@ -38,7 +43,7 @@ const Attributions = () => {
                     dagrejs
                 </a>{" "}
                 to generate the graph for the quests.
-            </p>
+            </Typography>
         </div>
     );
 };

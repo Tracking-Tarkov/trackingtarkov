@@ -1,0 +1,19 @@
+.item-fir-card {
+    .MuiCardMedia-img {
+        padding-top: 10px;
+        height: 120px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .item-card-actions{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        gap: 5px
+    }
+
+    .item-card-action {
+        background-color: #303030;
+    }
+}
