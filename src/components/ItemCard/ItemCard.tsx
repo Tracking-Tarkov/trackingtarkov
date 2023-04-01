@@ -107,7 +107,7 @@ const ItemCard = ({ data }: ItemCardProps) => {
                             onClick={buttonAction(itemCount + 1)}
                         >
                             <AddIcon />
-                        </IconButton>{" "}
+                        </IconButton>
                     </div>
                 </CardActions>
             </Card>
