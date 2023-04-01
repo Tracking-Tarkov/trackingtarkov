@@ -210,7 +210,7 @@ const SideBar = () => {
                     <ListItemButton
                         sx={listItemButtonSX}
                         onClick={() =>
-                            window.open("https://discord.gg/VkuW4wfC")
+                            window.open("https://discord.gg/F5BH9CsM2m")
                         }
                     >
                         <ListItemIcon sx={listItemIconSX}>
