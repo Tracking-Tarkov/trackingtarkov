@@ -1,22 +1,22 @@
-import { Alert, Button, FormControlLabel, Radio, RadioGroup, Typography } from "@mui/material";
-import { auth, database } from "../../utils/firebase";
-import { onValue, ref, set } from "firebase/database";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { Alert, Button, FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material';
+import { auth, database } from '../../utils/firebase';
+import { onValue, ref, set } from 'firebase/database';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 
 const HOUR_IN_MS = 60 * 60 * 1000;
 
 const mapOptions = [
-    "Customs",
-    "Shoreline",
-    "Woods",
-    "Lighthouse",
-]
+    'Customs',
+    'Shoreline',
+    'Woods',
+    'Lighthouse',
+];
 
 const GoonReporter = () => {
     const [user] = useAuthState(auth);
-    const [selectedMap, setSelectedMap] = useState<string>("");
-    const [lastReported, setLastReported] = useState<{ location: string; time: number; }>({ location: "", time: 0 });
+    const [selectedMap, setSelectedMap] = useState<string>('');
+    const [lastReported, setLastReported] = useState<{ location: string; time: number; }>({ location: '', time: 0 });
 
     useEffect(() => {
         if (!user) return;
@@ -24,26 +24,26 @@ const GoonReporter = () => {
             const lastUserVote = snapshot.val();
             if (lastUserVote) {
                 setLastReported(lastUserVote);
-                setSelectedMap(lastUserVote.location)
+                setSelectedMap(lastUserVote.location);
             } else {
-                setLastReported({ location: "", time: 0 })
+                setLastReported({ location: '', time: 0 });
             }
-        })
-    }, [user])
+        });
+    }, [user]);
 
     const selectMap = useCallback((event: ChangeEvent<HTMLInputElement>, value: string) => {
         setSelectedMap(value);
-    }, [setSelectedMap])
+    }, [setSelectedMap]);
 
     const report = useCallback(() => {
         if (!user) return;
         if (Date.now() - lastReported.time < HOUR_IN_MS) return;
-        const reporterRef = ref(database, `goons/votes/${user.uid}`)
+        const reporterRef = ref(database, `goons/votes/${user.uid}`);
         set(reporterRef, {
             location: selectedMap,
             time: Date.now()
-        })
-    }, [user, lastReported, selectedMap])
+        });
+    }, [user, lastReported, selectedMap]);
 
     const canVote = Date.now() > lastReported.time + HOUR_IN_MS;
 
@@ -67,7 +67,7 @@ const GoonReporter = () => {
                 )}
             </RadioGroup>
             {canVote && selectedMap &&
-                <Button variant="outlined" onClick={report} sx={{ marginTop: "5px" }}>Vote</Button>}
+                <Button variant="outlined" onClick={report} sx={{ marginTop: '5px' }}>Vote</Button>}
             {!canVote &&
                 <Alert severity="info">
                     <Typography variant="subtitle2">
@@ -78,7 +78,7 @@ const GoonReporter = () => {
                 </Alert>
             }
         </>
-    )
-}
+    );
+};
 
 export default GoonReporter;

@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, database } from "../../utils/firebase";
-import { onValue, ref } from "firebase/database";
-import { Button, Collapse, Grid, Paper, Typography, styled } from "@mui/material";
-import _ from "lodash";
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { useCallback, useEffect, useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth, database } from '../../utils/firebase';
+import { onValue, ref } from 'firebase/database';
+import { Button, Collapse, Grid, Paper, Typography, styled } from '@mui/material';
+import _ from 'lodash';
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -17,26 +17,26 @@ const Item = styled(Paper)(({ theme }) => ({
 const GoonData = () => {
     const [user] = useAuthState(auth);
     const [maps, setMaps] = useState<Record<string, number>>({});
-    const [latestVote, setLatestVote] = useState<string>("Unknown");
+    const [latestVote, setLatestVote] = useState<string>('Unknownaldjfldjafljaldjflkajdlfkjdlfjaljdflaldjfaldjflajdfljadf');
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
     useEffect(() => {
         if (!user) return;
-        const currentGoonRef = ref(database, "goons/current");
+        const currentGoonRef = ref(database, 'goons/current');
         return onValue(currentGoonRef, (snapshot) => {
             const firebaseData = snapshot.val();
             if (firebaseData) {
-                setMaps(firebaseData["map"]);
-                setLatestVote(new Date(firebaseData["mostRecentVote"]).toLocaleString())
+                setMaps(firebaseData['map']);
+                setLatestVote(new Date(firebaseData['mostRecentVote']).toLocaleString());
             }
-        })
-    }, [user])
+        });
+    }, [user]);
 
     const toggleExpand = useCallback(() => {
         setIsExpanded(!isExpanded);
-    }, [isExpanded])
+    }, [isExpanded]);
 
-    const mostProbableMap = (_.maxBy(Object.entries(maps), "1") ?? ["Unknown"])[0];
+    const mostProbableMap = (_.maxBy(Object.entries(maps), '1') ?? ['Unknown'])[0];
 
     return (
         <>
@@ -45,13 +45,13 @@ const GoonData = () => {
             <Button
                 variant="outlined"
                 onClick={toggleExpand}
-                sx={{ marginTop: "5px" }}
+                sx={{ marginTop: '5px' }}
                 endIcon={isExpanded ? <ExpandLess /> : <ExpandMore />}
             >
                 Map Probabilities
             </Button>
-            <Collapse in={isExpanded} sx={{ width: "75%" }}>
-                <Grid sx={{ marginTop: "5px" }} container columnSpacing={2} rowSpacing={2} justifyContent="center">
+            <Collapse in={isExpanded} sx={{ width: '75%' }}>
+                <Grid sx={{ marginTop: '5px' }} container columnSpacing={2} rowSpacing={2} justifyContent="center">
                     {Object.entries(maps).map(([map, probability]) => (
                         <Grid
                             key={map}
@@ -68,7 +68,7 @@ const GoonData = () => {
                 </Grid>
             </Collapse >
         </>
-    )
-}
+    );
+};
 
 export default GoonData;

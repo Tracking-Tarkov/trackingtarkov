@@ -1,10 +1,10 @@
 /** @module Common Utils */
-import { Quests } from "./buildQuestNodes";
+import { Quests } from './buildQuestNodes';
 
 const getQuestPriors = (
     quest: string,
     quests: Quests,
-    priors: Array<String>
+    priors: Array<string>
 ) => {
     priors.push(quest);
     if (!quests[quest] || !quests[quest].prior) return;
@@ -13,7 +13,7 @@ const getQuestPriors = (
     });
 };
 
-const getQuestNexts = (quest: string, quests: Quests, nexts: Array<String>) => {
+const getQuestNexts = (quest: string, quests: Quests, nexts: Array<string>) => {
     nexts.push(quest);
     if (!quests[quest] || !quests[quest].next) return;
     quests[quest].next.forEach((next) => {

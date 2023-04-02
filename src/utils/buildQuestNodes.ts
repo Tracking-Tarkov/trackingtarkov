@@ -1,6 +1,6 @@
-import { ConnectionLineType, Edge, Node } from "reactflow";
-import dagre from "dagre";
-import _ from "lodash";
+import { ConnectionLineType, Edge, Node } from 'reactflow';
+import dagre from 'dagre';
+import _ from 'lodash';
 
 export type Traders = Record<string, FirebaseTrader>;
 export type Quests = Record<string, QuestData>;
@@ -69,8 +69,8 @@ const transformFirebaseTraderData = (
 
 const generateTraderNodes = (trader: TraderData): Node[] => {
     const rootNode: TraderNode = {
-        id: "root",
-        type: "traderNode",
+        id: 'root',
+        type: 'traderNode',
         // Needs QuestNode data
         data: trader,
         position: { x: 0, y: 0 },
@@ -79,7 +79,7 @@ const generateTraderNodes = (trader: TraderData): Node[] => {
         ([quest, data]): QuestNode => {
             return {
                 id: quest,
-                type: "questNode",
+                type: 'questNode',
                 data: {
                     ...data,
                     next: data.next ?? [],
@@ -129,7 +129,7 @@ const generateTraderEdges = (quests: Quests): QuestEdge[] => {
         ([quest, data]): QuestEdge => {
             return {
                 id: `root-${quest}`,
-                source: "root",
+                source: 'root',
                 target: quest,
                 animated: false,
                 type: edgeType,

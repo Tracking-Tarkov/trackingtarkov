@@ -1,16 +1,16 @@
-import { useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
-import { tarkovMaps } from "../utils/getMaps";
+import { useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
+import { tarkovMaps } from '../utils/getMaps';
 import DropdownMenu, {
     DropdownElement,
-} from "../components/DropdownMenu/DropdownMenu";
+} from '../components/DropdownMenu/DropdownMenu';
 import {
     TransformWrapper,
     TransformComponent,
     ReactZoomPanPinchRef,
-} from "react-zoom-pan-pinch";
+} from 'react-zoom-pan-pinch';
 
-import "./styles/maps.scss";
+import './styles/maps.scss';
 
 const buildTarkovMapMenuItems = (): DropdownElement[] => {
     const dropDownElements = Object.entries(tarkovMaps).map(
@@ -25,7 +25,7 @@ const buildTarkovMapMenuItems = (): DropdownElement[] => {
 };
 
 const Maps = () => {
-    const { map = "", subMap = "" } = useParams();
+    const { map = '', subMap = '' } = useParams();
 
     useEffect(() => {
         let viewableHeight = window.innerHeight - 65;
@@ -34,14 +34,14 @@ const Maps = () => {
         }
 
         document.documentElement.style.setProperty(
-            "--display-height",
+            '--display-height',
             `${viewableHeight}px`
         );
 
         const cleanup = () => {
             document.documentElement.style.setProperty(
-                "--display-height",
-                `auto`
+                '--display-height',
+                'auto'
             );
         };
 
@@ -68,7 +68,7 @@ const Maps = () => {
                     <TransformComponent>
                         <div className="map-image-wrapper">
                             <img
-                                alt={"Map"}
+                                alt={'Map'}
                                 loading="lazy"
                                 className="map-image"
                                 src={tarkovMaps[map].subMaps[subMap]}

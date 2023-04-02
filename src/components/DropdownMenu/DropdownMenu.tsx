@@ -1,8 +1,8 @@
-import { useMemo } from "react";
-import DropdownMenuItem from "../DropdownMenuItem/DropdownMenuItem";
-import Tabs from "@mui/material/Tabs";
-import Box from "@mui/material/Box";
-import { useParams } from "react-router-dom";
+import { useMemo } from 'react';
+import DropdownMenuItem from '../DropdownMenuItem/DropdownMenuItem';
+import Tabs from '@mui/material/Tabs';
+import Box from '@mui/material/Box';
+import { useParams } from 'react-router-dom';
 
 export interface DropdownElement {
     label: string;
@@ -14,7 +14,7 @@ export interface IDropdownMenu {
 }
 
 const DropdownMenu = ({ navData }: IDropdownMenu) => {
-    const { map = "" } = useParams();
+    const { map = '' } = useParams();
 
     const currentValue = useMemo<number>(() => {
         return navData.findIndex((element: DropdownElement) => {

@@ -1,7 +1,7 @@
-import { initializeApp } from "firebase/app";
-import { getDatabase, ref, get, update } from "firebase/database";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { firebaseConfig, firebaseConfigDev, dev } from "../config";
+import { initializeApp } from 'firebase/app';
+import { getDatabase, ref, get, update } from 'firebase/database';
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { firebaseConfig, firebaseConfigDev, dev } from '../config';
 
 const firebaseApp = dev
     ? initializeApp(firebaseConfigDev)
@@ -18,7 +18,7 @@ export const signIn = () => {
             /** @type {firebase.auth.OAuthCredential} */
             const user = result.user;
 
-            update(ref(database, "users/" + user.uid), {
+            update(ref(database, 'users/' + user.uid), {
                 uid: user.uid,
                 name: user.displayName,
                 email: user.email,

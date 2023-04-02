@@ -67,6 +67,10 @@
     },
     "devDependencies": {
         "@types/dagre": "^0.7.48",
-        "@types/lodash": "^4.14.191"
+        "@types/lodash": "^4.14.191",
+        "@typescript-eslint/eslint-plugin": "^5.57.0",
+        "@typescript-eslint/parser": "^5.57.0",
+        "eslint": "^8.37.0",
+        "eslint-plugin-react": "^7.32.2"
     }
 }

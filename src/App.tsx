@@ -3,60 +3,60 @@ import {
     Routes,
     Route,
     Navigate,
-} from "react-router-dom";
-import { useState, useEffect, useMemo } from "react";
-import { basicRealtimeApiCall } from "./utils/firebase";
-import { createTheme } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import SideBar from "./components/SideBar/SideBar";
-import Maps from "./pages/Maps";
-import Attributions from "./pages/Attributions";
-import ItemsFIR from "./pages/ItemsFIR";
-import Quests from "./pages/Quests";
-import Goons from "./pages/Goons";
+} from 'react-router-dom';
+import { useState, useEffect, useMemo } from 'react';
+import { basicRealtimeApiCall } from './utils/firebase';
+import { createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import SideBar from './components/SideBar/SideBar';
+import Maps from './pages/Maps';
+import Attributions from './pages/Attributions';
+import ItemsFIR from './pages/ItemsFIR';
+import Quests from './pages/Quests';
+import Goons from './pages/Goons';
 import generateTraderGraphData, {
     TraderGraphData,
     Traders,
-} from "./utils/buildQuestNodes";
-import ThemeProvider from "@mui/system/ThemeProvider";
+} from './utils/buildQuestNodes';
+import ThemeProvider from '@mui/system/ThemeProvider';
 
-import "./App.scss";
+import './App.scss';
 
 const theme = createTheme({
     palette: {
-        mode: "dark",
+        mode: 'dark',
     },
     components: {
         MuiTabs: {
             styleOverrides: {
                 indicator: {
-                    backgroundColor: "#cecece",
+                    backgroundColor: '#cecece',
                 },
             },
         },
         MuiTab: {
             styleOverrides: {
                 root: {
-                    fontSize: "14px",
-                    fontFamily: "Bender",
-                    fontWeight: "normal",
+                    fontSize: '14px',
+                    fontFamily: 'Bender',
+                    fontWeight: 'normal',
                 },
             },
         },
         MuiMenuItem: {
             styleOverrides: {
                 root: {
-                    fontSize: "16px",
-                    fontFamily: "Bender",
-                    fontWeight: "normal",
+                    fontSize: '16px',
+                    fontFamily: 'Bender',
+                    fontWeight: 'normal',
                 },
             },
         },
         MuiTypography: {
             styleOverrides: {
                 root: {
-                    fontFamily: "Bender",
-                    fontWeight: "normal",
+                    fontFamily: 'Bender',
+                    fontWeight: 'normal',
                 },
             },
         },
@@ -93,18 +93,18 @@ export interface TarkovData {
 }
 
 const getFirebaseData = async (): Promise<TarkovData> => {
-    const lastUpdated: string = (await basicRealtimeApiCall("data/lastUpdated"))
+    const lastUpdated: string = (await basicRealtimeApiCall('data/lastUpdated'))
         .data;
     if (
-        !localStorage.getItem("lastUpdated") ||
-        !localStorage.getItem("tarkovData") ||
-        localStorage.getItem("lastUpdated") !== lastUpdated?.toString()
+        !localStorage.getItem('lastUpdated') ||
+        !localStorage.getItem('tarkovData') ||
+        localStorage.getItem('lastUpdated') !== lastUpdated?.toString()
     ) {
-        const tarkovData = (await basicRealtimeApiCall("data")).data;
-        localStorage.setItem("lastUpdated", lastUpdated);
-        localStorage.setItem("tarkovData", JSON.stringify(tarkovData));
+        const tarkovData = (await basicRealtimeApiCall('data')).data;
+        localStorage.setItem('lastUpdated', lastUpdated);
+        localStorage.setItem('tarkovData', JSON.stringify(tarkovData));
     }
-    return JSON.parse(localStorage.getItem("tarkovData") as string);
+    return JSON.parse(localStorage.getItem('tarkovData') as string);
 };
 
 const App = () => {
