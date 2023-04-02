@@ -1,4 +1,4 @@
-import { Alert, FormControlLabel, Radio, RadioGroup, Typography } from "@mui/material";
+import { Alert, Button, FormControlLabel, Radio, RadioGroup, Typography } from "@mui/material";
 import { auth, database } from "../../utils/firebase";
 import { onValue, ref, set } from "firebase/database";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -15,7 +15,8 @@ const mapOptions = [
 
 const GoonReporter = () => {
     const [user] = useAuthState(auth);
-    const [lastReported, setLastReported] = useState<{ location: string; time: number; }>({ location: "", time: Date.now() });
+    const [selectedMap, setSelectedMap] = useState<string>("");
+    const [lastReported, setLastReported] = useState<{ location: string; time: number; }>({ location: "", time: 0 });
 
     useEffect(() => {
         if (!user) return;
@@ -23,29 +24,36 @@ const GoonReporter = () => {
             const lastUserVote = snapshot.val();
             if (lastUserVote) {
                 setLastReported(lastUserVote);
+                setSelectedMap(lastUserVote.location)
             } else {
                 setLastReported({ location: "", time: 0 })
             }
         })
     }, [user])
 
-    const report = useCallback((event: ChangeEvent<HTMLInputElement>, value: string) => {
+    const selectMap = useCallback((event: ChangeEvent<HTMLInputElement>, value: string) => {
+        setSelectedMap(value);
+    }, [setSelectedMap])
+
+    const report = useCallback(() => {
         if (!user) return;
         if (Date.now() - lastReported.time < HOUR_IN_MS) return;
         const reporterRef = ref(database, `goons/votes/${user.uid}`)
         set(reporterRef, {
-            location: value,
+            location: selectedMap,
             time: Date.now()
         })
-    }, [user, lastReported])
+    }, [user, lastReported, selectedMap])
+
+    const canVote = Date.now() > lastReported.time + HOUR_IN_MS;
 
     return (
         <>
             <RadioGroup
                 name="goons-radio-group"
                 row
-                value={lastReported.location}
-                onChange={report}
+                value={selectedMap}
+                onChange={selectMap}
             >
                 {mapOptions.map(map =>
                     <FormControlLabel
@@ -58,7 +66,9 @@ const GoonReporter = () => {
                     />
                 )}
             </RadioGroup>
-            {!!lastReported.location &&
+            {canVote && selectedMap &&
+                <Button variant="outlined" onClick={report} sx={{ marginTop: "5px" }}>Vote</Button>}
+            {!canVote &&
                 <Alert severity="info">
                     <Typography variant="subtitle2">
                         You last reported the goons at: {new Date(lastReported.time).toLocaleTimeString()}.
