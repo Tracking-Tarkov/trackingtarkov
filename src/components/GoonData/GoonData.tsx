@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { auth, database } from '../../utils/firebase';
+import { database } from '../../utils/firebase';
 import { onValue, ref } from 'firebase/database';
 import {
     Button,
