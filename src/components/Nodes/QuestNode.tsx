@@ -1,14 +1,25 @@
-import { useState, useCallback, useEffect, useRef, MouseEvent } from "react";
-import { Handle, NodeProps, Position } from "reactflow";
-import QuestPopover from "../QuestPopover/QuestPopover";
-import { QuestData } from "../../utils/buildQuestNodes";
-import { ref, update, onValue, DataSnapshot } from "firebase/database";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, database } from "../../utils/firebase";
-import { getAllQuestPriors, getAllQuestNexts } from "../../utils/common";
+import {
+    useState,
+    useCallback,
+    useEffect,
+    useRef,
+    MouseEvent
+} from 'react';
+import { Handle, NodeProps, Position } from 'reactflow';
+import QuestPopover from '../QuestPopover/QuestPopover';
+import { QuestData } from '../../utils/buildQuestNodes';
+import {
+    ref,
+    update,
+    onValue,
+    DataSnapshot
+} from 'firebase/database';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth, database } from '../../utils/firebase';
+import { getAllQuestPriors, getAllQuestNexts } from '../../utils/common';
 
-import "./styles/questnode.scss";
-import { Typography } from "@mui/material";
+import './styles/questnode.scss';
+import { Typography } from '@mui/material';
 
 export interface IQuestNode extends NodeProps {
     data: QuestData;
@@ -79,7 +90,7 @@ const QuestNode = ({ data }: IQuestNode) => {
             onClick={() => setOpenPopover(true)}
         >
             <Handle type="target" position={Position.Top} />
-            <Typography sx={{ fontSize: "12px" }}>{data.name}</Typography>
+            <Typography sx={{ fontSize: '12px' }}>{data.name}</Typography>
             <Handle type="source" position={Position.Bottom} />
             <QuestPopover
                 open={openPopover}

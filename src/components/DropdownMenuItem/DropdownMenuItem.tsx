@@ -1,7 +1,7 @@
-import { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import MenuItem from "@mui/material/MenuItem";
-import { Popover, Tab } from "@mui/material";
+import { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import MenuItem from '@mui/material/MenuItem';
+import { Popover, Tab } from '@mui/material';
 
 export interface INavbarProps {
     name: string;
@@ -12,7 +12,7 @@ export interface INavbarProps {
 const DropdownMenuItem = ({ name, menuItems, selected }: INavbarProps) => {
     const navigate = useNavigate();
     const [openedPopover, setOpenedPopover] = useState(false);
-    const popoverAnchor = useRef<any>(null);
+    const popoverAnchor = useRef<HTMLDivElement>(null);
 
     const popoverEnter = () => {
         setOpenedPopover(true);
@@ -31,7 +31,7 @@ const DropdownMenuItem = ({ name, menuItems, selected }: INavbarProps) => {
             <Tab
                 ref={popoverAnchor}
                 id="basic-map-tab"
-                aria-owns={"mouse-over-popover"}
+                aria-owns={'mouse-over-popover'}
                 aria-haspopup="true"
                 aria-selected={selected}
                 onMouseEnter={popoverEnter}
@@ -44,15 +44,15 @@ const DropdownMenuItem = ({ name, menuItems, selected }: INavbarProps) => {
                 open={openedPopover}
                 anchorEl={popoverAnchor.current}
                 anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "left",
+                    vertical: 'bottom',
+                    horizontal: 'left',
                 }}
                 PaperProps={{
                     onMouseEnter: popoverEnter,
                     onMouseLeave: popoverLeave,
-                    style: { pointerEvents: "auto" },
+                    style: { pointerEvents: 'auto' },
                 }}
-                sx={{ pointerEvents: "none" }}
+                sx={{ pointerEvents: 'none' }}
             >
                 {menuItems.map((menuItem) => (
                     <MenuItem

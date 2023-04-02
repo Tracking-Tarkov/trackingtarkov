@@ -1,5 +1,5 @@
-import { Typography } from "@mui/material";
-import "./styles/attributions.scss";
+import { Typography } from '@mui/material';
+import './styles/attributions.scss';
 
 const Attributions = () => {
     return (
@@ -10,7 +10,7 @@ const Attributions = () => {
             <Typography>
                 A huge thank you to the Official Escape from Tarkov Wiki,
                 without their hard work this website would not be possible. If
-                you want to check them out they can be found{" "}
+                you want to check them out they can be found{' '}
                 <a
                     href="https://escapefromtarkov.fandom.com/wiki/Escape_from_Tarkov_Wiki"
                     target="_blank"
@@ -26,22 +26,22 @@ const Attributions = () => {
                 Graph Visualization
             </Typography>
             <Typography>
-                We are using{" "}
+                We are using{' '}
                 <a
                     href="https://reactflow.dev/"
                     target="_blank"
                     rel="noreferrer"
                 >
                     react flow
-                </a>{" "}
-                along with{" "}
+                </a>{' '}
+                along with{' '}
                 <a
                     href="https://github.com/dagrejs/dagre"
                     target="_blank"
                     rel="noreferrer"
                 >
                     dagrejs
-                </a>{" "}
+                </a>{' '}
                 to generate the graph for the quests.
             </Typography>
         </div>

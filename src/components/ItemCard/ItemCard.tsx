@@ -1,20 +1,25 @@
-import { useState, useCallback, useEffect } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, database } from "../../utils/firebase";
-import { ref, onValue, DataSnapshot, set } from "firebase/database";
-import { Item } from "../../App";
-import camelCase from "lodash/camelCase";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
-import { IconButton } from "@mui/material";
+import { useState, useCallback, useEffect } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth, database } from '../../utils/firebase';
+import {
+    ref,
+    onValue,
+    DataSnapshot,
+    set
+} from 'firebase/database';
+import { Item } from '../../App';
+import camelCase from 'lodash/camelCase';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import { IconButton } from '@mui/material';
 
-import "./styles/itemcard.scss";
+import './styles/itemcard.scss';
 
 export interface ItemCardProps {
     data: Item;
@@ -59,14 +64,14 @@ const ItemCard = ({ data }: ItemCardProps) => {
                 sx={{
                     minWidth: 280,
                     height: 250,
-                    textAlign: "center",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
+                    textAlign: 'center',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
                 }}
             >
                 <CardMedia
-                    sx={{ objectFit: "contain" }}
+                    sx={{ objectFit: 'contain' }}
                     component="img"
                     image={data.icon.url}
                 />
@@ -93,7 +98,7 @@ const ItemCard = ({ data }: ItemCardProps) => {
                         <Button
                             size="small"
                             className="item-card-action"
-                            sx={{ color: "white" }}
+                            sx={{ color: 'white' }}
                             onClick={buttonAction(
                                 itemCount === data.amount ? 0 : data.amount
                             )}

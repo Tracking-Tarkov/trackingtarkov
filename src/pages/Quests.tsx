@@ -1,22 +1,22 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback } from 'react';
 import ReactFlow, {
     ReactFlowProvider,
     ConnectionLineType,
     useNodesState,
     useEdgesState,
     useReactFlow,
-} from "reactflow";
-import { TraderGraphData, getLayoutedElements } from "../utils/buildQuestNodes";
-import QuestNode from "../components/Nodes/QuestNode";
-import TraderNode from "../components/Nodes/TraderNode";
-import GenericNavbar from "../components/GenericNavbar/GenericNavbar";
+} from 'reactflow';
+import { TraderGraphData, getLayoutedElements } from '../utils/buildQuestNodes';
+import QuestNode from '../components/Nodes/QuestNode';
+import TraderNode from '../components/Nodes/TraderNode';
+import GenericNavbar from '../components/GenericNavbar/GenericNavbar';
 
-import "reactflow/dist/style.css";
-import "./styles/quests.scss";
-import { database } from "../utils/firebase";
-import { goOffline, goOnline } from "firebase/database";
-import { Params, useNavigate, useParams } from "react-router-dom";
-import _ from "lodash";
+import 'reactflow/dist/style.css';
+import './styles/quests.scss';
+import { database } from '../utils/firebase';
+import { goOffline, goOnline } from 'firebase/database';
+import { Params, useNavigate, useParams } from 'react-router-dom';
+import _ from 'lodash';
 
 export interface IQuestProps {
     traderGraphData: TraderGraphData[];
@@ -24,11 +24,16 @@ export interface IQuestProps {
 
 const nodeTypes = { questNode: QuestNode, traderNode: TraderNode };
 
-const getCurrentTrader = (urlParams: Readonly<Params<string>>, traderGraphData: IQuestProps["traderGraphData"]) => {
-    const index = _.findIndex(traderGraphData, ({ name }) => _.camelCase(name) === _.camelCase(urlParams["trader"]));
+const getCurrentTrader = (
+    urlParams: Readonly<Params<string>>,
+    traderGraphData: IQuestProps['traderGraphData']
+) => {
+    const index = _.findIndex(
+        traderGraphData, ({ name }) => _.camelCase(name) === _.camelCase(urlParams['trader'])
+    );
     if (index === -1) return 0;
     return index;
-}
+};
 
 const Quests = ({ traderGraphData }: IQuestProps) => {
     const urlParams = useParams();
@@ -86,8 +91,8 @@ const Quests = ({ traderGraphData }: IQuestProps) => {
     };
 
     const setCurrentNav = useCallback((val: number) => {
-        navigate(`/quests/${traderGraphData[val].name}`)
-    }, [traderGraphData, navigate])
+        navigate(`/quests/${traderGraphData[val].name}`);
+    }, [traderGraphData, navigate]);
 
     return (
         <>
