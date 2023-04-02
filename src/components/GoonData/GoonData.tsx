@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, database } from '../../utils/firebase';
 import { onValue, ref } from 'firebase/database';
 import {
@@ -22,13 +21,11 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const GoonData = () => {
-    const [user] = useAuthState(auth);
     const [maps, setMaps] = useState<Record<string, number>>({});
     const [latestVote, setLatestVote] = useState<string>('Unknown');
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
     useEffect(() => {
-        if (!user) return;
         const currentGoonRef = ref(database, 'goons/current');
         return onValue(currentGoonRef, (snapshot) => {
             const firebaseData = snapshot.val();
@@ -37,7 +34,7 @@ const GoonData = () => {
                 setLatestVote(new Date(firebaseData['mostRecentVote']).toLocaleString());
             }
         });
-    }, [user]);
+    }, []);
 
     const toggleExpand = useCallback(() => {
         setIsExpanded(!isExpanded);
