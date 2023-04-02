@@ -33,7 +33,7 @@ const ItemsFIR = ({ items }: ItemsFIRProps) => {
                             .includes(nameFilter.toLowerCase())
                     )
                     .map((item) => (
-                        <ItemCard data={item} />
+                        <ItemCard key={item.name} data={item} />
                     ))}
             </div>
         </div>
