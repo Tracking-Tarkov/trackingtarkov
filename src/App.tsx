@@ -91,7 +91,7 @@ export interface TarkovData {
 
 const getFirebaseData = async (): Promise<TarkovData> => {
     const lastUpdated: string = (await basicRealtimeApiCall('data/lastUpdated'))
-        .data;
+        .data as string;
     if (
         !localStorage.getItem('lastUpdated') ||
         !localStorage.getItem('tarkovData') ||
