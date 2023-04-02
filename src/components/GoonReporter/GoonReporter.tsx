@@ -1,8 +1,20 @@
-import { Alert, Button, FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material';
+import {
+    Alert,
+    Button,
+    FormControlLabel,
+    Radio,
+    RadioGroup,
+    Typography
+} from '@mui/material';
 import { auth, database } from '../../utils/firebase';
 import { onValue, ref, set } from 'firebase/database';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import {
+    ChangeEvent,
+    useCallback,
+    useEffect,
+    useState
+} from 'react';
 
 const HOUR_IN_MS = 60 * 60 * 1000;
 
@@ -71,9 +83,11 @@ const GoonReporter = () => {
             {!canVote &&
                 <Alert severity="info">
                     <Typography variant="subtitle2">
-                        You last reported the goons at: {new Date(lastReported.time).toLocaleTimeString()}.
+                        You last reported the goons at:
+                        {new Date(lastReported.time).toLocaleTimeString()}.
                         <br />
-                        You can report them again at: {new Date(lastReported.time + HOUR_IN_MS).toLocaleTimeString()}.
+                        You can report them again at:
+                        {new Date(lastReported.time + HOUR_IN_MS).toLocaleTimeString()}.
                     </Typography>
                 </Alert>
             }

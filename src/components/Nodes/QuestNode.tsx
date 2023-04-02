@@ -1,8 +1,19 @@
-import { useState, useCallback, useEffect, useRef, MouseEvent } from 'react';
+import {
+    useState,
+    useCallback,
+    useEffect,
+    useRef,
+    MouseEvent
+} from 'react';
 import { Handle, NodeProps, Position } from 'reactflow';
 import QuestPopover from '../QuestPopover/QuestPopover';
 import { QuestData } from '../../utils/buildQuestNodes';
-import { ref, update, onValue, DataSnapshot } from 'firebase/database';
+import {
+    ref,
+    update,
+    onValue,
+    DataSnapshot
+} from 'firebase/database';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, database } from '../../utils/firebase';
 import { getAllQuestPriors, getAllQuestNexts } from '../../utils/common';

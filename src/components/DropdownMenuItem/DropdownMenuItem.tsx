@@ -12,7 +12,7 @@ export interface INavbarProps {
 const DropdownMenuItem = ({ name, menuItems, selected }: INavbarProps) => {
     const navigate = useNavigate();
     const [openedPopover, setOpenedPopover] = useState(false);
-    const popoverAnchor = useRef<any>(null);
+    const popoverAnchor = useRef<HTMLDivElement>(null);
 
     const popoverEnter = () => {
         setOpenedPopover(true);

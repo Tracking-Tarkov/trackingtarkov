@@ -99,7 +99,7 @@ const generateTraderEdges = (quests: Quests): QuestEdge[] => {
     const edgeType = ConnectionLineType.Bezier;
     const [childrenQeusts, parentQuests] = _.partition(
         Object.entries(quests),
-        ([quest, data]) => {
+        ([_quest, data]) => {
             if (!data.prior) return false;
             const priorQuests = data.prior.filter((priorQuest) => {
                 return !!quests[priorQuest];
@@ -108,7 +108,7 @@ const generateTraderEdges = (quests: Quests): QuestEdge[] => {
         }
     );
 
-    childrenQeusts.sort(([questA, dataA], [questB, dataB]) => {
+    childrenQeusts.sort(([_questA, dataA], [_questB, dataB]) => {
         return dataA.prior.length - dataB.prior.length;
     });
 
@@ -126,7 +126,7 @@ const generateTraderEdges = (quests: Quests): QuestEdge[] => {
     });
 
     const rootEdges: QuestEdge[] = parentQuests.map(
-        ([quest, data]): QuestEdge => {
+        ([quest]): QuestEdge => {
             return {
                 id: `root-${quest}`,
                 source: 'root',
@@ -166,7 +166,7 @@ export const getLayoutedElements = ({
     nodes,
     edges,
 }: {
-    nodes: Node<any>[];
+    nodes: Node<unknown>[];
     edges: Edge[];
 }) => {
     const dagreGraph = new dagre.graphlib.Graph();

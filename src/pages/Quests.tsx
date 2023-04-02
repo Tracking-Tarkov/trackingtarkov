@@ -24,8 +24,13 @@ export interface IQuestProps {
 
 const nodeTypes = { questNode: QuestNode, traderNode: TraderNode };
 
-const getCurrentTrader = (urlParams: Readonly<Params<string>>, traderGraphData: IQuestProps['traderGraphData']) => {
-    const index = _.findIndex(traderGraphData, ({ name }) => _.camelCase(name) === _.camelCase(urlParams['trader']));
+const getCurrentTrader = (
+    urlParams: Readonly<Params<string>>,
+    traderGraphData: IQuestProps['traderGraphData']
+) => {
+    const index = _.findIndex(
+        traderGraphData, ({ name }) => _.camelCase(name) === _.camelCase(urlParams['trader'])
+    );
     if (index === -1) return 0;
     return index;
 };

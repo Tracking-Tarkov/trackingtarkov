@@ -144,7 +144,7 @@ const SideBar = () => {
             ? {
                 title: 'Loading',
                 icon: <LoopIcon />,
-                onClick: () => {},
+                onClick: () => { return; },
             }
             : {
                 title: 'Login',
@@ -168,7 +168,7 @@ const SideBar = () => {
             <Divider />
 
             <List>
-                {topNavItems.map((item, index) => (
+                {topNavItems.map((item) => (
                     <ListItem key={item.title} disablePadding sx={listItemSX}>
                         <ListItemButton
                             sx={listItemButtonSX}

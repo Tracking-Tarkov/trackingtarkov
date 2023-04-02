@@ -1,5 +1,10 @@
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, get, update } from 'firebase/database';
+import {
+    getDatabase,
+    ref,
+    get,
+    update
+} from 'firebase/database';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { firebaseConfig, firebaseConfigDev, dev } from '../config';
 
@@ -25,14 +30,14 @@ export const signIn = () => {
                 creationTime: user.metadata.creationTime,
             });
         })
-        .catch(() => {});
+        .catch();
 };
 
 /* Databse calls */
 
 export interface IRealtimeAPICall {
-    data: any;
-    error: any;
+    data: unknown;
+    error: unknown;
 }
 
 export const basicRealtimeApiCall = async (

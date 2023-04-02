@@ -2,7 +2,14 @@ import { useCallback, useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, database } from '../../utils/firebase';
 import { onValue, ref } from 'firebase/database';
-import { Button, Collapse, Grid, Paper, Typography, styled } from '@mui/material';
+import {
+    Button,
+    Collapse,
+    Grid,
+    Paper,
+    Typography,
+    styled
+} from '@mui/material';
 import _ from 'lodash';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
@@ -17,7 +24,7 @@ const Item = styled(Paper)(({ theme }) => ({
 const GoonData = () => {
     const [user] = useAuthState(auth);
     const [maps, setMaps] = useState<Record<string, number>>({});
-    const [latestVote, setLatestVote] = useState<string>('Unknownaldjfldjafljaldjflkajdlfkjdlfjaljdflaldjfaldjflajdfljadf');
+    const [latestVote, setLatestVote] = useState<string>('Unknown');
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
     useEffect(() => {
@@ -51,7 +58,12 @@ const GoonData = () => {
                 Map Probabilities
             </Button>
             <Collapse in={isExpanded} sx={{ width: '75%' }}>
-                <Grid sx={{ marginTop: '5px' }} container columnSpacing={2} rowSpacing={2} justifyContent="center">
+                <Grid
+                    sx={{ marginTop: '5px' }}
+                    container
+                    columnSpacing={2}
+                    rowSpacing={2}
+                    justifyContent="center">
                     {Object.entries(maps).map(([map, probability]) => (
                         <Grid
                             key={map}

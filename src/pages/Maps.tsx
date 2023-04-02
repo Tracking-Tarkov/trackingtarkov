@@ -1,14 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { tarkovMaps } from '../utils/getMaps';
-import DropdownMenu, {
-    DropdownElement,
-} from '../components/DropdownMenu/DropdownMenu';
-import {
-    TransformWrapper,
-    TransformComponent,
-    ReactZoomPanPinchRef,
-} from 'react-zoom-pan-pinch';
+import DropdownMenu, { DropdownElement } from '../components/DropdownMenu/DropdownMenu';
+import { TransformWrapper, TransformComponent, ReactZoomPanPinchRef } from 'react-zoom-pan-pinch';
 
 import './styles/maps.scss';
 

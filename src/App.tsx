@@ -14,10 +14,7 @@ import Attributions from './pages/Attributions';
 import ItemsFIR from './pages/ItemsFIR';
 import Quests from './pages/Quests';
 import Goons from './pages/Goons';
-import generateTraderGraphData, {
-    TraderGraphData,
-    Traders,
-} from './utils/buildQuestNodes';
+import generateTraderGraphData, { TraderGraphData, Traders } from './utils/buildQuestNodes';
 import ThemeProvider from '@mui/system/ThemeProvider';
 
 import './App.scss';
