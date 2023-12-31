@@ -26,6 +26,10 @@ import labsExtract from '../mapimages/Labs/labsExtract.jpg';
 import labsHorizontal from '../mapimages/Labs/labsHorizontal.jpg';
 import labsVertical from '../mapimages/Labs/labsVertical.jpg';
 
+import groundZero3d from '../mapimages/GroundZero/groundzero3d.jpg';
+import groundZero2d from '../mapimages/GroundZero/groundzero2d.jpg';
+
+
 export type Maps = Record<string, TarkovMap>;
 
 export interface TarkovMap {
@@ -113,4 +117,12 @@ export const tarkovMaps: Maps = {
         playerCount: 16,
         duration: 35,
     },
+    groundzero: {
+        subMaps: {
+            'ground-zero-2d': groundZero2d,
+            'ground-zero-3d': groundZero3d,
+        },
+        playerCount: 16,
+        duration: 35,
+    }
 };
