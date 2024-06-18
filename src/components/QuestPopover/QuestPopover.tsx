@@ -63,7 +63,6 @@ const QuestPopover = ({
                     </Button>
                 </Box>
                 <Divider />
-                <Typography typography="h7">Type: {questInfo.type}</Typography>
                 <List
                     dense
                     subheader={

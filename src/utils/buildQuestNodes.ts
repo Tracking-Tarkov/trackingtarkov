@@ -24,7 +24,6 @@ export interface QuestData {
     rewards: string[];
     prior: string[];
     next: string[];
-    type: string;
     trader: string;
     dbId: string;
     traderQuests: Quests;
