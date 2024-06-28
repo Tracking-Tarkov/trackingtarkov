@@ -139,3 +139,17 @@
     box-shadow: 0 0 0 2px $lightkeeper-highlight-completed;
     border-radius: 2px;
 }
+
+.ref-node {
+    background: $ref;
+    border: 1px solid $ref-highlight;
+}
+
+.ref-completed {
+    background: $ref-highlight;
+}
+
+.ref > .therapist-node { 
+    box-shadow: 0 0 0 2px $ref-highlight-completed;
+    border-radius: 2px;
+}
