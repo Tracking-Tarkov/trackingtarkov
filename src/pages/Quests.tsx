@@ -26,7 +26,7 @@ const nodeTypes = { questNode: QuestNode, traderNode: TraderNode };
 
 const getCurrentTrader = (
     urlParams: Readonly<Params<string>>,
-    traderGraphData: IQuestProps['traderGraphData']
+    traderGraphData: TraderGraphData[]
 ) => {
     const index = _.findIndex(
         traderGraphData, ({ name }) => _.camelCase(name) === _.camelCase(urlParams['trader'])
@@ -36,17 +36,16 @@ const getCurrentTrader = (
 };
 
 const Quests = ({ traderGraphData }: IQuestProps) => {
+    const { setViewport } = useReactFlow();
+    const [nodes, setNodes, onNodesChange] = useNodesState([]);
+    const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+
     const urlParams = useParams();
     const navigate = useNavigate();
+
+    const currentTrader = getCurrentTrader(urlParams, traderGraphData);
     const autoTimeout = useRef<NodeJS.Timeout>();
     const isTimedOut = useRef(false);
-    const { setViewport } = useReactFlow();
-    const currentTrader = getCurrentTrader(urlParams, traderGraphData);
-    const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
-        traderGraphData[currentTrader]
-    );
-    const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
 
     const resetDatabaseConnection = useCallback(() => {
         if (isTimedOut.current) {
@@ -61,8 +60,7 @@ const Quests = ({ traderGraphData }: IQuestProps) => {
     }, []);
 
     useEffect(() => {
-        const { nodes: layoutedNodes, edges: layoutedEdges } =
-            getLayoutedElements(traderGraphData[currentTrader]);
+        const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(traderGraphData[currentTrader]);
 
         setNodes([...layoutedNodes]);
         setEdges([...layoutedEdges]);

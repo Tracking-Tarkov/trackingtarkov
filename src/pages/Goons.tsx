@@ -5,7 +5,6 @@ import GoonData from '../components/GoonData/GoonData';
 
 const Goons = () => {
 
-
     return (
         <Box display="flex" flexDirection="column" alignItems="center" marginTop="20px">
             <Typography variant="h3">Goon Squad</Typography>
