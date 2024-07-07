@@ -29,7 +29,6 @@ import labsVertical from '../mapimages/Labs/labsVertical.jpg';
 import groundZero3d from '../mapimages/GroundZero/groundzero3d.jpg';
 import groundZero2d from '../mapimages/GroundZero/groundzero2d.jpg';
 
-
 export type Maps = Record<string, TarkovMap>;
 
 export interface TarkovMap {
