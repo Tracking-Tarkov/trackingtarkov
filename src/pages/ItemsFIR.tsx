@@ -25,11 +25,6 @@ export interface ItemsFIRProps {
     items: Item[];
 }
 
-const filters: Filters[] = [
-    Filters.Kappa,
-    Filters.Craftable
-];
-
 const ItemsFIR = ({ items }: ItemsFIRProps) => {
     const [nameFilter, setNameFilter] = useState<string>('');
     const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
