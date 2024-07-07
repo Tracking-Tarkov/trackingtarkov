@@ -17,7 +17,8 @@ import './styles/itemsFIR.scss';
 
 enum Filters {
     Kappa = 'Kappa',
-    Craftable = 'Craftable'
+    Craftable = 'Craftable',
+    NotCraftable = 'Not Craftable',
 }
 
 export interface ItemsFIRProps {
@@ -46,7 +47,8 @@ const ItemsFIR = ({ items }: ItemsFIRProps) => {
     const filterItems = (item: Item) => {
         const itemFilterData: string[] = [
             `${item.kappa && Filters.Kappa}`,
-            `${item.craft && Filters.Craftable}`
+            `${item.craft && Filters.Craftable}`,
+            `${!item.craft && Filters.NotCraftable}`
         ];
 
         return (
@@ -77,7 +79,7 @@ const ItemsFIR = ({ items }: ItemsFIRProps) => {
                             input={<OutlinedInput label="Filters" />}
                             renderValue={(selected) => selected.join(', ')}
                         >
-                            {filters.map((filter) => (
+                            {Object.values(Filters).map((filter) => (
                                 <MenuItem key={filter} value={filter}>
                                     <Checkbox checked={selectedFilters.indexOf(filter) > -1} />
                                     <ListItemText primary={filter} />

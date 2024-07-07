@@ -63,7 +63,7 @@
         "max-len": [
             "error",
             {
-                "code": 100,
+                "code": 120,
                 "ignoreComments": true,
                 "ignoreStrings": true
             }
@@ -83,6 +83,12 @@
             "error",
             "multiline"
         ],
-        "react/react-in-jsx-scope": "off"
+        "react/react-in-jsx-scope": "off",
+        "no-multiple-empty-lines": [
+            "error", { 
+                "max": 1, 
+                "maxEOF": 0 
+            }
+        ]
     }
 }
