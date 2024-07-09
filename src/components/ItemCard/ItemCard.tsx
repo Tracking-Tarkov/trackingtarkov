@@ -1,4 +1,9 @@
-import { useState, useCallback, useEffect } from 'react';
+import {
+    useState,
+    useCallback,
+    useEffect,
+    useMemo
+} from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, database } from '../../utils/firebase';
 import {
@@ -23,9 +28,10 @@ import './styles/itemcard.scss';
 
 export interface ItemCardProps {
     data: Item;
+    isHideCompleted: boolean;
 }
 
-const ItemCard = ({ data }: ItemCardProps) => {
+const ItemCard = ({ data, isHideCompleted }: ItemCardProps) => {
     const [user] = useAuthState(auth);
     const [itemCount, setItemCount] = useState<number>(0);
 
@@ -58,8 +64,12 @@ const ItemCard = ({ data }: ItemCardProps) => {
         [user, data]
     );
 
+    const isHideItem: boolean = useMemo(() => {
+        return isHideCompleted && data.amount === itemCount;
+    }, [isHideCompleted, data, itemCount]);
+
     return (
-        <div className="item-fir-card">
+        <div className={`item-fir-card ${isHideItem && 'hide-fir-card'}`}>
             <Card
                 sx={{
                     minWidth: 280,
