@@ -4,13 +4,15 @@ import ItemCard from '../components/ItemCard/ItemCard';
 import {
     Checkbox,
     FormControl,
+    FormControlLabel,
     InputLabel,
     ListItemText,
     MenuItem,
     OutlinedInput,
     Select,
     SelectChangeEvent,
-    TextField
+    Switch,
+    TextField,
 } from '@mui/material';
 
 import './styles/itemsFIR.scss';
@@ -28,6 +30,7 @@ export interface ItemsFIRProps {
 const ItemsFIR = ({ items }: ItemsFIRProps) => {
     const [nameFilter, setNameFilter] = useState<string>('');
     const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+    const [isHideCompleted, setIsHideCompleted] = useState<boolean>(false);
 
     const handleFiltersChange = (event: SelectChangeEvent<typeof selectedFilters>) => {
         const {
@@ -37,6 +40,10 @@ const ItemsFIR = ({ items }: ItemsFIRProps) => {
             // On autofill we get a stringified value.
             typeof value === 'string' ? value.split(',') : value,
         );
+    };
+
+    const handleIsCompletedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setIsHideCompleted(event.target.checked);
     };
 
     const filterItems = (item: Item) => {
@@ -64,31 +71,34 @@ const ItemsFIR = ({ items }: ItemsFIRProps) => {
                         setNameFilter(event.target.value)
                     }
                 />
-                <div>
-                    <FormControl sx={{ ml: 1, width: 300 }}>
-                        <InputLabel>Filters</InputLabel>
-                        <Select
-                            multiple
-                            value={selectedFilters}
-                            onChange={handleFiltersChange}
-                            input={<OutlinedInput label="Filters" />}
-                            renderValue={(selected) => selected.join(', ')}
-                        >
-                            {Object.values(Filters).map((filter) => (
-                                <MenuItem key={filter} value={filter}>
-                                    <Checkbox checked={selectedFilters.indexOf(filter) > -1} />
-                                    <ListItemText primary={filter} />
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </div>
+                <FormControl sx={{ width: 300 }}>
+                    <InputLabel>Filters</InputLabel>
+                    <Select
+                        multiple
+                        value={selectedFilters}
+                        onChange={handleFiltersChange}
+                        input={<OutlinedInput label="Filters" />}
+                        renderValue={(selected) => selected.join(', ')}
+                    >
+                        {Object.values(Filters).map((filter) => (
+                            <MenuItem key={filter} value={filter}>
+                                <Checkbox checked={selectedFilters.indexOf(filter) > -1} />
+                                <ListItemText primary={filter} />
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                <FormControlLabel
+                    sx={{width: 250}}
+                    control={<Switch checked={isHideCompleted} onChange={handleIsCompletedChange}/>} 
+                    label="Hide Completed" 
+                />
             </div>
             <div className="items-fir-cards">
                 {items
                     .filter(filterItems)
                     .map((item) => (
-                        <ItemCard key={item.name} data={item} />
+                        <ItemCard key={item.name} data={item} isHideCompleted={isHideCompleted} />
                     ))}
             </div>
         </div>
