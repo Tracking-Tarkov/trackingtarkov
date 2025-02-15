@@ -153,3 +153,17 @@
     box-shadow: 0 0 0 2px $ref-highlight-completed;
     border-radius: 2px;
 }
+
+.btr-driver-node {
+    background: $ref;
+    border: 1px solid $btr-driver-highlight;
+}
+
+.btr-driver-completed {
+    background: $btr-driver-highlight;
+}
+
+.selected > .btr-driver-node { 
+    box-shadow: 0 0 0 2px $btr-driver-highlight-completed;
+    border-radius: 2px;
+}
