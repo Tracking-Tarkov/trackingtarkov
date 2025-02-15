@@ -6,6 +6,7 @@ import {
     MouseEvent
 } from 'react';
 import { Handle, NodeProps, Position } from 'reactflow';
+import _ from 'lodash';
 import QuestPopover from '../QuestPopover/QuestPopover';
 import { QuestData } from '../../utils/buildQuestNodes';
 import {
@@ -84,7 +85,7 @@ const QuestNode = ({ data }: IQuestNode) => {
     return (
         <div
             ref={popoverAnchor}
-            className={`quest-node ${data.trader.toLowerCase()}-node ${
+            className={`quest-node ${_.kebabCase(data.trader)}-node ${
                 isQuestComplete && data.trader.toLowerCase()
             }-completed`}
             onClick={() => setOpenPopover(true)}
