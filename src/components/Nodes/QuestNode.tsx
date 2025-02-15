@@ -86,7 +86,7 @@ const QuestNode = ({ data }: IQuestNode) => {
         <div
             ref={popoverAnchor}
             className={`quest-node ${_.kebabCase(data.trader)}-node ${
-                isQuestComplete && data.trader.toLowerCase()
+                isQuestComplete && _.kebabCase(data.trader)
             }-completed`}
             onClick={() => setOpenPopover(true)}
         >

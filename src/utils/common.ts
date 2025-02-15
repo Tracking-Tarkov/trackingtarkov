@@ -9,6 +9,7 @@ const getQuestPriors = (
     priors.push(quest);
     if (!quests[quest] || !quests[quest].prior) return;
     quests[quest].prior.forEach((prior) => {
+        if(priors.includes(prior)) return;
         getQuestPriors(prior, quests, priors);
     });
 };
@@ -17,6 +18,7 @@ const getQuestNexts = (quest: string, quests: Quests, nexts: Array<string>) => {
     nexts.push(quest);
     if (!quests[quest] || !quests[quest].next) return;
     quests[quest].next.forEach((next) => {
+        if(nexts.includes(next)) return;
         getQuestNexts(next, quests, nexts);
     });
 };

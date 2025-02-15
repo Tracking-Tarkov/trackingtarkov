@@ -56,7 +56,7 @@
             "error",
             {
                 "items": 3,
-                "max-len": 100,
+                "max-len": 120,
                 "semi": true
             }
         ],
