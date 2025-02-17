@@ -13,8 +13,7 @@ import {
     ListItemText,
     Tooltip,
 } from '@mui/material';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../../utils/firebase';
+import { useAuth } from '../../hooks/useAuth';
 
 export type QuestPopoverProps = {
     open: boolean;
@@ -23,9 +22,11 @@ export type QuestPopoverProps = {
     completed: boolean;
     anchor: MutableRefObject<HTMLDivElement | null>;
     updateQuestState: () => void;
+    readOnly: boolean;
 };
 
 const QuestPopover = ({
+    readOnly,
     open,
     onClose,
     completed,
@@ -33,7 +34,7 @@ const QuestPopover = ({
     questInfo,
     updateQuestState,
 }: QuestPopoverProps) => {
-    const [user] = useAuthState(auth);
+    const { user } = useAuth();
     return (
         <Popover
             open={open}
@@ -94,16 +95,26 @@ const QuestPopover = ({
                 {!questInfo.kappa && (
                     <Typography>Not required for Kappa</Typography>
                 )}
-                <Tooltip
-                    title={!user && <Typography color="inherit"> You must sign in to use this feature </Typography>}
-                    arrow
-                >
-                    <Box display="flex" justifyContent="center">
-                        <Button disabled={!user} onClick={updateQuestState}>
+                {!readOnly ? (
+                    <Tooltip
+                        title={!user && <Typography color="inherit"> You must sign in to use this feature </Typography>}
+                        arrow
+                    >
+                        <Box display="flex" justifyContent="center">
+                            <Button disabled={!user} onClick={updateQuestState}>
                             Mark as {completed ? 'Incomplete' : 'Complete'}
-                        </Button>
-                    </Box>
-                </Tooltip>
+                            </Button>
+                        </Box>
+                    </Tooltip>
+                ) : (
+                    <Typography
+                        variant='button'
+                        color='primary'
+                        style={{ display: 'flex', justifyContent: 'center' }}
+                    >
+                        {completed ? 'Incomplete' : 'Complete'}
+                    </Typography>
+                )}
             </Box>
         </Popover>
     );
