@@ -17,10 +17,20 @@
 .prapor-node {
     background: $prapor;
     border: 1px solid $prapor-highlight;
+
+    .plus-minus-square {
+        background: $prapor;
+        border: solid 1px $prapor-highlight;
+    }
 }
 
 .prapor-completed {
     background: $prapor-highlight;
+
+    .plus-minus-square {
+        background: $prapor-highlight;
+        border: solid 1px $prapor-highlight-completed;
+    }
 }
 
 .selected > .prapor-node { 
@@ -31,10 +41,20 @@
 .therapist-node {
     background: $therapist;
     border: 1px solid $therapist-highlight;
+
+    .plus-minus-square {
+        background: $therapist;
+        border: solid 1px $therapist-highlight;
+    }
 }
 
 .therapist-completed {
     background: $therapist-highlight;
+
+    .plus-minus-square {
+        background: $therapist-highlight;
+        border: solid 1px $therapist-highlight-completed;
+    }
 }
 
 .selected > .therapist-node { 
@@ -45,10 +65,20 @@
 .skier-node {
     background: $skier;
     border: 1px solid $skier-highlight;
+
+    .plus-minus-square {
+        background: $skier;
+        border: solid 1px $skier-highlight;
+    }
 }
 
 .skier-completed {
     background: $skier-highlight;
+
+    .plus-minus-square {
+        background: $skier-highlight;
+        border: solid 1px $skier-highlight-completed;
+    }
 }
 
 .selected > .skier-node { 
@@ -59,10 +89,20 @@
 .peacekeeper-node {
     background: $peacekeeper;
     border: 1px solid $peacekeeper-highlight;
+
+    .plus-minus-square {
+        background: $peacekeeper;
+        border: solid 1px $peacekeeper-highlight;
+    }
 }
 
 .peacekeeper-completed {
     background: $peacekeeper-highlight;
+
+    .plus-minus-square {
+        background: $peacekeeper-highlight;
+        border: solid 1px $peacekeeper-highlight-completed;
+    }
 }
 
 .selected > .peacekeeper-node { 
@@ -73,10 +113,20 @@
 .mechanic-node {
     background: $mechanic;
     border: 1px solid $mechanic-highlight;
+
+    .plus-minus-square {
+        background: $mechanic;
+        border: solid 1px $mechanic-highlight;
+    }
 }
 
 .mechanic-completed {
     background: $mechanic-highlight;
+
+    .plus-minus-square {
+        background: $mechanic-highlight;
+        border: solid 1px $mechanic-highlight-completed;
+    }
 }
 
 .selected > .mechanic-node { 
@@ -87,10 +137,20 @@
 .ragman-node {
     background: $ragman;
     border: 1px solid $ragman-highlight;
+
+    .plus-minus-square {
+        background: $ragman;
+        border: solid 1px $ragman-highlight;
+    }
 }
 
 .ragman-completed {
     background: $ragman-highlight;
+
+    .plus-minus-square {
+        background: $ragman-highlight;
+        border: solid 1px $ragman-highlight-completed;
+    }
 }
 
 .selected > .ragman-node { 
@@ -101,10 +161,20 @@
 .jaeger-node {
     background: $jaeger;
     border: 1px solid $jaeger-highlight;
+
+    .plus-minus-square {
+        background: $jaeger;
+        border: solid 1px $jaeger-highlight;
+    }
 }
 
 .jaeger-completed {
     background: $jaeger-highlight;
+
+    .plus-minus-square {
+        background: $jaeger-highlight;
+        border: solid 1px $jaeger-highlight-completed;
+    }
 }
 
 .selected > .jaeger-node { 
@@ -115,10 +185,21 @@
 .fence-node {
     background: $fence;
     border: 1px solid $fence-highlight;
+
+    .plus-minus-square {
+        background: $fence;
+        border: solid 1px $fence-highlight;
+    }
+    
 }
 
 .fence-completed {
     background: $fence-highlight;
+
+    .plus-minus-square {
+        background: $fence-highlight;
+        border: solid 1px $fence-highlight-completed;
+    }
 }
 
 .selected > .fence-node { 
@@ -129,10 +210,20 @@
 .lightkeeper-node {
     background: $lightkeeper;
     border: 1px solid $lightkeeper-highlight;
+
+    .plus-minus-square {
+        background: $lightkeeper;
+        border: solid 1px $lightkeeper-highlight;
+    }
 }
 
 .lightkeeper-completed {
     background: $lightkeeper-highlight;
+
+    .plus-minus-square {
+        background: $lightkeeper-highlight;
+        border: solid 1px $lightkeeper-highlight-completed;
+    }
 }
 
 .selected > .lightkeeper-node { 
@@ -143,10 +234,20 @@
 .ref-node {
     background: $ref;
     border: 1px solid $ref-highlight;
+
+    .plus-minus-square {
+        background: $ref;
+        border: solid 1px $ref-highlight;
+    }
 }
 
 .ref-completed {
     background: $ref-highlight;
+
+    .plus-minus-square {
+        background: $ref-highlight;
+        border: solid 1px $ref-highlight-completed;
+    }
 }
 
 .selected > .ref-node { 
@@ -157,13 +258,72 @@
 .btr-driver-node {
     background: $btr-driver;
     border: 1px solid $btr-driver-highlight;
+
+    .plus-minus-square {
+        background: $btr-driver;
+        border: solid 1px $btr-driver-highlight;
+    }
 }
 
 .btr-driver-completed {
     background: $btr-driver-highlight;
+
+    .plus-minus-square {
+        background: $btr-driver-highlight;
+        border: solid 1px $btr-driver-highlight-completed;
+    }
 }
 
 .selected > .btr-driver-node { 
     box-shadow: 0 0 0 2px $btr-driver-highlight-completed;
     border-radius: 2px;
+}
+
+.plus-minus-square {
+    width: 20px;
+    height: 20px;
+    top: -10px;
+    left: 139px;
+    border-radius: 50%;
+    position: absolute;
+    transition: all .15s ease-in-out;
+
+    span {
+        background: white;
+        position: absolute;
+    }
+
+    .horiz {
+        height: 2px;
+        width: 70%;
+        top: 50%;
+        margin-top: -1px;
+        left: 15%;
+        opacity: 1;
+        transition: all .2s ease-out;
+    }
+      
+    .vert {
+        width: 2px;
+        height: 70%;
+        left: 50%;
+        margin-left: -1px;
+        top: 15%;
+    }   
+}
+  
+
+/* Transitions */
+.plus-minus-square.minus {
+    -webkit-transform: rotate(90deg);
+            transform: rotate(90deg);
+}
+
+.plus-minus-square.plus {
+    -webkit-transform: rotate(-90deg);
+            transform: rotate(-90deg);
+}
+
+.plus-minus-square.minus .horiz.quest-complete {
+    opacity: 0;
 }

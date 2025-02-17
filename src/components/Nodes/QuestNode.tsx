@@ -17,10 +17,10 @@ import {
 } from 'firebase/database';
 import { database } from '../../utils/firebase';
 import { getAllQuestPriors, getAllQuestNexts } from '../../utils/common';
-
-import './styles/questnode.scss';
 import { Typography } from '@mui/material';
 import { useAuth } from '../../hooks/useAuth';
+
+import './styles/questnode.scss';
 
 export interface IQuestNode extends NodeProps {
     data: QuestData;
@@ -106,7 +106,17 @@ const QuestNode = ({ data }: IQuestNode) => {
                 anchor={popoverAnchor}
                 updateQuestState={updateQuestState}
             />
-        </div >
+            {!readOnly &&       
+                <div 
+                    className={`plus-minus-square ${isQuestComplete ? 'minus' : 'plus'}`}
+                    onClick={(e)=> {e.stopPropagation(); updateQuestState();}}
+                >
+                    <span className={`horiz ${isQuestComplete && 'quest-complete'}`}></span>
+                    <span className="vert"></span>
+                </div>
+            }
+      
+        </div>
     );
 };
 

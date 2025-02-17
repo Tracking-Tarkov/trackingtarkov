@@ -139,7 +139,7 @@ const App = () => {
                     >
                         <Box
                             display='flex'
-                            justifyContent='end'
+                            justifyContent='center'
                             alignItems='center'
                             gap={2}
                             paddingX={2}
