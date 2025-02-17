@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, signIn } from '../../utils/firebase';
@@ -28,6 +27,7 @@ import SensorOccupiedIcon from '@mui/icons-material/SensorOccupied';
 import GridViewIcon from '@mui/icons-material/GridView';
 
 import discordIcon from '../../icons/discord-mark-white.png';
+import { useNavigateWithParams } from '../../hooks/useNavigateWithParams';
 
 export interface NavItems {
     title: string;
@@ -103,14 +103,11 @@ const SideBar = () => {
     const [drawerOpen, setDrawerOpen] = useState(getIsMobile());
     const [user, loading] = useAuthState(auth);
 
-    const navigate = useNavigate();
+    const navigate = useNavigateWithParams();
 
-    const onNav = useCallback(
-        (page: string) => () => {
-            navigate(page.toLowerCase());
-        },
-        [navigate]
-    );
+    const onNav = (page: string) => () => {
+        navigate(page.toLowerCase());
+    };
 
     const handleDrawerToggle = useCallback(() => {
         setDrawerOpen((prevState) => !prevState);

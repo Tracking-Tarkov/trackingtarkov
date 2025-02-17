@@ -4,8 +4,7 @@ import {
     useEffect,
     useMemo
 } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth, database } from '../../utils/firebase';
+import { database } from '../../utils/firebase';
 import {
     ref,
     onValue,
@@ -25,6 +24,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import { IconButton } from '@mui/material';
 
 import './styles/itemcard.scss';
+import { useAuth } from '../../hooks/useAuth';
 
 export interface ItemCardProps {
     data: Item;
@@ -32,15 +32,15 @@ export interface ItemCardProps {
 }
 
 const ItemCard = ({ data, isHideCompleted }: ItemCardProps) => {
-    const [user] = useAuthState(auth);
+    const { viewAs, readOnly, user } = useAuth();
     const [itemCount, setItemCount] = useState<number>(0);
 
     useEffect(() => {
-        if (!user) return;
+        if (!viewAs) return;
 
         const itemCountRef = ref(
             database,
-            `users/${user.uid}/items/${camelCase(data.name)}`
+            `users/${viewAs}/items/${camelCase(data.name)}`
         );
 
         const snapshotCallback = (snapshot: DataSnapshot) => {
@@ -48,12 +48,12 @@ const ItemCard = ({ data, isHideCompleted }: ItemCardProps) => {
             setItemCount(itemCount ?? 0);
         };
 
-        onValue(itemCountRef, snapshotCallback);
-    }, [user, data]);
+        return onValue(itemCountRef, snapshotCallback);
+    }, [viewAs, data]);
 
     const buttonAction = useCallback(
         (amount: number) => () => {
-            if (!user || amount > data.amount || amount < 0) return;
+            if (readOnly || !user || amount > data.amount || amount < 0) return;
 
             const itemCountRef = ref(
                 database,
@@ -61,7 +61,7 @@ const ItemCard = ({ data, isHideCompleted }: ItemCardProps) => {
             );
             set(itemCountRef, amount);
         },
-        [user, data]
+        [readOnly, user, data]
     );
 
     const isHideItem: boolean = useMemo(() => {
@@ -97,32 +97,45 @@ const ItemCard = ({ data, isHideCompleted }: ItemCardProps) => {
                 </CardContent>
                 <CardActions>
                     <div className="item-card-actions">
-                        <IconButton
-                            size="small"
-                            className="item-card-action"
-                            sx={{ borderRadius: 1 }}
-                            onClick={buttonAction(itemCount - 1)}
-                        >
-                            <RemoveIcon />
-                        </IconButton>
-                        <Button
-                            size="small"
-                            className="item-card-action"
-                            sx={{ color: 'white' }}
-                            onClick={buttonAction(
-                                itemCount === data.amount ? 0 : data.amount
-                            )}
-                        >
-                            {itemCount}/{data.amount}
-                        </Button>
-                        <IconButton
-                            size="small"
-                            className="item-card-action"
-                            sx={{ borderRadius: 1 }}
-                            onClick={buttonAction(itemCount + 1)}
-                        >
-                            <AddIcon />
-                        </IconButton>
+                        {!readOnly ? (
+                            <>
+                                <IconButton
+                                    size="small"
+                                    className="item-card-action"
+                                    sx={{ borderRadius: 1 }}
+                                    onClick={buttonAction(itemCount - 1)}
+                                >
+                                    <RemoveIcon />
+                                </IconButton>
+                                <Button
+                                    size="small"
+                                    className="item-card-action"
+                                    sx={{ color: 'white' }}
+                                    onClick={buttonAction(
+                                        itemCount === data.amount ? 0 : data.amount
+                                    )}
+                                >
+                                    {itemCount}/{data.amount}
+                                </Button>
+                                <IconButton
+                                    size="small"
+                                    className="item-card-action"
+                                    sx={{ borderRadius: 1 }}
+                                    onClick={buttonAction(itemCount + 1)}
+                                >
+                                    <AddIcon />
+                                </IconButton>
+                            </>
+                        ) : (
+                            <Button
+                                size="small"
+                                className="item-card-action"
+                                disabled
+                                sx={{ color: 'white !important' }}
+                            >
+                                {itemCount}/{data.amount}
+                            </Button>
+                        )}
                     </div>
                 </CardActions>
             </Card>

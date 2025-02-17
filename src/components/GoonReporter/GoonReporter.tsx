@@ -8,15 +8,15 @@ import {
     Typography
 } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { auth, database } from '../../utils/firebase';
+import { database } from '../../utils/firebase';
 import { onValue, ref, set } from 'firebase/database';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import {
     ChangeEvent,
     useCallback,
     useEffect,
     useState
 } from 'react';
+import { useAuth } from '../../hooks/useAuth';
 
 const CAN_VOTE_THRESHOLD = (60 * 60 * 1000) / 2;
 
@@ -30,14 +30,14 @@ const mapOptions = [
 type GoonVote = { location: string; time: number; }
 
 const GoonReporter = () => {
-    const [user] = useAuthState(auth);
+    const { viewAs, user, readOnly } = useAuth();
     const [selectedMap, setSelectedMap] = useState<string>('');
     const [lastReported, setLastReported] = useState<GoonVote>({ location: '', time: 0 });
     const [reportHistory, setReportHistory] = useState<Record<string, GoonVote>>({});
 
     useEffect(() => {
-        if (!user) return;
-        return onValue(ref(database, `users/${user.uid}/goonVote`), (snapshot) => {
+        if (!viewAs) return;
+        return onValue(ref(database, `users/${viewAs}/goonVote`), (snapshot) => {
             const lastUserVote = snapshot.val();
             if (lastUserVote) {
                 setLastReported(lastUserVote);
@@ -46,7 +46,7 @@ const GoonReporter = () => {
                 setLastReported({ location: '', time: 0 });
             }
         });
-    }, [user]);
+    }, [viewAs]);
 
     useEffect(() => {
         const reportHistoryRef = ref(database, 'goons/votes');
@@ -110,28 +110,36 @@ const GoonReporter = () => {
 
     return (
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 15 }}>
-            <Tooltip
-                title={!user && <Typography color="inherit"> You must sign in to use this feature </Typography>}
-                arrow
-            >
-                <RadioGroup
-                    name="goons-radio-group"
-                    row
-                    value={selectedMap}
-                    onChange={selectMap}
+            {!readOnly ? (
+                <Tooltip
+                    title={!user && <Typography color="inherit"> You must sign in to use this feature </Typography>}
+                    arrow
                 >
-                    {mapOptions.map(map =>
-                        <FormControlLabel
-                            key={map}
-                            disabled={!canVote || !user}
-                            value={map}
-                            control={<Radio />}
-                            label={map}
-                            labelPlacement="top"
-                        />
-                    )}
-                </RadioGroup>
-            </Tooltip>
+                    <RadioGroup
+                        name="goons-radio-group"
+                        row
+                        value={selectedMap}
+                        onChange={selectMap}
+                    >
+                        {mapOptions.map(map =>
+                            <FormControlLabel
+                                key={map}
+                                disabled={!canVote || !user}
+                                value={map}
+                                control={<Radio />}
+                                label={map}
+                                labelPlacement="top"
+                            />
+                        )}
+                    </RadioGroup>
+                </Tooltip>
+            ) : (
+                <Alert severity="warning">
+                    <Typography variant="subtitle2">
+                        You cannot vote while while viewing as another person.
+                    </Typography>
+                </Alert>
+            )}
             {canVote && selectedMap &&
                 <Button variant="outlined" onClick={report}>Vote</Button>}
             {!canVote &&

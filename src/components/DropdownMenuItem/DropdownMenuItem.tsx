@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import MenuItem from '@mui/material/MenuItem';
 import { Popover, Tab } from '@mui/material';
+import { useNavigateWithParams } from '../../hooks/useNavigateWithParams';
 
 export interface INavbarProps {
     name: string;
@@ -10,7 +10,7 @@ export interface INavbarProps {
 }
 
 const DropdownMenuItem = ({ name, menuItems, selected }: INavbarProps) => {
-    const navigate = useNavigate();
+    const navigate = useNavigateWithParams();
     const [openedPopover, setOpenedPopover] = useState(false);
     const popoverAnchor = useRef<HTMLDivElement>(null);
 
