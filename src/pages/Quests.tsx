@@ -15,9 +15,8 @@ import 'reactflow/dist/style.css';
 import './styles/quests.scss';
 import { database } from '../utils/firebase';
 import { goOffline, goOnline } from 'firebase/database';
-import { Params, useParams } from 'react-router-dom';
+import { Params, useNavigate, useParams } from 'react-router-dom';
 import _ from 'lodash';
-import { useNavigateWithParams } from '../hooks/useNavigateWithParams';
 
 export interface IQuestProps {
     traderGraphData: TraderGraphData[];
@@ -42,7 +41,7 @@ const Quests = ({ traderGraphData }: IQuestProps) => {
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
     const urlParams = useParams();
-    const navigate = useNavigateWithParams();
+    const navigate = useNavigate();
 
     const currentTrader = getCurrentTrader(urlParams, traderGraphData);
     const autoTimeout = useRef<NodeJS.Timeout>();
