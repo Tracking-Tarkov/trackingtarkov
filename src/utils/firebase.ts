@@ -6,11 +6,9 @@ import {
     update
 } from 'firebase/database';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { firebaseConfig, firebaseConfigDev, dev } from '../config';
+import { config } from '../config';
 
-const firebaseApp = dev
-    ? initializeApp(firebaseConfigDev)
-    : initializeApp(firebaseConfig);
+const firebaseApp = initializeApp(config);
 
 export const database = getDatabase(firebaseApp);
 export const auth = getAuth(firebaseApp);
