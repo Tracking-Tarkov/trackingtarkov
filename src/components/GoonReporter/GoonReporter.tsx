@@ -18,7 +18,7 @@ import {
     useState
 } from 'react';
 
-const CAN_VOTE_THRESHOLD = (60 * 60 * 1000) / 2 ;
+const CAN_VOTE_THRESHOLD = (60 * 60 * 1000) / 2;
 
 const mapOptions = [
     'Customs',
@@ -79,37 +79,37 @@ const GoonReporter = () => {
     }, [user, lastReported, selectedMap]);
 
     const columns: GridColDef[] = [
-        { 
-            field: 'location', 
-            headerName: 'Map', 
+        {
+            field: 'location',
+            headerName: 'Map',
             flex: 1,
             sortable: false,
         },
-        { 
-            field: 'time', 
-            headerName: 'Time', 
+        {
+            field: 'time',
+            headerName: 'Time',
             flex: 1,
             sortable: false,
         },
-        { 
-            field: 'submitter', 
-            headerName: 'Submitter', 
+        {
+            field: 'submitter',
+            headerName: 'Submitter',
             flex: 1,
             sortable: false,
         },
     ];
-      
+
     const rows = Object.entries(reportHistory).map(([submitter, vote]) => {
         return {
-            id: submitter, 
-            submitter: submitter.includes('bot') ? 'Bot Report' : 'User Report' , 
-            time: new Date(vote.time).toLocaleString(), 
-            location: vote.location 
+            id: submitter,
+            submitter: submitter.includes('bot') ? 'Bot Report' : 'User Report',
+            time: new Date(vote.time).toLocaleString(),
+            location: vote.location
         };
     }).sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
 
     return (
-        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' , gap: 15}}>
+        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 15 }}>
             <Tooltip
                 title={!user && <Typography color="inherit"> You must sign in to use this feature </Typography>}
                 arrow
