@@ -5,7 +5,7 @@ const prodDomains = [
     'trackingtarkov.com',
 ];
 
-const dev = prodDomains.includes(window.location.hostname);
+const dev = !prodDomains.includes(window.location.hostname);
 
 const firebaseConfig = {
     apiKey: 'AIzaSyA_G-8ob1XuK2Qh5kHYEJy-KLHxX5nmZSE',
