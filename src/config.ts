@@ -1,9 +1,13 @@
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
-export const dev = false;
+const prodDomains = [
+    'trackingtarkov.com',
+];
 
-export const firebaseConfig = {
+const dev = prodDomains.includes(window.location.hostname);
+
+const firebaseConfig = {
     apiKey: 'AIzaSyA_G-8ob1XuK2Qh5kHYEJy-KLHxX5nmZSE',
     authDomain: 'trackingtarkov.com',
     databaseURL: 'https://trackingtarkov-default-rtdb.firebaseio.com',
@@ -14,7 +18,7 @@ export const firebaseConfig = {
     measurementId: 'G-0W9GBECEW5',
 };
 
-export const firebaseConfigDev = {
+const firebaseConfigDev = {
     apiKey: 'AIzaSyAqBmd9YxhSJmbiixcv0Z1puAy1W4yPHsQ',
     authDomain: 'trackingtarkovdev.firebaseapp.com',
     databaseURL: 'https://trackingtarkovdev-default-rtdb.firebaseio.com/',
@@ -24,3 +28,5 @@ export const firebaseConfigDev = {
     appId: '1:884125177564:web:2f5cb8a42b27b033b9c619',
     measurementId: 'G-GVYEVRQ0S4',
 };
+
+export const config = dev ? firebaseConfigDev : firebaseConfig;
