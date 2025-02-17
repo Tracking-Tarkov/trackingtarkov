@@ -95,7 +95,7 @@ const QuestPopover = ({
                     <Typography>Not required for Kappa</Typography>
                 )}
                 <Tooltip
-                    title={!user && 'You must sign in to use this feature'}
+                    title={!user && <Typography color="inherit"> You must sign in to use this feature </Typography>}
                     arrow
                 >
                     <Box display="flex" justifyContent="center">
