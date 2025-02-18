@@ -2,4 +2,7 @@
 .layoutflow {
     width: calc(100vw - 65px);
     height: calc(100vh - 48px);
-  }
+    &.viewing-as {
+      height: calc(100vh - 88px);
+    }
+}

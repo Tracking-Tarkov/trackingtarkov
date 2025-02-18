@@ -18,6 +18,7 @@ import { goOffline, goOnline } from 'firebase/database';
 import { Params, useParams } from 'react-router-dom';
 import _ from 'lodash';
 import { useNavigateWithParams } from '../hooks/useNavigateWithParams';
+import { useAuth } from '../hooks/useAuth';
 
 export interface IQuestProps {
     traderGraphData: TraderGraphData[];
@@ -37,6 +38,7 @@ const getCurrentTrader = (
 };
 
 const Quests = ({ traderGraphData }: IQuestProps) => {
+    const { user, viewAs } = useAuth();
     const { setViewport } = useReactFlow();
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -100,7 +102,7 @@ const Quests = ({ traderGraphData }: IQuestProps) => {
                 currentNav={currentTrader}
                 setCurrentNav={setCurrentNav}
             />
-            <div className="layoutflow">
+            <div className={`layoutflow ${viewAs !== user?.uid && 'viewing-as'}`}>
                 <ReactFlow
                     nodes={nodes}
                     edges={edges}
