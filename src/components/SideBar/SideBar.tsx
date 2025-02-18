@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
 import { signOut } from 'firebase/auth';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, signIn } from '../../utils/firebase';
 import { styled, Theme, CSSObject } from '@mui/material/styles';
 import { useNavigateWithParams } from '../../hooks/useNavigateWithParams';
@@ -27,8 +26,10 @@ import SensorOccupiedIcon from '@mui/icons-material/SensorOccupied';
 import GridViewIcon from '@mui/icons-material/GridView';
 import discordIcon from '../../icons/discord-mark-white.png';
 import tarkovTimeIcon from '../../icons/tarkovtimeicon.png';
+import { AccountBox } from '@mui/icons-material';
 
 import './styles/sidebar.scss';
+import { useAuth } from '../../hooks/useAuth';
 
 export interface NavItems {
     title: string;
@@ -102,13 +103,13 @@ const getIsMobile = () => {
 
 const SideBar = () => {
     const [drawerOpen, setDrawerOpen] = useState(getIsMobile());
-    const [user, loading] = useAuthState(auth);
+    const { user, viewAs, loading } = useAuth();
     const [tarkovTime, setTarkovTime] = useState<TarkovTime>(calculateTarkovTime(new Date()));
 
     useEffect(() => {
         const interval = setInterval(() => {
             setTarkovTime(calculateTarkovTime(new Date()));
-        }, 1000/7);
+        }, 1000 / 7);
         return () => clearInterval(interval);
     }, []);
 
@@ -191,7 +192,7 @@ const SideBar = () => {
                     </ListItem>
                 ))}
             </List>
-            
+
             <Divider />
 
             <div className='tarkov-time-container'>
@@ -199,12 +200,31 @@ const SideBar = () => {
                 <img className="weatherimg" src={tarkovTimeIcon} loading="lazy" alt="mediumfog-weather" />
                 {drawerOpen && <div className='right'><Typography>{tarkovTime.right}</Typography></div>}
             </div>
-            
+
             <Divider />
 
             <Divider sx={{ marginTop: 'auto' }} />
 
             <List>
+                {user?.uid && viewAs === user.uid ? (
+                    <ListItem
+                        disablePadding
+                        sx={listItemSX}
+                    >
+                        <ListItemButton
+                            sx={listItemButtonSX}
+                            onClick={onNav('/profile')}
+                        >
+                            <ListItemIcon sx={listItemIconSX}>
+                                <AccountBox />
+                            </ListItemIcon>
+                            <ListItemText
+                                primary='Profile'
+                                sx={{ opacity: drawerOpen ? 1 : 0 }}
+                            />
+                        </ListItemButton>
+                    </ListItem>
+                ) : null}
                 <ListItem
                     key={'user-options-icon'}
                     disablePadding

@@ -14,6 +14,7 @@ import Attributions from './pages/Attributions';
 import ItemsFIR from './pages/ItemsFIR';
 import Quests from './pages/Quests';
 import Goons from './pages/Goons';
+import Profile from './pages/Profile';
 import generateTraderGraphData, { TraderGraphData, Traders } from './utils/buildQuestNodes';
 import ThemeProvider from '@mui/system/ThemeProvider';
 
@@ -168,6 +169,7 @@ const App = () => {
                         path="items"
                         element={<ItemsFIR items={items ?? []} />}
                     />
+                    <Route path="profile" element={<Profile />} />
                     <Route path="attributions" element={<Attributions />} />
                     <Route
                         index

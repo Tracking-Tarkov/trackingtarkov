@@ -15,6 +15,7 @@ type TAuthContext = {
     user?: User | null,
     viewAs?: string | null,
     readOnly: boolean,
+    loading: boolean,
     cancelViewAs: () => void;
 }
 
@@ -22,6 +23,7 @@ const authContext = createContext<TAuthContext>({
     user: null,
     viewAs: null,
     readOnly: true,
+    loading: true,
     cancelViewAs: () => {
         throw new Error('Not implemented');
     }
@@ -30,7 +32,7 @@ const authContext = createContext<TAuthContext>({
 const Provider = authContext.Provider;
 
 export const AuthProvider = ({ children }: React.PropsWithChildren) => {
-    const [user] = useAuthState(auth);
+    const [user, loading] = useAuthState(auth);
     const [params, setSearchParams] = useSearchParams();
     const [viewAs, setViewAs] = useState<string | undefined>(undefined);
     const { addMessage } = useSnackbar();
@@ -58,8 +60,8 @@ export const AuthProvider = ({ children }: React.PropsWithChildren) => {
             params.delete('viewAs');
             setSearchParams(params);
         };
-        return { user, viewAs, readOnly, cancelViewAs };
-    }, [user, params, viewAs, setSearchParams]);
+        return { user, viewAs, readOnly, cancelViewAs, loading };
+    }, [user, params, viewAs, setSearchParams, loading]);
 
     return (
         <Provider value={value}>
