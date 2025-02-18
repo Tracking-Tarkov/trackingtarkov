@@ -94,16 +94,16 @@ export interface TarkovData {
 }
 
 const getFirebaseData = async (): Promise<TarkovData> => {
-    const lastUpdated: string = (await basicRealtimeApiCall('data/lastUpdated'))
-        .data as string;
+    const lastUpdated = (await basicRealtimeApiCall<number>('data/lastUpdated'))
+        .data;
     if (
         !localStorage.getItem('lastUpdated') ||
         !localStorage.getItem('tarkovData') ||
         localStorage.getItem('lastUpdated') !== lastUpdated?.toString()
     ) {
-        const tarkovData = (await basicRealtimeApiCall('data')).data;
-        localStorage.setItem('lastUpdated', lastUpdated);
-        localStorage.setItem('tarkovData', JSON.stringify(tarkovData));
+        const tarkovData = (await basicRealtimeApiCall<TarkovData>('data')).data;
+        localStorage.setItem('lastUpdated', lastUpdated?.toString() ?? '0');
+        localStorage.setItem('tarkovData', JSON.stringify(tarkovData ?? {}));
     }
     return JSON.parse(localStorage.getItem('tarkovData') as string);
 };

@@ -33,19 +33,19 @@ export const signIn = () => {
 
 /* Databse calls */
 
-export interface IRealtimeAPICall {
-    data: unknown;
-    error: unknown;
+export interface IRealtimeAPICall<T> {
+    data: T | null;
+    error?: Error;
 }
 
-export const basicRealtimeApiCall = async (
+export const basicRealtimeApiCall = async <T>(
     path: string
-): Promise<IRealtimeAPICall> => {
-    let data;
+): Promise<IRealtimeAPICall<T>> => {
+    let data: T | null = null;
     let error;
     await get(ref(database, path))
         .then((snapshot) => {
-            data = snapshot.exists() ? snapshot.val() : null;
+            data = snapshot.exists() ? snapshot.val() as T : null;
         })
         .catch((e) => {
             error = e;
