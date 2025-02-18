@@ -1,0 +1,59 @@
+// .tarkov-time-container {
+//     display: flex;
+//     margin: 0 auto;
+//     width: 250px;
+//     justify-content: center;
+//     align-items: center;
+//     flex-direction: row;
+//     flex-wrap: nowrap;
+//     gap: 20px;
+//     background-color: transparent;
+//     -webkit-clip-path: polygon(calc(0% + 8px) 0%, 100% 0%, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0% 100%, 0% calc(0% + 8px));
+//     clip-path: polygon(calc(0% + 8px) 0%, 100% 0%, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0% 100%, 0% calc(0% + 8px));
+//     height: 40px;
+//     font-size: 20px;
+//     color: #fff;
+//     border: solid 1px #9a8866;
+
+//     .left {
+//         float: left;
+//         text-align: left;
+//         width: --webkit-fit-content;
+//         width: --moz-fit-content;
+//         width: fit-content;
+//     }
+
+//     .right {
+//         text-align: right;
+//         width: --webkit-fit-content;
+//         width: --moz-fit-content;
+//         width: fit-content;
+//         float: right;
+//     }
+
+//     .image-container {
+//         display: flex;
+//         align-items: center;
+//         justify-content: center;
+//         width: fit-content;
+
+//         .weathering {
+//             width: 30px;
+//             height: 30px;
+//         }
+//     }
+
+// }
+
+.tarkov-time-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 10px;
+
+    .weatherimg {
+        width: 25px;
+        height: 25px;
+    }
+    
+}
