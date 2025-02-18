@@ -106,7 +106,7 @@ const QuestNode = ({ data }: IQuestNode) => {
                 anchor={popoverAnchor}
                 updateQuestState={updateQuestState}
             />
-            {!readOnly &&       
+            {(user && !readOnly) &&       
                 <div 
                     className={`plus-minus-square ${isQuestComplete ? 'minus' : 'plus'}`}
                     onClick={(e)=> {e.stopPropagation(); updateQuestState();}}
