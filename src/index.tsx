@@ -5,6 +5,8 @@ import reportWebVitals from './reportWebVitals';
 
 import './index.css';
 import { BrowserRouter } from 'react-router-dom';
+import { SnackbarProvider } from './hooks/useSnackbar';
+import { AuthProvider } from './hooks/useAuth';
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -12,7 +14,11 @@ const root = ReactDOM.createRoot(
 root.render(
     <React.StrictMode>
         <BrowserRouter>
-            <App />
+            <SnackbarProvider>
+                <AuthProvider>
+                    <App />
+                </AuthProvider>
+            </SnackbarProvider>
         </BrowserRouter>
     </React.StrictMode>
 );
