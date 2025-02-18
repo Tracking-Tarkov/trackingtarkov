@@ -2,14 +2,14 @@ import { useState, useCallback, useEffect } from 'react';
 import { signOut } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, signIn } from '../../utils/firebase';
-
 import { styled, Theme, CSSObject } from '@mui/material/styles';
+import { useNavigateWithParams } from '../../hooks/useNavigateWithParams';
+import { calculateTarkovTime, TarkovTime } from '../../utils/tarkovTime';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-
 import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -25,10 +25,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import LoopIcon from '@mui/icons-material/Loop';
 import SensorOccupiedIcon from '@mui/icons-material/SensorOccupied';
 import GridViewIcon from '@mui/icons-material/GridView';
-
 import discordIcon from '../../icons/discord-mark-white.png';
-import { useNavigateWithParams } from '../../hooks/useNavigateWithParams';
-import { calculatetarkovTime } from '../../utils/tarkovTime';
+import tarkovTimeIcon from '../../icons/tarkovtimeicon.png';
 
 import './styles/sidebar.scss';
 
@@ -105,16 +103,14 @@ const getIsMobile = () => {
 const SideBar = () => {
     const [drawerOpen, setDrawerOpen] = useState(getIsMobile());
     const [user, loading] = useAuthState(auth);
-    const [time, setTime] = useState<Date>(new Date());
+    const [tarkovTime, setTarkovTime] = useState<TarkovTime>(calculateTarkovTime(new Date()));
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setTime(new Date());
+            setTarkovTime(calculateTarkovTime(new Date()));
         }, 1000/7);
         return () => clearInterval(interval);
     }, []);
-
-    const tarkovTime = calculatetarkovTime(time);
 
     const navigate = useNavigateWithParams();
 
@@ -200,7 +196,7 @@ const SideBar = () => {
 
             <div className='tarkov-time-container'>
                 {drawerOpen && <div className='left'><Typography>{tarkovTime.left}</Typography></div>}
-                <img className="weatherimg" src="https://tarkovbot.eu/main/img/mediummlha.png" loading="lazy" alt="mediumfog-weather" />
+                <img className="weatherimg" src={tarkovTimeIcon} loading="lazy" alt="mediumfog-weather" />
                 {drawerOpen && <div className='right'><Typography>{tarkovTime.right}</Typography></div>}
             </div>
             

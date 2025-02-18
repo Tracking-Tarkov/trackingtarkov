@@ -7,7 +7,7 @@ export interface TarkovTime {
     right: string;
 }
 
-export const calculatetarkovTime = (date: Date): TarkovTime => {
+export const calculateTarkovTime = (date: Date): TarkovTime => {
     // 1 second real time = 7 seconds tarkov time
     const tarkovRatio = 7;
 
