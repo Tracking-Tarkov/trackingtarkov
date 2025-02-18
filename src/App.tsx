@@ -19,7 +19,7 @@ import generateTraderGraphData, { TraderGraphData, Traders } from './utils/build
 import ThemeProvider from '@mui/system/ThemeProvider';
 
 import './App.scss';
-import { IconButton, Paper } from '@mui/material';
+import { IconButton, Paper, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useAuth } from './hooks/useAuth';
 import { Close } from '@mui/icons-material';
@@ -145,7 +145,13 @@ const App = () => {
                             gap={2}
                             paddingX={2}
                         >
-                            Currently viewing as {viewAs}
+                            <Typography
+                                whiteSpace='nowrap'
+                                overflow='hidden'
+                                textOverflow='ellipsis'
+                            >
+                                Currently viewing as {viewAs}
+                            </Typography>
                             <IconButton onClick={cancelViewAs}>
                                 <Close />
                             </IconButton>
