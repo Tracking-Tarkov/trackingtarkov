@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { signOut } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, signIn } from '../../utils/firebase';
@@ -28,6 +28,9 @@ import GridViewIcon from '@mui/icons-material/GridView';
 
 import discordIcon from '../../icons/discord-mark-white.png';
 import { useNavigateWithParams } from '../../hooks/useNavigateWithParams';
+import { calculatetarkovTime } from '../../utils/tarkovTime';
+
+import './styles/sidebar.scss';
 
 export interface NavItems {
     title: string;
@@ -102,6 +105,16 @@ const getIsMobile = () => {
 const SideBar = () => {
     const [drawerOpen, setDrawerOpen] = useState(getIsMobile());
     const [user, loading] = useAuthState(auth);
+    const [time, setTime] = useState<Date>(new Date());
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTime(new Date());
+        }, 1000/7);
+        return () => clearInterval(interval);
+    }, []);
+
+    const tarkovTime = calculatetarkovTime(time);
 
     const navigate = useNavigateWithParams();
 
@@ -182,7 +195,15 @@ const SideBar = () => {
                     </ListItem>
                 ))}
             </List>
+            
+            <Divider />
 
+            <div className='tarkov-time-container'>
+                {drawerOpen && <div className='left'><Typography>{tarkovTime.left}</Typography></div>}
+                <img className="weatherimg" src="https://tarkovbot.eu/main/img/mediummlha.png" loading="lazy" alt="mediumfog-weather" />
+                {drawerOpen && <div className='right'><Typography>{tarkovTime.right}</Typography></div>}
+            </div>
+            
             <Divider />
 
             <Divider sx={{ marginTop: 'auto' }} />
