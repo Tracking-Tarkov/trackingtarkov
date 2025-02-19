@@ -28,10 +28,11 @@ type DataPath = (user: User) => string;
 const itemsPath: DataPath = (user: User) => `users/${user.uid}/items`;
 const questPath: DataPath = (user: User) =>  `users/${user.uid}/completedQuests`;
 
-const wipeDataPathsMapper = new Map<WipeData, DataPath[]>()
-    .set(WipeData.All, [questPath, itemsPath])
-    .set(WipeData.Quests, [questPath])
-    .set(WipeData.Items, [itemsPath]);
+const wipeDataPaths: Record<WipeData, DataPath[]> = {
+    [WipeData.All]: [questPath, itemsPath],
+    [WipeData.Quests]: [questPath],
+    [WipeData.Items]: [itemsPath],
+};
 
 const CopyTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -62,7 +63,7 @@ const Profile = () => {
     const handleWipeData = () => {
         if (readOnly || !user || !wipeData) return;
 
-        wipeDataPathsMapper.get(wipeData)?.forEach(dataPath => remove(ref(database, dataPath(user))));
+        wipeDataPaths[wipeData].forEach(dataPath => remove(ref(database, dataPath(user))));
 
         closePopover();
     };
