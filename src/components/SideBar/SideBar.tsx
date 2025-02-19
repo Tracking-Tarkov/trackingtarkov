@@ -103,7 +103,7 @@ const getIsMobile = () => {
 
 const SideBar = () => {
     const [drawerOpen, setDrawerOpen] = useState(getIsMobile());
-    const { user, viewAs, loading } = useAuth();
+    const { user, loading, readOnly } = useAuth();
     const [tarkovTime, setTarkovTime] = useState<TarkovTime>(calculateTarkovTime(new Date()));
 
     useEffect(() => {
@@ -206,7 +206,7 @@ const SideBar = () => {
             <Divider sx={{ marginTop: 'auto' }} />
 
             <List>
-                {user?.uid && viewAs === user.uid ? (
+                {user?.uid && !readOnly ? (
                     <ListItem
                         disablePadding
                         sx={listItemSX}
