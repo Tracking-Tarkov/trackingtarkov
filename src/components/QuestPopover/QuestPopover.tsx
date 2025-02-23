@@ -102,7 +102,7 @@ const QuestPopover = ({
                     >
                         <Box display="flex" justifyContent="center">
                             <Button disabled={!user} onClick={updateQuestState}>
-                            Mark as {completed ? 'Incomplete' : 'Complete'}
+                                Mark as {completed ? 'Incomplete' : 'Complete'}
                             </Button>
                         </Box>
                     </Tooltip>
