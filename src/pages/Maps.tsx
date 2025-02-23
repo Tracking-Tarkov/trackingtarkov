@@ -2,7 +2,8 @@ import React, {
     useEffect,
     useRef,
     useState,
-    useCallback
+    useCallback,
+    ChangeEvent
 } from 'react';
 import {
     Box,
@@ -85,9 +86,20 @@ const Maps = () => {
     const [showCopied, setShowCopied] = useState(false);
     const [isDrawMode, setIsDrawMode] = useState(false);
     const [openPopover, setOpenPopover] = useState(false);
+    const [imgSize, setImgSize] = useState({width: 0, height: 0});
     const popoverAnchor = useRef(null);
     const ref = useRef<ReactZoomPanPinchRef>(null);
     const imgRef = useRef<HTMLImageElement>(null);
+
+    useEffect(()=> {
+        new ResizeObserver(() => {
+            if (!imgRef.current) return;
+            setImgSize({
+                width: imgRef.current?.width,
+                height: imgRef.current?.height,
+            });
+        }).observe(document.body);
+    }, []);
 
     const handleClosePopover = useCallback(
         (event: MouseEvent) => {
@@ -97,13 +109,14 @@ const Maps = () => {
         [setOpenPopover]
     );
 
+    const handleImageLoad = (event: ChangeEvent<HTMLImageElement>) => {
+        const { width, height } = event.target;
+        setImgSize({ width, height });
+    };
+
     const handleToggleDrawMode = () => setIsDrawMode(!isDrawMode);
 
     const handleOpenPopover = () => setOpenPopover(true);
-
-    const handleColorChange = (newValue: string) => {
-        setLineColor(newValue);
-    };
 
     useEffect(() => {
         let viewableHeight = window.innerHeight - 65;
@@ -253,15 +266,15 @@ const Maps = () => {
                     }}
                 >
                     <TransformComponent>
-                        <div className="map-image-wrapper">
+                        <div className="map-image-wrapper" id='observe-resize'>
                             {imgRef.current ? (
                                 <DrawableMap
                                     lineWidth={lineWeight}
                                     lineColor={lineColor}
                                     lines={lines}
                                     savePath={savePath}
-                                    width={imgRef.current.width}
-                                    height={imgRef.current.height}
+                                    width={imgSize.width}
+                                    height={imgSize.height}
                                     disabled={!isDrawMode}
                                 />
                             ) : null}
@@ -271,6 +284,7 @@ const Maps = () => {
                                 loading="lazy"
                                 className="map-image"
                                 src={tarkovMaps[map].subMaps[subMap]}
+                                onLoad={handleImageLoad}
                             />
                         </div>
                     </TransformComponent>

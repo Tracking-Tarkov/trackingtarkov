@@ -1,6 +1,7 @@
 import React, {
     useCallback,
     useEffect,
+    useMemo,
     useRef,
     useState
 } from 'react';
@@ -16,15 +17,10 @@ type DrawableMapProps = {
     lines: Line[];
 };
 
-const CANVAS_SPACE = {
-    width: 1920,
-    height: 1080
-};
-
-const getTransformedEvent = (event: React.MouseEvent<HTMLCanvasElement>) => {
+const getTransformedEvent = (event: React.MouseEvent<HTMLCanvasElement>, canvasWidth: number, canvasHeight: number) => {
     const bound = event.currentTarget.getBoundingClientRect();
-    const x = ((event.clientX - bound.left) / bound.width) * CANVAS_SPACE.width;
-    const y = ((event.clientY - bound.top) / bound.height) * CANVAS_SPACE.height;
+    const x = ((event.clientX - bound.left) / bound.width) * canvasWidth;
+    const y = ((event.clientY - bound.top) / bound.height) * canvasHeight;
 
     return { x, y };
 };
@@ -56,6 +52,12 @@ const DrawableMap = ({ lineColor, lineWidth, disabled, savePath, lines, width, h
     const [isDrawing, setIsDrawing] = useState(false);
     const [path, setPath] = useState<Point[]>([]);
 
+    const [canvasWidth, canvasHeight] = useMemo(()=> {
+        const ratio = width / height;
+        const baseValue = 2000;
+        return [baseValue, baseValue / ratio];
+    }, [width, height]);
+
     useEffect(() => {
         const context = ref.current?.getContext('2d');
         if (!context) return;
@@ -72,7 +74,7 @@ const DrawableMap = ({ lineColor, lineWidth, disabled, savePath, lines, width, h
 
     const onMouseDown: React.MouseEventHandler<HTMLCanvasElement> = useCallback((event) => {
         if (disabled || isDrawing) return;
-        const { x, y } = getTransformedEvent(event);
+        const { x, y } = getTransformedEvent(event, canvasWidth, canvasHeight);
         setPath([{ x, y }]);
         setIsDrawing(true);
     }, [isDrawing, disabled, setPath, setIsDrawing]);
@@ -82,7 +84,7 @@ const DrawableMap = ({ lineColor, lineWidth, disabled, savePath, lines, width, h
         setPath([]);
         setIsDrawing(false);
         if (path.length > 1) {
-            const { x, y } = getTransformedEvent(event);
+            const { x, y } = getTransformedEvent(event, canvasWidth, canvasHeight);
             const newPath = [...path, { x, y }];
             savePath(newPath);
         }
@@ -92,7 +94,7 @@ const DrawableMap = ({ lineColor, lineWidth, disabled, savePath, lines, width, h
         if (disabled || !isDrawing) return;
         const context = ref.current?.getContext('2d');
         if (!context) return;
-        const { x, y } = getTransformedEvent(event);
+        const { x, y } = getTransformedEvent(event, canvasWidth, canvasHeight);
         const prev = path[path.length - 1];
         if (Math.sqrt((prev.x - x) ** 2 + (prev.y - y) ** 2) > 15) {
             setPath(prev => {
@@ -107,8 +109,8 @@ const DrawableMap = ({ lineColor, lineWidth, disabled, savePath, lines, width, h
     return (
         <canvas
             style={{ width, height, border: '1px solid red', position: 'absolute' }}
-            width={CANVAS_SPACE.width}
-            height={CANVAS_SPACE.height}
+            width={canvasWidth}
+            height={canvasHeight}
             ref={ref}
             onContextMenu={(e) => e.preventDefault()}
             onMouseDown={onMouseDown}
