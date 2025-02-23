@@ -39,7 +39,7 @@ const buildTarkovMapMenuItems = (): DropdownElement[] => {
     return dropDownElements;
 };
 
-const LineWeightSlider = styled(Slider)(({ theme }) => ({
+const LineWeightSlider = styled(Slider)(() => ({
     color: '#ffffff',
     height: 5,
     '& .MuiSlider-track': {
@@ -80,23 +80,23 @@ const LineWeightSlider = styled(Slider)(({ theme }) => ({
 }));
 
 const Maps = () => {
-    const { map, subMap, lines, saveLine, startMapRoom, leaveMapRoom, clearMap } = useMapRoom();
+    const { roomId, map, subMap, lines, saveLine, startMapRoom, leaveMapRoom, clearMap } = useMapRoom();
     const [lineWeight, setLineWeight] = useState<number>(10);
     const [lineColor, setLineColor] = useState<string>('#ffffff');
     const [showCopied, setShowCopied] = useState(false);
     const [isDrawMode, setIsDrawMode] = useState(false);
     const [openPopover, setOpenPopover] = useState(false);
-    const [imgSize, setImgSize] = useState({width: 0, height: 0});
+    const [imgSize, setImgSize] = useState({ width: 0, height: 0 });
     const popoverAnchor = useRef(null);
     const ref = useRef<ReactZoomPanPinchRef>(null);
     const imgRef = useRef<HTMLImageElement>(null);
 
-    useEffect(()=> {
+    useEffect(() => {
         new ResizeObserver(() => {
             if (!imgRef.current) return;
             setImgSize({
-                width: imgRef.current?.width,
-                height: imgRef.current?.height,
+                width: imgRef.current.width,
+                height: imgRef.current.height,
             });
         }).observe(document.body);
     }, []);
@@ -186,7 +186,7 @@ const Maps = () => {
                                 width='75%'
                             >
                                 <Button variant='outlined' onClick={clearMap}> Reset </Button>
-                                <Button variant='outlined' onClick={leaveMapRoom}> Leave </Button>
+                                <Button disabled={!roomId} variant='outlined' onClick={leaveMapRoom}> Leave </Button>
                             </Box>
                             <Box
                                 display='flex'

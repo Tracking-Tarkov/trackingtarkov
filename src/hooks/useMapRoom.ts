@@ -3,7 +3,8 @@ import {
     onChildRemoved,
     push,
     ref,
-    remove
+    remove,
+    update
 } from 'firebase/database';
 import { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
@@ -27,12 +28,14 @@ export type DBLine = {
     points: string;
 }
 
+const SERIAL_RADIX = 36;
+
 const parsePoints = (serializedPoints: string): Point[] => {
     const result: Point[] = [];
     const points = serializedPoints.split(',');
     for (let index = 0; index < points.length; index += 2) {
-        const x = Number(points[index]);
-        const y = Number(points[index + 1]);
+        const x = Number.parseInt(points[index], SERIAL_RADIX);
+        const y = Number.parseInt(points[index + 1], SERIAL_RADIX);
         result.push({ x, y });
     }
     return result;
@@ -43,7 +46,8 @@ const parseLine = (line: DBLine): Line => {
 };
 
 const serializeLine = (line: Line): DBLine => {
-    const onlyPoints = line.points.flatMap((point) => [point.x, point.y]);
+    const onlyPoints = line.points.flatMap((point) =>
+        [Math.trunc(point.x).toString(SERIAL_RADIX), Math.trunc(point.y).toString(SERIAL_RADIX)]);
     return {
         color: line.color,
         width: line.width,
@@ -57,11 +61,13 @@ export const useMapRoom = () => {
     const [lines, setLines] = useState<Line[]>([]);
 
     const roomId = searchParams.get('mapRoomId');
-    const roomPath = `/mapRooms/${roomId}/${map}/${subMap}`;
+    const roomPath = `/mapRooms/${roomId}`;
+    const linePath = `${roomPath}/${map}/${subMap}/lines`;
+    const lastUpdated = `${roomPath}/lastUpdated`;
 
     useEffect(() => {
         if (!roomId) return;
-        const cleanup = onChildAdded(ref(database, roomPath), (snapshot) => {
+        const cleanup = onChildAdded(ref(database, linePath), (snapshot) => {
             if (snapshot.exists()) {
                 const parsedLines = parseLine(snapshot.val());
                 setLines(prevLines => ([...prevLines, parsedLines]));
@@ -75,7 +81,7 @@ export const useMapRoom = () => {
 
     useEffect(() => {
         if (!roomId) return;
-        const cleanup = onChildRemoved(ref(database, `/mapRooms/${roomId}/${map}`), () => {
+        const cleanup = onChildRemoved(ref(database, lastUpdated), () => {
             setLines([]);
         });
         return () => {
@@ -87,7 +93,8 @@ export const useMapRoom = () => {
     const saveLine = (line: Line) => {
         setLines(prev => [...prev, line]);
         if (!roomId) return;
-        push(ref(database, roomPath), serializeLine(line));
+        update(ref(database, roomPath), { lastUpdated: Date.now() });
+        push(ref(database, linePath), serializeLine(line));
     };
 
     const clearMap = () => {
@@ -99,7 +106,6 @@ export const useMapRoom = () => {
     const startMapRoom = (): string => {
         if (!roomId) {
             const id = shortUuid.generate();
-            console.log(id);
             searchParams.set('mapRoomId', id);
             setSearchParams(searchParams);
         }
@@ -114,6 +120,7 @@ export const useMapRoom = () => {
     };
 
     return {
+        roomId,
         map,
         subMap,
         lines,

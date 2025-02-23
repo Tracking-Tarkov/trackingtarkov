@@ -52,7 +52,10 @@ const DrawableMap = ({ lineColor, lineWidth, disabled, savePath, lines, width, h
     const [isDrawing, setIsDrawing] = useState(false);
     const [path, setPath] = useState<Point[]>([]);
 
-    const [canvasWidth, canvasHeight] = useMemo(()=> {
+    const [canvasWidth, canvasHeight] = useMemo(() => {
+        if (width === 0 || height === 0) {
+            return [0, 0];
+        }
         const ratio = width / height;
         const baseValue = 2000;
         return [baseValue, baseValue / ratio];
@@ -70,7 +73,7 @@ const DrawableMap = ({ lineColor, lineWidth, disabled, savePath, lines, width, h
         }
         context.clearRect(0, 0, context.canvas.width, context.canvas.height);
         drawLines(context, lines);
-    }, [lines]);
+    }, [lines, width, height]);
 
     const onMouseDown: React.MouseEventHandler<HTMLCanvasElement> = useCallback((event) => {
         if (disabled || isDrawing) return;
@@ -108,7 +111,7 @@ const DrawableMap = ({ lineColor, lineWidth, disabled, savePath, lines, width, h
 
     return (
         <canvas
-            style={{ width, height, position: 'absolute' }}
+            style={{ width, height, position: 'absolute', cursor: disabled ? 'move' : 'crosshair' }}
             width={canvasWidth}
             height={canvasHeight}
             ref={ref}
