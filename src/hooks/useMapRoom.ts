@@ -58,49 +58,52 @@ const serializeLine = (line: Line): DBLine => {
 export const useMapRoom = () => {
     const { map = '', subMap = '' } = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
-    const [lines, setLines] = useState<Line[]>([]);
+    const [mapLines, setMapLines] = useState<Record<string, Line[]>>({});
 
     const roomId = searchParams.get('mapRoomId');
     const roomPath = `/mapRooms/${roomId}`;
     const linePath = `${roomPath}/${map}/${subMap}/lines`;
-    const lastUpdated = `${roomPath}/lastUpdated`;
+    const mapKey = `${map}-${subMap}`;
 
     useEffect(() => {
         if (!roomId) return;
         const cleanup = onChildAdded(ref(database, linePath), (snapshot) => {
             if (snapshot.exists()) {
-                const parsedLines = parseLine(snapshot.val());
-                setLines(prevLines => ([...prevLines, parsedLines]));
+                const parsedLine = parseLine(snapshot.val());
+                setMapLines(prev => ({
+                    ...prev,
+                    [mapKey]: (prev[mapKey] ?? []).concat(parsedLine)
+                }));
             }
         });
         return () => {
             cleanup();
-            setLines([]);
+            setMapLines(prev => ({ ...prev, [mapKey]: [] }));
         };
     }, [roomId, map, subMap]);
 
     useEffect(() => {
         if (!roomId) return;
-        const cleanup = onChildRemoved(ref(database, lastUpdated), () => {
-            setLines([]);
+        const cleanup = onChildRemoved(ref(database, linePath), () => {
+            setMapLines(prev => ({ ...prev, [mapKey]: [] }));
         });
         return () => {
             cleanup();
-            setLines([]);
+            setMapLines(prev => ({ ...prev, [mapKey]: [] }));
         };
     }, [roomId, map, subMap]);
 
     const saveLine = (line: Line) => {
-        setLines(prev => [...prev, line]);
+        setMapLines(prev => ({ ...prev, [mapKey]: (prev[mapKey] ?? []).concat(line) }));
         if (!roomId) return;
         update(ref(database, roomPath), { lastUpdated: Date.now() });
         push(ref(database, linePath), serializeLine(line));
     };
 
     const clearMap = () => {
-        setLines([]);
+        setMapLines(prev => ({ ...prev, [mapKey]: [] }));
         if (!roomId) return;
-        remove(ref(database, roomPath));
+        remove(ref(database, linePath));
     };
 
     const startMapRoom = (): string => {
@@ -108,6 +111,7 @@ export const useMapRoom = () => {
             const id = shortUuid.generate();
             searchParams.set('mapRoomId', id);
             setSearchParams(searchParams);
+            setMapLines({});
         }
 
         return window.location.href;
@@ -116,14 +120,14 @@ export const useMapRoom = () => {
     const leaveMapRoom = () => {
         searchParams.delete('mapRoomId');
         setSearchParams(searchParams);
-        setLines([]);
+        setMapLines({});
     };
 
     return {
         roomId,
         map,
         subMap,
-        lines,
+        lines: mapLines[mapKey] ?? [],
         startMapRoom,
         leaveMapRoom,
         saveLine,
