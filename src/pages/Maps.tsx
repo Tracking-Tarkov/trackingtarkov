@@ -81,7 +81,7 @@ const LineWeightSlider = styled(Slider)(() => ({
 
 const Maps = () => {
     const { roomId, map, subMap, lines, saveLine, startMapRoom, leaveMapRoom, clearMap } = useMapRoom();
-    const [lineWeight, setLineWeight] = useState<number>(10);
+    const [lineWeight, setLineWeight] = useState<number>(5);
     const [lineColor, setLineColor] = useState<string>('#ffffff');
     const [showCopied, setShowCopied] = useState(false);
     const [isDrawMode, setIsDrawMode] = useState(false);
@@ -196,10 +196,10 @@ const Maps = () => {
                                 width='75%'
                             >
                                 <LineWeightSlider
-                                    defaultValue={10}
+                                    defaultValue={5}
                                     aria-label="Default"
-                                    max={30}
-                                    min={5}
+                                    max={20}
+                                    min={1}
                                     valueLabelDisplay="auto"
                                     value={lineWeight}
                                     onChange={(e, newValue) => setLineWeight(newValue as number)}

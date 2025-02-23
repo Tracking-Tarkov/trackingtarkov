@@ -80,7 +80,7 @@ const DrawableMap = ({ lineColor, lineWidth, disabled, savePath, lines, width, h
         const { x, y } = getTransformedEvent(event, canvasWidth, canvasHeight);
         setPath([{ x, y }]);
         setIsDrawing(true);
-    }, [isDrawing, disabled, setPath, setIsDrawing]);
+    }, [isDrawing, disabled, setPath, setIsDrawing, canvasWidth, canvasHeight]);
 
     const onMouseUp: React.MouseEventHandler<HTMLCanvasElement> = useCallback((event) => {
         if (disabled || !isDrawing) return;
@@ -91,7 +91,7 @@ const DrawableMap = ({ lineColor, lineWidth, disabled, savePath, lines, width, h
             const newPath = [...path, { x, y }];
             savePath(newPath);
         }
-    }, [path, disabled, savePath, setPath, isDrawing, setIsDrawing]);
+    }, [path, disabled, savePath, setPath, isDrawing, setIsDrawing, canvasWidth, canvasHeight]);
 
     const onMouseMove: React.MouseEventHandler<HTMLCanvasElement> = useCallback((event) => {
         if (disabled || !isDrawing) return;
@@ -107,11 +107,11 @@ const DrawableMap = ({ lineColor, lineWidth, disabled, savePath, lines, width, h
             });
 
         }
-    }, [path, disabled, isDrawing, setPath]);
+    }, [path, disabled, isDrawing, setPath, canvasWidth, canvasHeight]);
 
     return (
         <canvas
-            style={{ width, height, position: 'absolute', cursor: disabled ? 'move' : 'crosshair' }}
+            style={{ width, height, position: 'absolute', cursor: disabled ? 'grab' : 'default' }}
             width={canvasWidth}
             height={canvasHeight}
             ref={ref}
