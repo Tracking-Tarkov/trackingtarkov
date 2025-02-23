@@ -108,7 +108,7 @@ const DrawableMap = ({ lineColor, lineWidth, disabled, savePath, lines, width, h
 
     return (
         <canvas
-            style={{ width, height, border: '1px solid red', position: 'absolute' }}
+            style={{ width, height, position: 'absolute' }}
             width={canvasWidth}
             height={canvasHeight}
             ref={ref}
