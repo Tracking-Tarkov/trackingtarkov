@@ -80,7 +80,17 @@ const LineWeightSlider = styled(Slider)(() => ({
 }));
 
 const Maps = () => {
-    const { roomId, map, subMap, lines, saveLine, startMapRoom, leaveMapRoom, clearMap } = useMapRoom();
+    const { 
+        drawingDatabaseDisabled, 
+        roomId, 
+        map, 
+        subMap,
+        lines, 
+        saveLine, 
+        startMapRoom, 
+        leaveMapRoom, 
+        clearMap 
+    } = useMapRoom();
     const [lineWeight, setLineWeight] = useState<number>(5);
     const [lineColor, setLineColor] = useState<string>('#ffffff');
     const [showCopied, setShowCopied] = useState(false);
@@ -210,7 +220,7 @@ const Maps = () => {
                         <HexColorPicker color={lineColor} onChange={setLineColor} />
                     </div>
                 </Popover >
-                <CopyTooltip
+                {!drawingDatabaseDisabled && <CopyTooltip
                     title="Copied"
                     open={showCopied}
                     arrow
@@ -230,7 +240,7 @@ const Maps = () => {
                     >
                         <Share />
                     </Fab>
-                </CopyTooltip>
+                </CopyTooltip>}
                 <Fab
                     sx={{
                         position: 'absolute',

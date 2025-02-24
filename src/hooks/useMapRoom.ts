@@ -1,6 +1,7 @@
 import {
     onChildAdded,
     onChildRemoved,
+    onValue,
     push,
     ref,
     remove,
@@ -10,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import shortUuid from 'short-uuid';
 import { database } from '../utils/firebase';
+import { useSnackbar } from './useSnackbar';
 
 export type Point = {
     x: number;
@@ -59,6 +61,8 @@ export const useMapRoom = () => {
     const { map = '', subMap = '' } = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
     const [mapLines, setMapLines] = useState<Record<string, Line[]>>({});
+    const [drawingDatabaseDisabled, setDrawingDatabaseDisabled] = useState(false);
+    const { addMessage } = useSnackbar();
 
     const roomId = searchParams.get('mapRoomId');
     const roomPath = `/mapRooms/${roomId}`;
@@ -66,7 +70,17 @@ export const useMapRoom = () => {
     const mapKey = `${map}-${subMap}`;
 
     useEffect(() => {
-        if (!roomId) return;
+        return onValue(ref(database, '/featureFlag/disableMapDrawing'), (snapshot) => {
+            const disableMapDrawing = snapshot.val();
+            setDrawingDatabaseDisabled(disableMapDrawing ?? false);
+            if(disableMapDrawing) {
+                addMessage('disableMapDrawing', 'Map Roomns are currently disabled');
+            }
+        });
+    }, []);
+
+    useEffect(() => {
+        if (!roomId || drawingDatabaseDisabled) return;
         const cleanup = onChildAdded(ref(database, linePath), (snapshot) => {
             if (snapshot.exists()) {
                 const parsedLine = parseLine(snapshot.val());
@@ -83,7 +97,7 @@ export const useMapRoom = () => {
     }, [roomId, map, subMap]);
 
     useEffect(() => {
-        if (!roomId) return;
+        if (!roomId || drawingDatabaseDisabled) return;
         const cleanup = onChildRemoved(ref(database, linePath), () => {
             setMapLines(prev => ({ ...prev, [mapKey]: [] }));
         });
@@ -95,14 +109,14 @@ export const useMapRoom = () => {
 
     const saveLine = (line: Line) => {
         setMapLines(prev => ({ ...prev, [mapKey]: (prev[mapKey] ?? []).concat(line) }));
-        if (!roomId) return;
+        if (!roomId || drawingDatabaseDisabled) return;
         update(ref(database, roomPath), { lastUpdated: Date.now() });
         push(ref(database, linePath), serializeLine(line));
     };
 
     const clearMap = () => {
         setMapLines(prev => ({ ...prev, [mapKey]: [] }));
-        if (!roomId) return;
+        if (!roomId || drawingDatabaseDisabled) return;
         remove(ref(database, linePath));
     };
 
@@ -124,6 +138,7 @@ export const useMapRoom = () => {
     };
 
     return {
+        drawingDatabaseDisabled,
         roomId,
         map,
         subMap,
