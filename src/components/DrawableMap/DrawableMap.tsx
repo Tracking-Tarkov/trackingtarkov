@@ -99,7 +99,7 @@ const DrawableMap = ({ lineColor, lineWidth, disabled, savePath, lines, width, h
         if (!context) return;
         const { x, y } = getTransformedEvent(event, canvasWidth, canvasHeight);
         const prev = path[path.length - 1];
-        if (Math.sqrt((prev.x - x) ** 2 + (prev.y - y) ** 2) > 15) {
+        if (Math.sqrt((prev.x - x) ** 2 + (prev.y - y) ** 2) > 10) {
             setPath(prev => {
                 const newPath = [...prev, { x, y }];
                 drawLine(context, { color: lineColor, width: lineWidth, points: newPath });

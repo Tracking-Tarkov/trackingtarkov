@@ -79,6 +79,8 @@ const LineWeightSlider = styled(Slider)(() => ({
     },
 }));
 
+const generateRandomHexColor = () => '#'+(Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
+
 const Maps = () => {
     const { 
         drawingDatabaseDisabled, 
@@ -92,7 +94,7 @@ const Maps = () => {
         clearMap 
     } = useMapRoom();
     const [lineWeight, setLineWeight] = useState<number>(5);
-    const [lineColor, setLineColor] = useState<string>('#ffffff');
+    const [lineColor, setLineColor] = useState<string>(generateRandomHexColor());
     const [showCopied, setShowCopied] = useState(false);
     const [isDrawMode, setIsDrawMode] = useState(false);
     const [openPopover, setOpenPopover] = useState(false);
