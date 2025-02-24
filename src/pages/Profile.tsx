@@ -2,12 +2,8 @@ import {
     Avatar,
     Box,
     Button,
-    styled,
-    Tooltip,
     Typography,
     Zoom,
-    TooltipProps,
-    tooltipClasses,
     Popover,
 } from '@mui/material';
 import { useAuth } from '../hooks/useAuth';
@@ -16,6 +12,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { ref, remove } from 'firebase/database';
 import { database } from '../utils/firebase';
 import { User } from 'firebase/auth';
+import CopyTooltip from '../components/CopyTooltip/CopyTooltip';
 
 enum WipeData {
     All = 'All',
@@ -26,24 +23,13 @@ enum WipeData {
 type DataPath = (user: User) => string;
 
 const itemsPath: DataPath = (user: User) => `users/${user.uid}/items`;
-const questPath: DataPath = (user: User) =>  `users/${user.uid}/completedQuests`;
+const questPath: DataPath = (user: User) => `users/${user.uid}/completedQuests`;
 
 const wipeDataPaths: Record<WipeData, DataPath[]> = {
     [WipeData.All]: [questPath, itemsPath],
     [WipeData.Quests]: [questPath],
     [WipeData.Items]: [itemsPath],
 };
-
-const CopyTooltip = styled(({ className, ...props }: TooltipProps) => (
-    <Tooltip {...props} classes={{ popper: className }} />
-))(({ theme }) => ({
-    [`& .${tooltipClasses.tooltipArrow}`]: {
-        backgroundColor: theme.palette.success.dark,
-    },
-    [`& .${tooltipClasses.arrow}`]: {
-        color: theme.palette.success.dark,
-    },
-}));
 
 const Profile = () => {
     const { user, readOnly } = useAuth();
@@ -58,7 +44,7 @@ const Profile = () => {
 
     const closePopover = () => setAnchorEl(null);
 
-    const isPopoverOver = useMemo(() => Boolean(anchorEl), [anchorEl]); 
+    const isPopoverOver = useMemo(() => Boolean(anchorEl), [anchorEl]);
 
     const handleWipeData = () => {
         if (readOnly || !user || !wipeData) return;

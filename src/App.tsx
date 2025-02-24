@@ -5,7 +5,7 @@ import {
     useSearchParams
 } from 'react-router-dom';
 import { useState, useEffect, useMemo } from 'react';
-import { basicRealtimeApiCall } from './utils/firebase';
+import { basicRealtimeApiCall, database } from './utils/firebase';
 import { createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import SideBar from './components/SideBar/SideBar';
@@ -23,8 +23,9 @@ import { IconButton, Paper, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useAuth } from './hooks/useAuth';
 import { Close } from '@mui/icons-material';
+import { onValue, ref } from 'firebase/database';
 
-const theme = createTheme({
+export const theme = createTheme({
     palette: {
         mode: 'dark',
     },
@@ -113,6 +114,7 @@ const App = () => {
     const { viewAs, user, cancelViewAs } = useAuth();
     const [tarkovData, setTarkovData] = useState<TarkovData | null>(null);
     const [searchParams] = useSearchParams();
+    const [downForMaintenance, setDownForMaintenance] = useState(false);
 
     const traderGraphData = useMemo<TraderGraphData[] | null>(() => {
         if (!tarkovData) return null;
@@ -128,7 +130,25 @@ const App = () => {
         getFirebaseData().then(setTarkovData);
     }, []);
 
-    return (
+    useEffect(() => {
+        return onValue(ref(database, '/featureFlag/maintenance'), (snapshot) => {
+            const downForMaintenance = snapshot.val();
+            setDownForMaintenance(downForMaintenance ?? false);
+        });
+    }, []);
+
+    if (downForMaintenance) {
+        return (
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <Box display="flex" justifyContent="center" alignItems='center' width="100%" height="100vh">
+                    <Typography variant="h4"> We are currently down for maintenance, please comeback later. </Typography>            
+                </Box>
+            </ThemeProvider>
+        );
+    }
+
+    return (            
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <SideBar />
@@ -193,6 +213,7 @@ const App = () => {
             </div>
         </ThemeProvider>
     );
+       
 };
 
 export default App;
