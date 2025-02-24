@@ -9,6 +9,7 @@ import {
     Box,
     Button,
     styled,
+    Tooltip,
     Typography,
     Zoom
 } from '@mui/material';
@@ -222,50 +223,72 @@ const Maps = () => {
                         <HexColorPicker color={lineColor} onChange={setLineColor} />
                     </div>
                 </Popover >
-                {!drawingDatabaseDisabled && <CopyTooltip
-                    title="Copied"
-                    open={showCopied}
+                {!drawingDatabaseDisabled && (
+                    <CopyTooltip
+                        title="Copied"
+                        open={showCopied}
+                        arrow
+                        placement='top'
+                        TransitionComponent={Zoom}>
+                        <Tooltip
+                            title={<Typography color="inherit"> Share this room to draw with others </Typography>}
+                            arrow
+                            placement='left'
+                        >
+                            <Fab
+                                sx={{
+                                    position: 'absolute',
+                                    bottom: 156,
+                                    right: 16,
+                                }}
+                                color='default'
+                                onClick={() => navigator.clipboard
+                                    .writeText(startMapRoom())
+                                    .then(() => setShowCopied(true))
+                                }
+                            >
+                                <Share />
+                            </Fab>
+                        </Tooltip>
+
+                    </CopyTooltip>
+                )}
+                <Tooltip
+                    title={<Typography color="inherit"> Enter {isDrawMode ? 'move' : ' draw' } mode</Typography>}
                     arrow
                     placement='left'
-                    TransitionComponent={Zoom}>
+                >
                     <Fab
                         sx={{
                             position: 'absolute',
-                            bottom: 156,
+                            bottom: 86,
                             right: 16,
                         }}
                         color='default'
-                        onClick={() => navigator.clipboard
-                            .writeText(startMapRoom())
-                            .then(() => setShowCopied(true))
-                        }
+                        onClick={handleToggleDrawMode}
                     >
-                        <Share />
+                        {isDrawMode ? <PanToolAlt /> : <EditIcon />}
                     </Fab>
-                </CopyTooltip>}
-                <Fab
-                    sx={{
-                        position: 'absolute',
-                        bottom: 86,
-                        right: 16,
-                    }}
-                    color='default'
-                    onClick={handleToggleDrawMode}
+                </Tooltip>
+                <Tooltip
+                    title={<Typography color="inherit"> Open settings </Typography>}
+                    arrow
+                    placement='left'
                 >
-                    {isDrawMode ? <PanToolAlt /> : <EditIcon />}
-                </Fab>
-                <Fab
-                    ref={popoverAnchor}
-                    sx={{
-                        position: 'absolute',
-                        bottom: 16,
-                        right: 16,
-                    }}
-                    color='default'
-                    onClick={handleOpenPopover}
-                >
-                    <Settings />
-                </Fab>
+                    <Fab
+                        ref={popoverAnchor}
+                        sx={{
+                            position: 'absolute',
+                            bottom: 16,
+                            right: 16,
+                        }}
+                        color='default'
+                        onClick={handleOpenPopover}
+                    >
+                        <Settings />
+                    </Fab>
+                </Tooltip>
+
             </Box >
             <div className="display-wrapper">
                 <TransformWrapper
