@@ -117,7 +117,7 @@ const App = () => {
     const [downForMaintenance, setDownForMaintenance] = useState(false);
 
     const traderGraphData = useMemo<TraderGraphData[] | null>(() => {
-        if (!tarkovData) return null;
+        if (!tarkovData?.quests) return null;
         return generateTraderGraphData(tarkovData.quests);
     }, [tarkovData]);
 
